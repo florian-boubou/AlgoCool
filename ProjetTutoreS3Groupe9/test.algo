@@ -1,0 +1,12 @@
+ALGORITHME Algo
+constante:
+CACA ◄— 5
+variable :
+    x, y : entier
+    x, y : entier
+DEBUT
+    x   ◄— 5
+    y   ◄— 2
+    x   ◄— x + y
+    ecrire(x)
+FIN

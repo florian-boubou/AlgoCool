@@ -21,9 +21,10 @@ public class HashMapConfig
 
 		try
 		{
-			InputStream       ips  = Test.class.getResourceAsStream( "test.algo" );
-			InputStreamReader ipsr = new InputStreamReader( ips );
-			BufferedReader    br   = new BufferedReader( ipsr );
+			//InputStream       ips  = Test.class.getResourceAsStream( "data/AlgoPars.algo" );
+			//InputStreamReader ipsr = new InputStreamReader( ips );
+			FileReader fr = new FileReader( "data/AlgoPars.config" );
+			BufferedReader    br   = new BufferedReader( fr );
 			while ( ( line = br.readLine() ) != null )
 			{
 				line.replaceAll( "\\t| ", "" );

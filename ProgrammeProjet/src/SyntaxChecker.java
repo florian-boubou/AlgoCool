@@ -42,7 +42,7 @@ public class SyntaxChecker {
             this.body.add(algo.get(i));
         }
     }
-    //Prendre en charge les paramètres
+    //Prendre en charge les paramètres /!\
     public boolean headerCheck() {
         String tag, name;
 
@@ -112,7 +112,7 @@ public class SyntaxChecker {
                         //  Texte compris entre guillemets
                         //  Suite de chiffres suivis ou non d'une virgule et d'une suite de chiffres
                         //  Caractère compris entre simples guillemets
-                        if(!testLine.split("◄—")[1].trim().matches("^\".*\"$|[0-9]*(,[0-9]*)?$|^'[a-zA-Z]'$")) { return false ;}
+                        if(!testLine.split("◄—")[1].trim().matches("^\"([^\"]|\\\\\")*\"$|[0-9]*(,[0-9]*)?$|^'[^']'$")) { return false ;}
                         //On vérifie que la constante n'a pas déjà été déclarée
                         for (String k : hConstant.keySet()) {
                             if (k.equals(testName)) {
@@ -155,7 +155,7 @@ public class SyntaxChecker {
                 if (testName.contains(",")) {
                     for (int j = 0; j < testName.split(",").length; j++) {
                         //On vérifie la syntaxe de chaque nom de variable trouvé
-                        if (!testName.split(",")[j].trim().matches("^[a-z][0-9a-zA-Z]*((-|_)[0-9A-Za-z]*)*$")) {
+                        if (!testName.split(",")[j].trim().matches("^[a-z][0-9A-Za-z]*((-|_)[0-9A-Za-z]*)*$")) {
                             return false;
                         }
                         //On vérifie si le nom de la variable n'est pas déjà réservé par l'interpréteur
@@ -173,7 +173,7 @@ public class SyntaxChecker {
                         hVariable.put(testName.split(",")[j].trim(), testType);
                     }
                 } else {
-                    if (!testName.matches("^[a-z][0-9a-zA-Z]*((-|_)[0-9A-Za-z]*)*$")) {
+                    if (!testName.matches("^[a-z][0-9A-Za-z]*((-|_)[0-9a-zA-Z]*)*$")) {
                         return false;
                     }
                     hVariable.put(testName, testType);
@@ -195,10 +195,16 @@ public class SyntaxChecker {
         for (String s : body) {
             if (s.contains("◄—")) {
                 for (String keyC : hConstant.keySet()) {
-                    found = s.split("◄—")[0].trim().equals(keyC);
+                    if(s.split("◄—")[0].trim().equals(keyC)) {
+                        found = true;
+                        break;
+                    }
                 }
                 for (String keyV : hVariable.keySet()) {
-                    found = s.split("◄—")[0].trim().equals(keyV);
+                    if(s.split("◄—")[0].trim().equals(keyV)) {
+                        found = true;
+                        break;
+                    }
                 }
                 if (!found) {
                     return false;

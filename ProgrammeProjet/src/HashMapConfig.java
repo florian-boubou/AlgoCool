@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -15,10 +16,9 @@ public class HashMapConfig {
         String key = null;
 
         try {
-            //InputStream ips = Test.class.getResourceAsStream("../test.algo");
-            //InputStreamReader ipsr = new InputStreamReader(ips);
-            FileReader fr = new FileReader("AlgoPars.config");
-            BufferedReader br = new BufferedReader(fr);
+            InputStream ips = Test.class.getResourceAsStream( "test.algo" );
+            FileReader fr = new FileReader();
+            BufferedReader br = new BufferedReader();
             while((line = br.readLine()) != null) {
                 line.replaceAll("\\t| ", "");
                 if (line.matches("^\\/\\*.*")) {

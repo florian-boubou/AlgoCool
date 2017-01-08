@@ -1,4 +1,4 @@
-package engine.data;
+package engine.type;
 
 /**
  * Created by cathi on 06/01/2017.

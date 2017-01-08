@@ -1,36 +1,36 @@
-import engine.SyntaxChecker;
-
-import java.io.*;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.*;
+import bsh.Interpreter;
 
 public class Test
 {
+	static ArrayList<String> algorithm;
 	public static void main( String[] args )
 	{
-		ArrayList<String> code = new ArrayList<String>();
-		String            line = null;
-
-		try
-		{
-			//InputStream ips = Test.class.getResourceAsStream("../test.algo");
-			//InputStreamReader ipsr = new InputStreamReader(ips);
-			FileReader     fr = new FileReader( "data/test.algo" );
-			BufferedReader br = new BufferedReader( fr );
-
-			while ( ( line = br.readLine() ) != null )
-				code.add( line );
-
-		} catch ( Exception e )
-		{
-			e.printStackTrace();
+		/*Interpreter i = new Interpreter();
+		try {
+			i.eval("a = 2");
+			System.out.println(i.get("a"));
 		}
+		catch(Exception e) {
+			System.err.println("Erreur");
+		}*/
 
-		SyntaxChecker sc = new SyntaxChecker( code );
-		System.out.println( "Test Header :" );
-		System.out.println( sc.headerCheck() );
-		System.out.println( "Test Data :" );
-		System.out.println( sc.dataCheck() );
-		System.out.println( "Test Body :" );
-		System.out.println( sc.bodyCheck() );
+		/*AlgoReader r = new AlgoReader("/test.algo");
+		algorithm = r.getAlgorithm();
+		ConsoleDisplay cd = new ConsoleDisplay(algorithm);
+
+
+		for(int i = 0; i < (algorithm.size() > 40? 40: algorithm.size()); i++) {
+			//interpreter ici
+			cd.display(i);
+			Scanner scanner = new Scanner(System.in);
+			scanner.nextLine();
+		}*/
+		Interpreter i = new Interpreter();
+		i
+
 	}
 }

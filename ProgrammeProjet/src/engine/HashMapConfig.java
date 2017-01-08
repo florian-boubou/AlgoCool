@@ -24,9 +24,9 @@ public class HashMapConfig
 
 		try
 		{
-			//InputStream       ips  = Test.class.getResourceAsStream( "data/AlgoPars.algo" );
+			//InputStream       ips  = Test.class.getResourceAsStream( "type/AlgoPars.algo" );
 			//InputStreamReader ipsr = new InputStreamReader( ips );
-			FileReader fr = new FileReader( "data/AlgoPars.config" );
+			FileReader fr = new FileReader( "type/AlgoPars.config" );
 			BufferedReader    br   = new BufferedReader( fr );
 			while ( ( line = br.readLine() ) != null )
 			{

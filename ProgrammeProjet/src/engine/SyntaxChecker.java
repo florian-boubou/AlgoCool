@@ -1,10 +1,11 @@
 package engine; /**
  * Created by Terawa on 2016/12/28.
  */
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
+ import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import tool.Regex;
 
 public class SyntaxChecker {
     private String[] header;
@@ -112,7 +113,7 @@ public class SyntaxChecker {
                         //  Texte compris entre guillemets
                         //  Suite de chiffres suivis ou non d'une virgule et d'une suite de chiffres
                         //  Caractère compris entre simples guillemets
-                        if(!testLine.split("◄—")[1].trim().matches("^\"([^\"]|\\\\\")*\"$|[0-9]*(,[0-9]*)?$|^'[^']'$")) { return false ;}
+                        if(!testLine.split("◄—")[1].trim().matches("^\"([^\"]|\\\\\")*\"$|[0-9]*(,[0-9]*)?$|^'[^']|\''$")) { return false ;}
                         //On vérifie que la constante n'a pas déjà été déclarée
                         for (String k : hConstant.keySet()) {
                             if (k.equals(testName)) {
@@ -155,7 +156,7 @@ public class SyntaxChecker {
                 if (testName.contains(",")) {
                     for (int j = 0; j < testName.split(",").length; j++) {
                         //On vérifie la syntaxe de chaque nom de variable trouvé
-                        if (!testName.split(",")[j].trim().matches("^[a-z][0-9A-Za-z]*((-|_)[0-9A-Za-z]*)*$")) {
+                        if (!Regex.isVariable(testName.split(",")[j].trim())) {
                             return false;
                         }
                         //On vérifie si le nom de la variable n'est pas déjà réservé par l'interpréteur
@@ -173,7 +174,7 @@ public class SyntaxChecker {
                         hVariable.put(testName.split(",")[j].trim(), testType);
                     }
                 } else {
-                    if (!testName.matches("^[a-z][0-9A-Za-z]*((-|_)[0-9a-zA-Z]*)*$")) {
+                    if (!Regex.isVariable(testName)) {
                         return false;
                     }
                     hVariable.put(testName, testType);
@@ -194,23 +195,45 @@ public class SyntaxChecker {
         }
         for (String s : body) {
             if (s.contains("◄—")) {
-                for (String keyC : hConstant.keySet()) {
-                    if(s.split("◄—")[0].trim().equals(keyC)) {
-                        found = true;
-                        break;
-                    }
-                }
                 for (String keyV : hVariable.keySet()) {
                     if(s.split("◄—")[0].trim().equals(keyV)) {
                         found = true;
                         break;
                     }
                 }
-                if (!found) {
-                    return false;
+                if (found) {
+
                 }
+                return false;
             }
         }
         return true;
+    }
+
+    public boolean typeCheck (String var, String val){
+        if(val.matches("^[a-z][0-9A-Za-z]*((-|_)[0-9a-zA-Z]*)*$")) {
+            return hVariable.get(var).equals(hVariable.get(val));
+        }
+        else if(val.matches("^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$")) {
+            return hConstant.get(var).equals(hConstant.get(val));
+        }
+        else {
+            switch(hVariable.get(var)) {
+                case "entier" :
+                    return val.matches("[0-9]*");
+                case "reel" :
+                    return val.matches("[0-9]*,[0-9]+");
+                case "booleen" :
+                    break;
+                case "caractere" :
+                    return val.matches("^'[^']'$");
+                case "chaine" :
+                    return val.matches("^\"([^\"]|\\\\\")*\"$");
+                default :
+                    break;
+            }
+        }
+
+        return false;
     }
 }

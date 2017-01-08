@@ -7,7 +7,7 @@ public class Regex {
 
     public static boolean isVariable(String s) {return s.matches("^[a-z][0-9A-Za-z]*((-|_)[0-9a-zA-Z]*)*$");}
 
-    public static boolean isConstant(String s) {return s.matches("\"^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$\"");}
+    public static boolean isConstant(String s) {return s.matches("^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$");}
 
     public static boolean isInteger(String s) {return s.matches("[0-9]*");}
 

@@ -9,48 +9,59 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Created by Terawa on 2016/12/29.
+ * Classe HashMapConfig qui sert à réserver les mots-clés de pseudo-code
+ *
+ * @author Antoine WARET
+ * @version 1.0.0a
+ * @date 01/08/2017
  */
 public class HashMapConfig
 {
 	private HashMap<String, HashSet<String>> reserved;
-
-
+	
+	/**
+	 * Constructeur de HashMapConfig
+	 */
 	public HashMapConfig()
 	{
 		reserved = new HashMap<String, HashSet<String>>();
 		String line = null;
 		String key  = null;
-
+		
 		try
 		{
 			//InputStream       ips  = Test.class.getResourceAsStream( "type/AlgoPars.algo" );
 			//InputStreamReader ipsr = new InputStreamReader( ips );
-			FileReader fr = new FileReader( "type/AlgoPars.config" );
-			BufferedReader    br   = new BufferedReader( fr );
-			while ( ( line = br.readLine() ) != null )
+			FileReader     fr = new FileReader("type/AlgoPars.config");
+			BufferedReader br = new BufferedReader(fr);
+			while((line = br.readLine()) != null)
 			{
-				line.replaceAll( "\\t| ", "" );
-				if ( line.matches( "^\\/\\*.*" ) )
+				line.replaceAll("\\t| ", "");
+				if(line.matches("^\\/\\*.*"))
 				{
-					key = line.substring( 2 );
-					reserved.put( key, new HashSet<String>() );
+					key = line.substring(2);
+					reserved.put(key, new HashSet<String>());
 				}
 				else
 				{
-					if ( ! line.matches( "^\\/\\/.*" ) && ! line.equals( "\n" ) )
+					if(!line.matches("^\\/\\/.*") && !line.equals("\n"))
 					{
-						reserved.get( key ).add( line );
+						reserved.get(key).add(line);
 					}
 				}
 			}
-		} catch ( Exception e )
+		}
+		catch(Exception e)
 		{
-			System.out.println( e );
+			System.out.println(e);
 		}
 	}
-
-
+	
+	/**
+	 * Méthode permettant d'obtenir la HashMap de mots-clés réservés
+	 *
+	 * @return La HashMap de mots-clés réservés
+	 */
 	public HashMap<String, HashSet<String>> getHashMapConfig()
 	{
 		return reserved;

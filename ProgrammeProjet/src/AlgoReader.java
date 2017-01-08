@@ -4,30 +4,52 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
- * Created by Terawa on 07/01/2017.
+ * Classe AlgoReader qui lit le fichier contenant l'algorithme et le transforme en ArrayList<String>
+ *
+ * @author Antoine WARET
+ * @version 1.0.0a
+ * @date 01/08/2017
  */
-public class AlgoReader {
+public class AlgoReader
+{
 	private ArrayList<String> algorithm;
-
-	public AlgoReader(String filePath) {
+	
+	/**
+	 * Constructeur d'AlgoReader
+	 *
+	 * @param filePath
+	 * 		String décrivant le chemin faire le fichier contenant l'algorithme
+	 */
+	public AlgoReader(String filePath)
+	{
 		String line;
 		algorithm = new ArrayList<String>();
-
-		try {
-			InputStream ips = this.getClass().getResourceAsStream(filePath);
+		
+		try
+		{
+			InputStream       ips  = this.getClass().getResourceAsStream(filePath);
 			InputStreamReader ipsr = new InputStreamReader(ips);
-			BufferedReader br = new BufferedReader(ipsr);
-
-			while ((line = br.readLine()) != null) {
+			BufferedReader    br   = new BufferedReader(ipsr);
+			
+			while((line = br.readLine()) != null)
+			{
 				algorithm.add(line);
 			}
 			ipsr.close();
-		} catch (Exception e) {
+		}
+		catch(Exception e)
+		{
 			System.err.println("Erreur: fichier introuvable");
 		}
 	}
-
-	public ArrayList<String> getAlgorithm() {
+	
+	/**
+	 * Méthode permettant d'obtenir l'ArrayList de String consrtuite sur la base du fichier
+	 *
+	 * @return l'ArrayList<String> représentant l'algorithme
+	 */
+	public ArrayList<String> getAlgorithm()
+	{
 		return algorithm;
 	}
 }

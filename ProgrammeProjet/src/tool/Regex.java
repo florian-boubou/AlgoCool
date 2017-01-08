@@ -1,32 +1,125 @@
 package tool;
 
 /**
- * Created by Terawa on 06/01/2017.
+ * Classe Regex, utilitaire qui permet de vérifier la bonne forme de tous les mots-clés de l'algorithme
+ *
+ * @author Antoine WARET
+ * @version 1.0.0a
+ * @date 01/08/2017
  */
-public class Regex {
-    public static final String REGEX_VARIABLE = "^[a-z][0-9A-Za-z]*(_[0-9a-zA-Z]*)*$";
-    public static final String REGEX_CONSTANT = "^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$";
-    public static final String REGEX_INTEGER = "[0-9]*";
-    public static final String REGEX_DOUBLE = "[0-9]*,[0-9]+";
-    public static final String REGEX_BOOLEAN = "^true|false$";
-    public static final String REGEX_STRING = "^\"([^\"]|\\\\\")*\"$";
-    public static final String REGEX_CHAR = "^'[^']'$";
-    public static final String REGEX_FUNCTION = "^[a-z][a-zA-Z]*\\( *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *([+×,\\-\\\\] *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *)* *\\)$";
-    
-    public static boolean isVariable(String s) {return s.matches(REGEX_VARIABLE);}
-
-    public static boolean isConstant(String s) {return s.matches(REGEX_CONSTANT);}
-
-    public static boolean isInteger(String s) {return s.matches(REGEX_INTEGER);}
-
-    public static  boolean isDouble(String s) {return s.matches(REGEX_DOUBLE);}
-
-    public static boolean isBoolean(String s) {return s.matches(REGEX_BOOLEAN);}
-
-    public static boolean isString(String s) {return s.matches(REGEX_STRING);}
-
-    public static boolean isCharacter(String s) {return s.matches(REGEX_CHAR);}
-    
-    public static boolean isFunction(String s)  { return s.matches(REGEX_FUNCTION); }
-    
+public class Regex
+{
+	public static final String REGEX_VARIABLE = "^[a-z][0-9A-Za-z]*(_[0-9a-zA-Z]*)*$";
+	public static final String REGEX_CONSTANT = "^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$";
+	public static final String REGEX_INTEGER  = "[0-9]*";
+	public static final String REGEX_DOUBLE   = "[0-9]*,[0-9]+";
+	public static final String REGEX_BOOLEAN  = "^vrai|faux";
+	public static final String REGEX_STRING   = "^\"([^\"]|\\\\\")*\"$";
+	public static final String REGEX_CHAR     = "^'[^']'$";
+	public static final String REGEX_FUNCTION = "^[a-z][a-zA-Z]*\\( *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *([+×,\\-\\\\] *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *)* *\\)$";
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard de variable
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isVariable(String s)
+	{
+		return s.matches(REGEX_VARIABLE);
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard de constante
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isConstant(String s)
+	{
+		return s.matches(REGEX_CONSTANT);
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard des entiers
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isInteger(String s)
+	{
+		return s.matches(REGEX_INTEGER);
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard des réels
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isDouble(String s)
+	{
+		return s.matches(REGEX_DOUBLE);
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard des booléens
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isBoolean(String s)
+	{
+		return s.matches(REGEX_BOOLEAN);
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard des chaînes de caractères
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isString(String s)
+	{
+		return s.matches(REGEX_STRING);
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard des caractères
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isCharacter(String s)
+	{
+		return s.matches(REGEX_CHAR);
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien au standard des primitives
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isFunction(String s)
+	{
+		return s.matches(REGEX_FUNCTION);
+	}
+	
 }

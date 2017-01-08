@@ -1,42 +1,70 @@
 import bsh.Interpreter;
+import engine.SyntaxChecker;
 import engine.type.Variable;
 
 import java.util.ArrayList;
 
+
 /**
- * Created by Terawa on 08/01/2017.
+ * Classe AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
+ *
+ * @author Antoine WARET, Mathieu CHOUGUI
+ * @version 1.0.0a
+ * @date 01/08/2017
  */
 public class AlgoInterpreter
 {
-	private Interpreter         interpreter;
-	private ArrayList<Variable> data;
+	private Interpreter interpreter;
+	private DataFactory data;
 	
-	public AlgoInterpreter()
+	private ArrayList<String> algorithm;
+	
+	/**
+	 * Constructeur d'AlgoInterpreter
+	 *
+	 * @param algorithm
+	 * 		L'ArrayList<String> représentant l'algorithme à interpréter
+	 */
+	public AlgoInterpreter(ArrayList<String> algorithm)
 	{
 		interpreter = new Interpreter();
+		this.algorithm = algorithm;
 	}
 	
-	public void declareData(String line)
+	/**
+	 * Méthode lançant l'interprétation
+	 */
+	public void run()
 	{
-		String varName;
-		if(!line.trim().isEmpty())
+		
+		this.declareData(null);
+		for(String s : algorithm)
 		{
-			if(line.contains("◄—"))
-			{
-				varName = line.split("◄—")[0].trim();
-				
-			}
+			this.processLine(s);
 		}
 	}
 	
+	/**
+	 * Méthode stockant toutes les variables déclarées dans la DataFactory
+	 *
+	 * @param data
+	 * 		L'ArrayList<String> correspondante à la partie données de l'algorithme
+	 */
+	public void declareData(ArrayList<String> data)
+	{
+		
+	}
+	
+	/**
+	 * Méthodant interprétant l'algorithme ligne par ligne
+	 *
+	 * @param line
+	 * 		La ligne à interpréter
+	 *
+	 * @return Ce qui sera possiblement à afficher après l'interprétation de cette ligne
+	 */
 	public String processLine(String line)
 	{
-		return "";
-	}
-		
-	public static void main(String[] args)
-	{
-		String line = "\t\tecrire(joie)\n";
 		line = new String(line.replaceAll("\\s", ""));
 		
 		if(tool.Regex.isFunction(line))
@@ -44,8 +72,28 @@ public class AlgoInterpreter
 			String[] fonc = line.split("\\(");
 			if(fonc[0].equals("ecrire"))
 			{
-				System.out.println(fonc[1].replace(')', ' ').trim());
+				
 			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Point d'entrée du programme d'interprétation
+	 *
+	 * @param args
+	 * 		Contiendra une chaîne représentant le chemin vers le fichier contenant l'algorithme à interpréter
+	 */
+	public static void main(String[] args)
+	{
+		AlgoReader      algoReader    = new AlgoReader(args[0]);
+		AlgoInterpreter algoInterpreter;
+		SyntaxChecker   syntaxChecker = new SyntaxChecker(algoReader.getAlgorithm());
+		if(syntaxChecker.headerCheck() && syntaxChecker.dataCheck() && syntaxChecker.bodyCheck())
+		{
+			algoInterpreter = new AlgoInterpreter(algoReader.getAlgorithm());
+			algoInterpreter.run();
 		}
 	}
 }

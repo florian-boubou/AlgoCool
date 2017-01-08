@@ -20,6 +20,7 @@ public class CharVar extends Variable implements Comparable<CharVar>
 	public CharVar( String name, String strValue )
 	{
 		super( name, strValue );
+		type = "caractere";
 		if(strValue != null)
 			this.value = strValue.charAt( 0 );
 	}

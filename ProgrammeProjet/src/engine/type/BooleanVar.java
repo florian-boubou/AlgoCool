@@ -20,6 +20,7 @@ public class BooleanVar extends Variable
 	public BooleanVar( String name, String strValue )
 	{
 		super( name, strValue );
+		type = "booleen";
 		if(strValue != null) {
 			if (strValue.equals("vrai")) value = true;
 			else value = false;

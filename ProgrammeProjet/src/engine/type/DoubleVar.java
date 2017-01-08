@@ -20,6 +20,7 @@ public class DoubleVar extends Variable implements Comparable<DoubleVar>
 	public DoubleVar( String name, String strValue )
 	{
 		super( name, strValue );
+		type = "double";
 		if(strValue != null)
 			this.value = Double.parseDouble( strValue );
 	}

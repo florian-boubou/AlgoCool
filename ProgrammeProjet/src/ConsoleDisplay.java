@@ -37,12 +37,12 @@ public class ConsoleDisplay
 	 */
 	public void display(int current)
 	{
-		//ArrayList<Variable> variables = interpreter.getData();
+		/*ArrayList<Variable> variables = interpreter.getData();
 		ArrayList<Variable> variables = new ArrayList<Variable>();
 		variables.add(new IntegerVar("x", "5"));
 		variables.add(new IntegerVar("y", "2"));
 		variables.add(new StringVar("CACA", "\"Coucou\""));
-		variables.add(new DoubleVar("z", "12.5"));
+		variables.add(new DoubleVar("z", "12.5"));*/
 		
 		String dataStr;
 		String str = background + new String(new char[10]).replace('\0', '"') + new String(new char[78]).replace(
@@ -61,8 +61,8 @@ public class ConsoleDisplay
 			}
 			else if(iVar < interpreter.getAlData().size()) {
 				dataStr = "|" + String.format("%-10s", interpreter.getAlData().get(iVar).getName())
-						+ "|" + String.format("%-10s", interpreter.getAlData().get(iVar).getClass())
-						+ "|" + String.format("%-20s", interpreter.getAlData().get(iVar).getStrValue()) + "|\n";
+						+ "|" + String.format("%-10s", interpreter.getAlData().get(iVar).getType())
+						+ "|" + String.format("%-20s", interpreter.getAlData().get(iVar).getStrValue() == null ? "" : interpreter.getAlData().get(iVar).getStrValue()) + "|\n";
 				iVar++;
 			}
 			else if(iVar == interpreter.getAlData().size()) {

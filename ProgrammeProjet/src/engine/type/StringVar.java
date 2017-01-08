@@ -22,6 +22,7 @@ public class StringVar extends Variable
 	public StringVar(String name, String strValue)
 	{
 		super(name, strValue);
+		type = "chaine";
 		if(strValue != null)
 			this.value = strValue;
 	}

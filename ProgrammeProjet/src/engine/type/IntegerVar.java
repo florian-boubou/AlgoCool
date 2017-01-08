@@ -20,6 +20,7 @@ public class IntegerVar extends Variable implements Comparable<IntegerVar>
 	public IntegerVar( String name, String strValue )
 	{
 		super( name, strValue );
+		type = "entier";
 		if(strValue != null)
 			this.value = Integer.parseInt( strValue );
 	}

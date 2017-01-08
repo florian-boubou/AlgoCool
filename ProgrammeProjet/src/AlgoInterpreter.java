@@ -52,10 +52,8 @@ public class AlgoInterpreter
 		syntaxChecker.dataCheck();
 		this.declareData(syntaxChecker.gethData());
 		for(String s : df.getHMapData().keySet()){
-			System.err.println(s);
 			alData.add(df.getHMapData().get(s));
 		}
-		System.err.println(alData.size());
 		/*for(String s : algorithm)
 		{
 			this.processLine(s);
@@ -76,7 +74,7 @@ public class AlgoInterpreter
 					try {
 						df.dataDeclaration(valName, null, data.get(valName));
 					} catch (Exception e) {
-						System.err.println("ta mère");
+						System.err.println(e.toString());
 					}
 				}
 				else {

@@ -11,6 +11,7 @@ package engine.type;
 public abstract class Variable
 {
 	public       String  name;
+	public       String  type;
 	public       String  strValue;
 	public final boolean constant;
 
@@ -39,6 +40,16 @@ public abstract class Variable
 		return this.strValue;
 	}
 	
+	/**
+	 * Méthode permettant d'obtenir le type de la variable sous forme de string
+	 *
+	 * @return Le type de la variable
+	 */
+	public String getType()
+	{
+		return this.type;
+	}
+
 	/**
 	 * Méthode permettant d'obtenir le nom de la variable
 	 *

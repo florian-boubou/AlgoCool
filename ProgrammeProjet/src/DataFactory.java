@@ -17,7 +17,7 @@ public class DataFactory
 		INTEGER("entier", Regex.REGEX_INTEGER),
 		DOUBLE("double", Regex.REGEX_DOUBLE),
 		CHAR("caractere", Regex.REGEX_CHAR),
-		STRING("string", Regex.REGEX_STRING),
+		STRING("chaine", Regex.REGEX_STRING),
 		BOOLEAN("booleen", Regex.REGEX_BOOLEAN);
 		
 		private String pCType;
@@ -94,7 +94,7 @@ public class DataFactory
 				hMapData.put(varName, new IntegerVar(varName, value));
 				break;
 			case "double":
-				hMapData.put(varName, new DoubleVar(varName, value));
+				hMapData.put(varName, new DoubleVar(varName, value.replace(',','.')));
 				break;
 			case "caractere":
 				hMapData.put(varName, new CharVar(varName, value));

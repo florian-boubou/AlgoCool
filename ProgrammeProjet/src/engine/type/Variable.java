@@ -13,26 +13,9 @@ public abstract class Variable
 	public       String  name;
 	public       String  strValue;
 	public final boolean constant;
-	
+
 	/**
-	 * Constructeur de Variable
-	 *
-	 * @param name
-	 * 		Le nom de la Variable
-	 * @param strValue
-	 * 		La chaîne représentant sa valeur
-	 * @param constant
-	 * 		Booléen indiquant si la Variable est constante
-	 */
-	public Variable(String name, String strValue, boolean constant)
-	{
-		this.name = name;
-		this.strValue = strValue;
-		this.constant = constant;
-	}
-	
-	/**
-	 * Deuxième constructeur de Variable
+	 *Constructeur de Variable
 	 *
 	 * @param name
 	 * 		Le nom de la Variable
@@ -43,7 +26,7 @@ public abstract class Variable
 	{
 		this.name = name;
 		this.strValue = strValue;
-		this.constant = false;
+		this.constant = (strValue != null);
 	}
 	
 	/**

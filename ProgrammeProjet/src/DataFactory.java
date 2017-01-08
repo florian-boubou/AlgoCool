@@ -1,7 +1,7 @@
 import engine.type.*;
 import tool.Regex;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Classe AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
@@ -58,14 +58,14 @@ public class DataFactory
 		}
 	}
 	
-	private HashMap<String, Variable> hMapData;
+	private LinkedHashMap<String, Variable> hMapData;
 	
 	/**
 	 * Constructeur de DataFactory
 	 */
 	public DataFactory()
 	{
-		hMapData = new HashMap<>();
+		hMapData = new LinkedHashMap<>();
 	}
 	
 	
@@ -126,6 +126,7 @@ public class DataFactory
 			if(value.matches(t.getRegexType()))
 			{
 				ret = t.getpCType();
+				break;
 			}
 		}
 		return ret;
@@ -136,7 +137,7 @@ public class DataFactory
 	 *
 	 * @return La HashMap de Variable
 	 */
-	public HashMap<String, Variable> getHMapData()
+	public LinkedHashMap<String, Variable> getHMapData()
 	{
 		return hMapData;
 	}

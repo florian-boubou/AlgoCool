@@ -11,7 +11,7 @@ public class Test
 	
 	public static void main(String[] args)
 	{
-		Interpreter bsh = new Interpreter();
+		/*Interpreter bsh = new Interpreter();
 		try
 		{
 			bsh.eval("a = 2");
@@ -20,7 +20,7 @@ public class Test
 		catch(Exception e)
 		{
 			System.err.println("Erreur");
-		}
+		}*/
 		
 		AlgoReader r = new AlgoReader("/test.algo");
 		algorithm = r.getAlgorithm();

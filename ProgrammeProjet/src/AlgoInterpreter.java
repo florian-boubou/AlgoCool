@@ -1,8 +1,10 @@
 import bsh.Interpreter;
 import engine.SyntaxChecker;
 import engine.type.Variable;
+import tool.Regex;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -15,9 +17,12 @@ import java.util.ArrayList;
 public class AlgoInterpreter
 {
 	private Interpreter interpreter;
+	private DataFactory df;
+	private SyntaxChecker syntaxChecker;
 	private DataFactory data;
 	
 	private ArrayList<String> algorithm;
+	private ArrayList<Variable> alData;
 	
 	/**
 	 * Constructeur d'AlgoInterpreter
@@ -27,8 +32,16 @@ public class AlgoInterpreter
 	 */
 	public AlgoInterpreter(ArrayList<String> algorithm)
 	{
-		interpreter = new Interpreter();
-		this.algorithm = algorithm;
+		try {
+			interpreter = new Interpreter();
+			df = new DataFactory();
+			syntaxChecker = new SyntaxChecker(algorithm);
+			this.algorithm = algorithm;
+			alData = new ArrayList<>();
+		}
+		catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	/**
@@ -36,12 +49,17 @@ public class AlgoInterpreter
 	 */
 	public void run()
 	{
-		
-		this.declareData(null);
-		for(String s : algorithm)
+		syntaxChecker.dataCheck();
+		this.declareData(syntaxChecker.gethData());
+		for(String s : df.getHMapData().keySet()){
+			System.err.println(s);
+			alData.add(df.getHMapData().get(s));
+		}
+		System.err.println(alData.size());
+		/*for(String s : algorithm)
 		{
 			this.processLine(s);
-		}
+		}*/
 	}
 	
 	/**
@@ -50,10 +68,28 @@ public class AlgoInterpreter
 	 * @param data
 	 * 		L'ArrayList<String> correspondante à la partie données de l'algorithme
 	 */
-	public void declareData(ArrayList<String> data)
+	public void declareData(HashMap<String, String> data)
 	{
-		
+
+			for(String valName : data.keySet()) {
+				if (Regex.isConstant(valName)) {
+					try {
+						df.dataDeclaration(valName, null, data.get(valName));
+					} catch (Exception e) {
+						System.err.println("ta mère");
+					}
+				}
+				else {
+
+					try {
+						df.dataDeclaration(valName, data.get(valName), null);
+					} catch (Exception e) {
+						System.err.println(e.toString());
+					}
+				}
+			}
 	}
+
 	
 	/**
 	 * Méthodant interprétant l'algorithme ligne par ligne
@@ -78,6 +114,10 @@ public class AlgoInterpreter
 		
 		return null;
 	}
+
+	public ArrayList<Variable> getAlData(){
+		return alData;
+	}
 	
 	/**
 	 * Point d'entrée du programme d'interprétation
@@ -85,7 +125,7 @@ public class AlgoInterpreter
 	 * @param args
 	 * 		Contiendra une chaîne représentant le chemin vers le fichier contenant l'algorithme à interpréter
 	 */
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		AlgoReader      algoReader    = new AlgoReader(args[0]);
 		AlgoInterpreter algoInterpreter;
@@ -95,5 +135,5 @@ public class AlgoInterpreter
 			algoInterpreter = new AlgoInterpreter(algoReader.getAlgorithm());
 			algoInterpreter.run();
 		}
-	}
+	}*/
 }

@@ -11,9 +11,9 @@ public class Regex
 {
 	public static final String REGEX_VARIABLE = "^[a-z][0-9A-Za-z]*(_[0-9a-zA-Z]*)*$";
 	public static final String REGEX_CONSTANT = "^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$";
-	public static final String REGEX_INTEGER  = "[0-9]*";
-	public static final String REGEX_DOUBLE   = "[0-9]*,[0-9]+";
-	public static final String REGEX_BOOLEAN  = "^vrai|faux";
+	public static final String REGEX_INTEGER  = "^[0-9]*$";
+	public static final String REGEX_DOUBLE   = "^[0-9]*,[0-9]+$";
+	public static final String REGEX_BOOLEAN  = "^(vrai|faux)$";
 	public static final String REGEX_STRING   = "^\"([^\"]|\\\\\")*\"$";
 	public static final String REGEX_CHAR     = "^'[^']'$";
 	public static final String REGEX_FUNCTION = "^[a-z][a-zA-Z]*\\( *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *([+×,\\-\\\\] *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *)* *\\)$";

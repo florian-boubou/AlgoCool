@@ -22,7 +22,8 @@ public class StringVar extends Variable
 	public StringVar(String name, String strValue)
 	{
 		super(name, strValue);
-		this.value = strValue;
+		if(strValue != null)
+			this.value = strValue;
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 import engine.type.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Classe ConsoleDisplay qui se charge d'afficher tout le tintouin
@@ -24,6 +25,8 @@ public class ConsoleDisplay
 	public ConsoleDisplay(ArrayList<String> algorithm)
 	{
 		this.algorithm = algorithm;
+		interpreter = new AlgoInterpreter(algorithm);
+		interpreter.run();
 	}
 	
 	/**
@@ -41,36 +44,39 @@ public class ConsoleDisplay
 		variables.add(new StringVar("CACA", "\"Coucou\""));
 		variables.add(new DoubleVar("z", "12.5"));
 		
-		String dataStr = background + "";
+		String dataStr;
 		String str = background + new String(new char[10]).replace('\0', '"') + new String(new char[78]).replace(
 				'\0', ' ') + new String(new char[11]).replace('\0', '"') + "\n";
 		str += "|  CODE  |" + new String(new char[78]).replace('\0', ' ') + "| DONNEES |\n";
-		str += new String(new char[87]).replace('\0', '"') + " " + new String(new char[46]).replace('\0', '"') + "\n";
+		str += new String(new char[87]).replace('\0', '"') + " " + new String(new char[44]).replace('\0', '"') + "\n";
 		
 		int iVar = 0;
 		for(int i = 0 ; i < (algorithm.size() > 40 ? 40 : algorithm.size()) ; i++)
 		{
 			if(i == 0)
 			{
-				dataStr = background + "|" + String.format("%-10.10s", "NOM") + "|" + String.format("%-10.10s",
-				                                                                                    "TYPE") + "|" +
-				          String.format("%-20.20s", "VALEUR") + "|\n";
+				dataStr = background + "|" + String.format("%-10s", "NOM") + "|"
+						+ String.format("%-10s", "TYPE") + "|"
+						+ String.format("%-20s", "VALEUR") + "|\n";
+			}
+			else if(iVar < interpreter.getAlData().size()) {
+				dataStr = "|" + String.format("%-10s", interpreter.getAlData().get(iVar).getName())
+						+ "|" + String.format("%-10s", interpreter.getAlData().get(iVar).getClass())
+						+ "|" + String.format("%-20s", interpreter.getAlData().get(iVar).getStrValue()) + "|\n";
+				iVar++;
+			}
+			else if(iVar == interpreter.getAlData().size()) {
+				dataStr = new String(new char[44]).replace('\0', '"') + "\n";
+				iVar++;
 			}
 			else
 			{
-				if(iVar < variables.size())
-				{
-					dataStr = background + variables.get(iVar).toString() + "\n";
-					iVar++;
-				}
-				else
-				{
-					dataStr = background + "\n";
-				}
+				dataStr = "\n";
 			}
-			str += background + "| " + String.format("%-88.88s", (current == i ? "\033[47m" + "\033[30m" : "") +
+
+			str += background + "| " + String.format("%-80s", (current == i ? "\033[47m" + "\033[30m" : "") +
 			                                                     String.format("%2d", i) + " " + String.format(
-					algorithm.get(i).contains("◄—") ? "%-79s" : "%-80s", algorithm.get(i))) + " | " + dataStr;
+					algorithm.get(i).contains("◄—") ? "%-79s" : "%-80s", algorithm.get(i))) + background + " | " + dataStr;
 		}
 		str += new String(new char[87]).replace('\0', '"') + "\n";
 		System.out.println(str);

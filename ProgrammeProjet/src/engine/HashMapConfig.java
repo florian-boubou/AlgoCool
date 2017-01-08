@@ -30,10 +30,9 @@ public class HashMapConfig
 		
 		try
 		{
-			//InputStream       ips  = Test.class.getResourceAsStream( "type/AlgoPars.algo" );
-			//InputStreamReader ipsr = new InputStreamReader( ips );
-			FileReader     fr = new FileReader("type/AlgoPars.config");
-			BufferedReader br = new BufferedReader(fr);
+			InputStream       ips  = this.getClass().getResourceAsStream("/AlgoPars.config");
+			InputStreamReader ipsr = new InputStreamReader(ips);;
+			BufferedReader br = new BufferedReader(ipsr);
 			while((line = br.readLine()) != null)
 			{
 				line.replaceAll("\\t| ", "");

@@ -1,10 +1,9 @@
 package engine;
 
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 import tool.Regex;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Classe permettant de vérifier la syntaxe du pseudo-code à interpréter
@@ -17,15 +16,14 @@ public class SyntaxChecker
 	private ArrayList<String>       data;
 	private ArrayList<String>       body;
 	private HashMapConfig           reserved;
-	private HashMap<String, String> hConstant;
-	private HashMap<String, String> hVariable;
+	private LinkedHashMap<String, String> hData;
 
 	/**
 	 * Constructeur de la classe initialisant les structures d'en-tête, de données et de corps
 	 * @param algo La structure contenant les lignes de code du programme à interpréter
-	 * @throws SyntaxException Dans le cas où il n'y a pas de corps de défini dans le code
+	 * @throws Exception Dans le cas où il n'y a pas de corps de défini dans le code
 	 */
-	public SyntaxChecker( ArrayList<String> algo ) throws SyntaxException
+	public SyntaxChecker( ArrayList<String> algo ) throws Exception
 	{
 		int delimiter = -1;
 		data = new ArrayList<String>();
@@ -46,7 +44,7 @@ public class SyntaxChecker
 		//Si la balise "DEBUT" n'a pas été trouvée, on lance une exception
 		if( delimiter == -1 )
 		{
-			throw new SyntaxException( "L'algorithme doit contenir une balise \"DEBUT\"" );
+			throw new Exception( "L'algorithme doit contenir une balise \"DEBUT\"" );
 		}
 
 		//Remplissage de la partie données contenue entre l'en-tête et le corps de l'algorithme
@@ -90,12 +88,13 @@ public class SyntaxChecker
 		int constant = -1;
 		//Indice de la balise "variable:"
 		int    variable = -1;
+		int nbConstant = 0;
+		int nbVariable = 0;
 		String testLine = null;
 		String testName = null;
 		String testType = null;
 		//HashMaps contenant les constantes et les variables
-		hConstant = new HashMap<String, String>();
-		hVariable = new HashMap<String, String>();
+		hData = new LinkedHashMap<String, String>();
 
 		//On cherche les balises "constante:" et "variable:"
 		for( int i = 0; i < data.size(); i++ )
@@ -151,17 +150,18 @@ public class SyntaxChecker
 								"^\"([^\"]|\\\\\")*\"$|[0-9]*(,[0-9]*)?$|^'[^']|\''$" ) )
 							return false;
 						//On vérifie que la constante n'a pas déjà été déclarée
-						for( String k : hConstant.keySet() )
+						for( String k : hData.keySet() )
 							if( k.equals( testName ) )
 								return false;
 
 						//On place dans la HasMap de constantes la constante vérifiée en clé et sa valeur attribuée en valeur
-						hConstant.put( testName, testLine.split( "◄—" )[1].trim() );
+						hData.put( testName, testLine.split( "◄—" )[1].trim() );
 					}
 				}
+				nbConstant = hData.size();
 
 			//Si la balise "constante:" existe mais qu'aucune constante n'est déclarée, on retourne false
-			if( hConstant.isEmpty() )
+			if( nbConstant == 0 )
 				return false;
 		}
 
@@ -203,11 +203,11 @@ public class SyntaxChecker
 								return false;
 
 						//On vérifie que la variable n'a pas déjà été déclarée
-						for( String k : hVariable.keySet() )
+						for( String k : hData.keySet() )
 							if( k.equals( testName.split( "," )[j].trim() ) )
 								return false;
 
-						hVariable.put( testName.split( "," )[j].trim(), testType );
+						hData.put( testName.split( "," )[j].trim(), testType );
 					}
 				}
 				else
@@ -215,11 +215,12 @@ public class SyntaxChecker
 					if( !Regex.isVariable( testName ) )
 						return false;
 
-					hVariable.put( testName, testType );
+					hData.put( testName, testType );
 				}
 			}
+			nbVariable = hData.size() - nbConstant;
 
-			if( hVariable.isEmpty() )
+			if( nbVariable == 0 )
 				return false;
 		}
 
@@ -240,7 +241,7 @@ public class SyntaxChecker
 		for( String s : body )
 			if( s.contains( "◄—" ) )
 			{
-				for( String keyV : hVariable.keySet() )
+				for( String keyV : hData.keySet() )
 					if( s.split( "◄—" )[0].trim().equals( keyV ) )
 					{
 						found = true;
@@ -266,27 +267,29 @@ public class SyntaxChecker
 	 */
 	public boolean typeCheck( String var, String val )
 	{
-		if( val.matches( "^[a-z][0-9A-Za-z]*((-|_)[0-9a-zA-Z]*)*$" ) )
-			return hVariable.get( var ).equals( hVariable.get( val ) );
-		else if( val.matches( "^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$" ) )
-			return hConstant.get( var ).equals( hConstant.get( val ) );
+		if( Regex.isConstant(val) || Regex.isVariable(val) )
+			return hData.get( var ).equals( hData.get( val ) ); //à revoir
 		else
-			switch( hVariable.get( var ) )
+			switch( hData.get( var ) )
 			{
 				case "entier":
-					return tool.Regex.isInteger( var );
+					return Regex.isInteger( var );
 				case "reel":
-					return tool.Regex.isDouble( var );
+					return Regex.isDouble( var );
 				case "booleen":
-					break;
+					return Regex.isBoolean(var);
 				case "caractere":
-					return tool.Regex.isCharacter( var );
+					return Regex.isCharacter( var );
 				case "chaine":
-					return tool.Regex.isString( var );
+					return Regex.isString( var );
 				default:
 					break;
 			}
 
 		return false;
+	}
+
+	public LinkedHashMap<String, String> gethData() {
+		return hData;
 	}
 }

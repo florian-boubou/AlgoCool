@@ -8,9 +8,9 @@ public class StringVar extends Variable
 {
 	private String value;
 
-	public StringVar(String name,String strValue)
+	public StringVar( String name, String strValue )
 	{
-		super(name,strValue);
+		super( name, strValue );
 		this.value = strValue;
 	}
 
@@ -19,8 +19,8 @@ public class StringVar extends Variable
 		return value;
 	}
 
-	public void setValue(String value1)
+	public void setValue( String value1 )
 	{
-		if(!constant) this.value=value1;
+		if( !constant ) this.value = value1;
 	}
 }

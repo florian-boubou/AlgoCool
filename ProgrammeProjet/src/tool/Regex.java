@@ -11,7 +11,8 @@ public class Regex {
     public static final String REGEX_BOOLEAN = "^true|false$";
     public static final String REGEX_STRING = "^\"([^\"]|\\\\\")*\"$";
     public static final String REGEX_CHAR = "^'[^']'$";
-
+    public static final String REGEX_FUNCTION = "^[a-z][a-zA-Z]*\\( *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *([+×,\\-\\\\] *(([a-z]\\w*(_\\w*)*)+|[0-9]*) *)* *\\)$";
+    
     public static boolean isVariable(String s) {return s.matches(REGEX_VARIABLE);}
 
     public static boolean isConstant(String s) {return s.matches(REGEX_CONSTANT);}
@@ -25,4 +26,7 @@ public class Regex {
     public static boolean isString(String s) {return s.matches(REGEX_STRING);}
 
     public static boolean isCharacter(String s) {return s.matches(REGEX_CHAR);}
+    
+    public static boolean isFunction(String s)  { return s.matches(REGEX_FUNCTION); }
+    
 }

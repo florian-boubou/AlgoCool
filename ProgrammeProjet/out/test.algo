@@ -1,12 +1,10 @@
 ALGORITHME Algo
 constante:
-CACA ◄— "\""
+TAILLE ◄— 58
 variable :
     x, y : entier
 DEBUT
     x   ◄— 5
     y   ◄— 2
-    ◄—
-    ◄—
-
+    ecrire(x)
 FIN

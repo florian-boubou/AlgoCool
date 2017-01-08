@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="bsh-2.0b4">
+  <library name="bsh-2.0b41">
     <CLASSES>
-      <root url="jar://C:/JAVA/TP/paquetage_class/bsh-2.0b4.jar!/" />
+      <root url="jar://C:/JAVA/paquetage_class/bsh-2.0b4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

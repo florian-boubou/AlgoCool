@@ -18,6 +18,7 @@ public class Regex
 	public static final String REGEX_CHAR     = "^'[^']'$";
 	public static final String REGEX_FUNCTION = "^[a-z][a-zA-Z]*\\( *(([a-z]\\w*(_\\w*)*)+|[0-9]+|\"([^\"]|\\\\\")*\") *([+×,&\\-\\\\] *(([a-z]\\w*(_\\w*)*)+|[0-9]+|\"([^\"]|\\\\\")*\") *)* *\\)$";
 	public static final String REGEX_OPERATION= "^[0-9]+,?[0-9]* *([+&×\\-\\\\]|(MOD|DIV)){1} *[0-9]+,?[0-9]*$";
+	public static final String REGEX_CONDITION= "^\\s*si .+ alors\\s*$";
 	
 	/**
 	 * Méthode permettant de savoir si une chaîne correspond bien au standard de variable
@@ -135,5 +136,17 @@ public class Regex
 	{
 		return s.matches(REGEX_OPERATION);
 	}
-	
+
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à une opération
+	 *
+	 * @param s
+	 * 		La chaîne à analyser
+	 *
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isCondition(String s)
+	{
+		return s.matches(REGEX_CONDITION);
+	}
 }

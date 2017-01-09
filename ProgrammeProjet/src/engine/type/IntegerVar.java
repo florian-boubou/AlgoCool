@@ -40,9 +40,9 @@ public class IntegerVar extends Variable implements Comparable<IntegerVar>
 	 *
 	 * @param value1 la future valeur de la variable
 	 */
-	public void setValue( int value1 )
+	public void setValue( String value1 )
 	{
-		if( !constant ) this.value = value1;
+		if( !constant && value1 != null) this.value = Integer.parseInt( value1 );
 	}
 
 	/**

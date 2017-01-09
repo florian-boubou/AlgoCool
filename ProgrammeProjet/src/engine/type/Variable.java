@@ -59,6 +59,12 @@ public abstract class Variable
 	{
 		return this.name;
 	}
+
+	/**
+	 * Methode abstraite permettant de changer la valeur
+	 * @param newValue nouvelle valeur a affecter
+     */
+	public abstract void setValue(String newValue);
 	
 	/**
 	 * Méthode permettant d'obetnir une chaîne représentant l'état complet de l'objet Variable courant
@@ -69,4 +75,6 @@ public abstract class Variable
 	{
 		return this.name + " : " + this.strValue;
 	}
+
+
 }

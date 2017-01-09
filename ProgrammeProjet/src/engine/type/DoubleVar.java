@@ -40,9 +40,9 @@ public class DoubleVar extends Variable implements Comparable<DoubleVar>
 	 *
 	 * @param value1 la future valeur de la variable
 	 */
-	public void setValue( double value1 )
+	public void setValue( String value1 )
 	{
-		if( !constant ) this.value = value1;
+		if( !constant && value1 != null) this.value = Double.parseDouble( value1 );
 	}
 
 	/**

@@ -45,6 +45,6 @@ public class StringVar extends Variable
 	 */
 	public void setValue(String value1)
 	{
-		if(!constant) this.value = value1;
+		if(!constant && value1 != null) this.value = value1;
 	}
 }

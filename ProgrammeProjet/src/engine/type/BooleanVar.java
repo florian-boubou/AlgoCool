@@ -42,8 +42,11 @@ public class BooleanVar extends Variable
 	 *
 	 * @param value1 la future valeur de la variable
 	 */
-	public void setValue( boolean value1 )
+	public void setValue( String value1 )
 	{
-		if( !constant ) this.value = value1;
+		if( !constant && strValue != null) {
+			if (value1.equals("vrai")) value = true;
+			else value = false;
+		}
 	}
 }

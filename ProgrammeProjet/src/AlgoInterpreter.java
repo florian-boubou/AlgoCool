@@ -2,10 +2,12 @@ import bsh.EvalError;
 import bsh.Interpreter;
 import engine.SyntaxChecker;
 import engine.type.Variable;
+import tool.Loop;
 import tool.Regex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 
 /**
@@ -23,8 +25,11 @@ public class AlgoInterpreter
 	private DataFactory   data;
 
 	private ArrayList<String>   algorithm;
+	private int                 lineIndex;
 	private ArrayList<Variable> alData;
-	private ArrayList<Boolean>  conditionsStack;
+
+	private Stack<Boolean> conditionsStack;
+	private Stack<Loop>    loopsStack;
 
 	/**
 	 * Constructeur d'AlgoInterpreter
@@ -38,9 +43,13 @@ public class AlgoInterpreter
 			interpreter = new Interpreter();
 			df = new DataFactory();
 			syntaxChecker = new SyntaxChecker( algorithm );
+
 			this.algorithm = algorithm;
+			lineIndex = 0;
+
 			alData = new ArrayList<>();
-			conditionsStack = new ArrayList<>();
+			conditionsStack = new Stack<>();
+			loopsStack = new Stack<>();
 		} catch( Exception e )
 		{
 			System.err.println( e.getMessage() );
@@ -55,10 +64,10 @@ public class AlgoInterpreter
 	{
 		syntaxChecker.dataCheck();
 		this.declareData( syntaxChecker.gethData() );
+
 		for( String s : df.getHMapData().keySet() )
-		{
 			alData.add( df.getHMapData().get( s ) );
-		}
+
 		for( Variable v : alData )
 		{
 			try
@@ -69,10 +78,9 @@ public class AlgoInterpreter
 				System.err.println( e.toString() );
 			}
 		}
-		for( String s : syntaxChecker.getBody() )
-		{
-			this.processLine( s );
-		}
+
+		for( ; lineIndex < algorithm.size(); lineIndex++ )
+			this.processLine();
 	}
 
 
@@ -113,24 +121,29 @@ public class AlgoInterpreter
 	/**
 	 * Méthodant interprétant l'algorithme ligne par ligne
 	 *
-	 * @param line La ligne à interpréter
 	 * @return Ce qui sera possiblement à afficher après l'interprétation de cette ligne
 	 */
-	public String processLine( String line )
+	public String processLine()
 	{
-		line = line.trim();
+		String line = algorithm.get( lineIndex ).trim();
 		System.out.println( line ); //TEST
-		if( line.matches( "^fsi$" ) )
+
+		if( line.equals( "fsi" ) )
+			conditionsStack.pop();
+		else if( line.equals( "sinon" ) )
 		{
-			conditionsStack.remove( conditionsStack.size() - 1 );
-		} else if( line.matches( "^sinon$" ) )
-		{
-			Boolean b = conditionsStack.get( conditionsStack.size() - 1 );
+			Boolean b = conditionsStack.peek();
 			b = !b;
+		} else if( line.equals( "ftq" ) )
+		{
+			loopsStack.peek().setConditionValue(
+					evaluateCondition( loopsStack.peek().getCondition() ) );
+
+			if( loopsStack.peek().isConditionValue() ) ;
+			this.lineIndex = loopsStack.peek().getStartIndex();
 		}
 
-		if( conditionsStack.isEmpty() || !conditionsStack.isEmpty() && conditionsStack.get(
-				conditionsStack.size() - 1 ) )
+		if( conditionsStack.empty() || !conditionsStack.empty() && conditionsStack.peek() )
 		{
 			if( tool.Regex.isFunction( line ) )
 			{
@@ -149,7 +162,15 @@ public class AlgoInterpreter
 			{
 				line = new String( line.replaceAll( "\\s+", " " ) ).trim();
 				line = line.substring( line.indexOf( "si" ) + 2, line.indexOf( "alors" ) ).trim();
-				this.conditionsStack.add( this.evaluateCondition( line ) );
+				this.conditionsStack.push( this.evaluateCondition( line ) );
+			} else if( tool.Regex.isLoop( line ) )
+			{
+				this.loopsStack.push( new Loop( algorithm.indexOf( line ),
+				                                line.substring( line.indexOf( "que" ) + 3,
+				                                                line.indexOf( "faire" ) ) ) );
+
+				this.loopsStack.peek().setConditionValue(
+						evaluateCondition( loopsStack.peek().getCondition() ) );
 			}
 		}
 
@@ -174,6 +195,9 @@ public class AlgoInterpreter
 				try
 				{
 					interpreter.eval( v.getName() + " = " + v.getStrValue() );
+					v.setValue( String.valueOf( interpreter.get( v.getName() ) ) );
+					System.out.println( "AFFECTATION : " + v.getName() + " = " + v.getStrValue()
+					                  );//TEST
 				} catch( EvalError e )
 				{
 					System.err.println( e.toString() );
@@ -189,42 +213,7 @@ public class AlgoInterpreter
 	 */
 	public Boolean evaluateCondition( String condition )
 	{
-		//Transformations classiques pseudo-code -> Java
-		condition = condition.replaceAll( "/=", "!=" );
-		condition = condition.replaceAll( "ET|et", "&&" );
-		condition = condition.replaceAll( "OU|ou", "||" );
-
-		//On stocke les opérateurs logiques pour les réassigner plus tard
-		ArrayList<String> logicOps = new ArrayList<>();
-		{
-			String tmp = new String( condition );
-			int    opET, opOU;
-
-			for( ; (opET = tmp.indexOf( "&&" )) != -1 || (opOU = tmp.indexOf( "||" )) != -1; )
-			{
-				if( opET == -1 )
-					logicOps.add( "||" );
-				else if( opOU == -1 )
-					logicOps.add( "&&" );
-				else if( opET < opOU )
-					logicOps.add( "&&" );
-				else
-					logicOps.add( "||" );
-
-				tmp = tmp.replace( "&&", "" ).replace( "||", "" );
-			}
-		}
-
-		String[] tabS = condition.split( "\\&\\&|\\|\\|" );
-		condition = "";
-
-		//Transformation du = (pseudo-code) en == (pseudo-code)
-		for( int i = 0; i < tabS.length; i++ )
-		{
-			if( tabS[i].trim().matches( "^\\w*\\s*=\\s*\\w*$" ) )
-				tabS[i] = tabS[i].replaceAll( "=", "==" );
-			condition += tabS[i] + (i < tabS.length - 1 ? logicOps.get( i ) : "");
-		}
+		condition = tool.Transformer.transformCondition( condition );
 
 		try
 		{
@@ -233,6 +222,7 @@ public class AlgoInterpreter
 		{
 			evalError.printStackTrace();
 		}
+
 		return false;
 	}
 

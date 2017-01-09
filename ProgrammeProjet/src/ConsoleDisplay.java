@@ -44,7 +44,7 @@ public class ConsoleDisplay
 		variables.add(new StringVar("CACA", "\"Coucou\""));
 		variables.add(new DoubleVar("z", "12.5"));*/
 
-		StringBuilder dataStr = new StringBuilder();
+		String dataStr;
 
 		StringBuilder str = new StringBuilder();
 		str.append( background + new String( new char[10] ).replace( '\0', '"' ) +
@@ -63,33 +63,33 @@ public class ConsoleDisplay
 		{
 			if ( i == 0 )
 			{
-				dataStr.append( background + "|" + String.format( "%-10s", "NOM" ) + "|"
-								+ String.format( "%-10s", "TYPE" ) + "|"
-								+ String.format( "%-20s", "VALEUR" ) + "|\n" );
+				dataStr = background + "|" + String.format( "%-10s", "NOM" ) + "|"
+						  + String.format( "%-10s", "TYPE" ) + "|"
+						  + String.format( "%-20s", "VALEUR" ) + "|\n";
 			}
 			else if ( iVar < interpreter.getAlData().size() )
 			{
-				dataStr.append( "|" +
-								String.format( "%-10s",
-											   interpreter.getAlData().get( iVar ).getName() )
-								+ "|" +
-								String.format( "%-10s",
-											   interpreter.getAlData().get( iVar ).getType() )
-								+ "|" +
-								String.format( "%-20s", interpreter.getAlData().
-										get( iVar ).getStrValue() == null ?
-										"" : interpreter.getAlData().get( iVar ).getStrValue() ) +
-								"|\n" );
+				dataStr = "|" +
+						  String.format( "%-10s",
+										 interpreter.getAlData().get( iVar ).getName() )
+						  + "|" +
+						  String.format( "%-10s",
+										 interpreter.getAlData().get( iVar ).getType() )
+						  + "|" +
+						  String.format( "%-20s", interpreter.getAlData().
+								  get( iVar ).getStrValue() == null ?
+								  "" : interpreter.getAlData().get( iVar ).getStrValue() ) +
+						  "|\n";
 				iVar++;
 			}
 			else if ( iVar == interpreter.getAlData().size() )
 			{
-				dataStr.append( new String( new char[44] ).replace( '\0', '"' ) + "\n" );
+				dataStr = new String( new char[44] ).replace( '\0', '"' ) + "\n";
 				iVar++;
 			}
 			else
 			{
-				dataStr.append( "\n" );
+				dataStr = "\n";
 			}
 
 			str.append( background + "| " +
@@ -105,6 +105,7 @@ public class ConsoleDisplay
 
 		System.out.println( str );
 	}
+
 
 	/**
 	 * Méthode permettant d'obtenir l'algorithme à interpréter

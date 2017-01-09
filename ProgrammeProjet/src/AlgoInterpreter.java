@@ -139,8 +139,10 @@ public class AlgoInterpreter
 			loopsStack.peek().setConditionValue(
 					evaluateCondition( loopsStack.peek().getCondition() ) );
 
-			if( loopsStack.peek().isConditionValue() ) ;
-			this.lineIndex = loopsStack.peek().getStartIndex();
+			if( loopsStack.peek().isConditionValue() )
+				this.lineIndex = loopsStack.peek().getStartIndex();
+
+			line = algorithm.get( lineIndex );
 		}
 
 		if( conditionsStack.empty() || !conditionsStack.empty() && conditionsStack.peek() )
@@ -165,7 +167,7 @@ public class AlgoInterpreter
 				this.conditionsStack.push( this.evaluateCondition( line ) );
 			} else if( tool.Regex.isLoop( line ) )
 			{
-				this.loopsStack.push( new Loop( algorithm.indexOf( line ),
+				this.loopsStack.push( new Loop( lineIndex + 1,
 				                                line.substring( line.indexOf( "que" ) + 3,
 				                                                line.indexOf( "faire" ) ) ) );
 
@@ -173,7 +175,6 @@ public class AlgoInterpreter
 						evaluateCondition( loopsStack.peek().getCondition() ) );
 			}
 		}
-
 
 		return null;
 	}
@@ -194,7 +195,7 @@ public class AlgoInterpreter
 				v.setValue( val );
 				try
 				{
-					interpreter.eval( v.getName() + " = " + v.getStrValue() );
+					interpreter.eval( (v.getName() + " = " + v.getStrValue()) );
 					v.setValue( String.valueOf( interpreter.get( v.getName() ) ) );//PROBLEME
 					System.out.println( "AFFECTATION : " + v.getName() + " = " + v.getStrValue()
 					                  );//TEST
@@ -217,6 +218,8 @@ public class AlgoInterpreter
 
 		try
 		{
+			System.out.println( "CONDITION : " + condition + " = " + (Boolean) interpreter.eval(
+					condition ) );//TEST
 			return (Boolean) interpreter.eval( condition );
 		} catch( EvalError evalError )
 		{

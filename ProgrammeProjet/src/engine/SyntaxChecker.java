@@ -292,4 +292,6 @@ public class SyntaxChecker
 	public LinkedHashMap<String, String> gethData() {
 		return hData;
 	}
+
+	public ArrayList<String> getBody() {return body;}
 }

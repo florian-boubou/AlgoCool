@@ -42,7 +42,10 @@ public class DoubleVar extends Variable implements Comparable<DoubleVar>
 	 */
 	public void setValue( String value1 )
 	{
-		if( !constant && value1 != null) this.value = Double.parseDouble( value1 );
+		if( !constant && value1 != null) {
+			strValue = value1;
+			this.value = Double.parseDouble( value1 );
+		}
 	}
 
 	/**

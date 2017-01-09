@@ -42,7 +42,10 @@ public class IntegerVar extends Variable implements Comparable<IntegerVar>
 	 */
 	public void setValue( String value1 )
 	{
-		if( !constant && value1 != null) this.value = Integer.parseInt( value1 );
+		if( !constant) {
+			strValue = value1;
+			this.value = Integer.parseInt( value1 );
+		}
 	}
 
 	/**

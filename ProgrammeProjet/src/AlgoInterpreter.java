@@ -37,7 +37,7 @@ public class AlgoInterpreter {
             syntaxChecker = new SyntaxChecker(algorithm);
             this.algorithm = algorithm;
             alData = new ArrayList<>();
-            conditionsStack = new ArrayList<Boolean>();
+            conditionsStack = new ArrayList<>();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -53,7 +53,15 @@ public class AlgoInterpreter {
         for (String s : df.getHMapData().keySet()) {
             alData.add(df.getHMapData().get(s));
         }
-        for (String s : algorithm) {
+        for(Variable v : alData){
+            try{
+                interpreter.eval(v.getName() + " = " + v.getStrValue());
+            }
+            catch(EvalError e){
+                System.err.println(e.toString());
+            }
+        }
+        for (String s : syntaxChecker.getBody()) {
             this.processLine(s);
         }
     }
@@ -92,11 +100,12 @@ public class AlgoInterpreter {
      * @return Ce qui sera possiblement à afficher après l'interprétation de cette ligne
      */
     public String processLine(String line) {
-        line = new String(line.replaceAll("\\s", ""));
-
-        if (line.matches("^fsi\\s$"))
+        line = line.trim();
+        System.out.println(line); //TEST
+        if (line.matches("^fsi$")){
             conditionsStack.remove(conditionsStack.size() - 1);
-        else if (line.matches("^sinon\\s$"))
+        }
+        else if (line.matches("^sinon$"))
         {
             Boolean b = conditionsStack.get(conditionsStack.size() - 1);
             b = !b;
@@ -114,20 +123,30 @@ public class AlgoInterpreter {
             } else if (line.indexOf("◄—") != -1) {
                 this.assignement(line);
             } else if (tool.Regex.isCondition(line)) {
-                this.conditionsStack.add(this.evaluateCondition(line.substring(line.indexOf("si" + 2), line.indexOf("alors"))));
+                line = new String(line.replaceAll("\\s+", " ")).trim();
+                line = line.substring(line.indexOf("si") + 2, line.indexOf("alors")).trim();
+                this.conditionsStack.add(this.evaluateCondition(line));
             }
         }
+
 
         return null;
     }
 
     public void assignement(String line) {
-        String var = line.substring(0, line.indexOf("◄—")).replaceAll(" ", "");
-        String val = line.substring(line.indexOf("◄—") + 1).replaceAll(" ", "");
+        String var = line.split("◄—")[0].trim();
+        String val = line.split("◄—")[1].trim();
 
         for (Variable v : alData) {
             if (v.getName().equals(var)) {
                 v.setValue(val);
+                try{
+                    interpreter.eval(v.getName() + " = " + v.getStrValue());
+                }
+                catch(EvalError e){
+                    System.err.println(e.toString());
+                }
+                System.out.println("AFFECTATION -> " + val + " | " + v.getName() + " : " + v.getStrValue()); //TEST
             }
         }
     }
@@ -138,12 +157,12 @@ public class AlgoInterpreter {
         condition = condition.replaceAll("OU|ou", "||");
 
         String[] tabS = condition.split("\\&\\&|\\|\\|");
-        condition = null;
+        condition = "";
 
         for(int i =0; i<tabS.length;i++)
         {
-            if(tabS[i].matches("[^></]="))
-                tabS[i]=tabS[i].replaceAll("="," =");
+            if(tabS[i].matches("^\\w*\\s*=\\s*\\w*$"))
+                tabS[i]=tabS[i].replaceAll("=","==");
             condition+=tabS[i];
         }
 
@@ -199,16 +218,16 @@ public class AlgoInterpreter {
      * @param args Contiendra une chaîne représentant le chemin vers le fichier contenant l'algorithme à interpréter
      */
     public static void main(String[] args) {
-        AlgoReader algoReader = new AlgoReader(args[0]);
+        AlgoReader algoReader = new AlgoReader("/test.algo");
         AlgoInterpreter algoInterpreter;
         SyntaxChecker syntaxChecker = null;
+
         try {
             syntaxChecker = new SyntaxChecker(algoReader.getAlgorithm());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if (syntaxChecker.headerCheck() && syntaxChecker.dataCheck() && syntaxChecker.bodyCheck()) {
+        if (syntaxChecker.headerCheck() && syntaxChecker.dataCheck() /*&& syntaxChecker.bodyCheck()*/) {
             algoInterpreter = new AlgoInterpreter(algoReader.getAlgorithm());
             algoInterpreter.run();
         }

@@ -42,7 +42,10 @@ public class CharVar extends Variable implements Comparable<CharVar>
 	 */
 	public void setValue( String value1 )
 	{
-		if( !constant && value1 != null) this.value = value1.charAt( 0 );
+		if( !constant && value1 != null) {
+			strValue = value1;
+			this.value = value1.charAt( 0 );
+		}
 	}
 
 	/**

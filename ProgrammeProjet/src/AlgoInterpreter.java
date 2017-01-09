@@ -22,7 +22,6 @@ public class AlgoInterpreter
 	private Interpreter   interpreter;
 	private DataFactory   df;
 	private SyntaxChecker syntaxChecker;
-	private DataFactory   data;
 
 	private ArrayList<String>   algorithm;
 	private int                 lineIndex;
@@ -134,12 +133,13 @@ public class AlgoInterpreter
 		{
 			Boolean b = conditionsStack.peek();
 			b = !b;
-		} else if( line.equals( "ftq" ) )
+		}
+		else if( line.equals( "ftq" ) )
 		{
 			loopsStack.peek().setConditionValue(
 					evaluateCondition( loopsStack.peek().getCondition() ) );
 
-			if( loopsStack.peek().isConditionValue() )
+			if( loopsStack.peek().getConditionValue() )
 				this.lineIndex = loopsStack.peek().getStartIndex();
 
 			line = algorithm.get( lineIndex );
@@ -157,15 +157,18 @@ public class AlgoInterpreter
 					default:
 						break;
 				}
-			} else if( line.indexOf( "◄—" ) != -1 )
+			}
+			else if( line.indexOf( "◄—" ) != -1 )
 			{
 				this.assignement( line );
-			} else if( tool.Regex.isCondition( line ) )
+			}
+			else if( tool.Regex.isCondition( line ) )
 			{
 				line = new String( line.replaceAll( "\\s+", " " ) ).trim();
 				line = line.substring( line.indexOf( "si" ) + 2, line.indexOf( "alors" ) ).trim();
 				this.conditionsStack.push( this.evaluateCondition( line ) );
-			} else if( tool.Regex.isLoop( line ) )
+			}
+			else if( tool.Regex.isLoop( line ) )
 			{
 				this.loopsStack.push( new Loop( lineIndex + 1,
 				                                line.substring( line.indexOf( "que" ) + 3,
@@ -175,14 +178,15 @@ public class AlgoInterpreter
 						evaluateCondition( loopsStack.peek().getCondition() ) );
 			}
 		}
-
+		
 		return null;
 	}
 
 	/**
 	 * Méthode permettant d'interpréter les lignes d'affectation de variables
 	 *
-	 * @param line La ligne comprenant l'affectation
+	 * @param line
+	 *      La ligne comprenant l'affectation
 	 */
 	public void assignement( String line )
 	{
@@ -209,8 +213,10 @@ public class AlgoInterpreter
 	/**
 	 * Méthode permettant d'évaluer une expression booléenne donnée en pseudo-code
 	 *
-	 * @param condition L'expression booléenne en pseudo-code
-	 * @return La valeur de l'expression booléenne à évaluer
+	 * @param condition
+	 *      L'expression booléenne en pseudo-code
+	 * @return
+	 *      La valeur de l'expression booléenne à évaluer
 	 */
 	public Boolean evaluateCondition( String condition )
 	{
@@ -232,8 +238,10 @@ public class AlgoInterpreter
 	/**
 	 * Méthode qui gère la primitive "ecrire"
 	 *
-	 * @param toWrite La chaîne représentant ce qu'il y a à écrire
-	 * @return La chaîne de ce qui sera écrit
+	 * @param toWrite
+	 *      La chaîne représentant ce qu'il y a à écrire
+	 * @return
+	 *      La chaîne de ce qui sera écrit
 	 */
 	public String write( String toWrite )
 	{
@@ -243,8 +251,10 @@ public class AlgoInterpreter
 	/**
 	 * Méthode permettant d'évaluer une expression passée en paramètre
 	 *
-	 * @param statement L'expression à évaluer
-	 * @return L'évaluation de l'expression
+	 * @param statement
+	 *      L'expression à évaluer
+	 * @return
+	 *      L'évaluation de l'expression
 	 */
 	public String process( String statement )
 	{
@@ -254,7 +264,8 @@ public class AlgoInterpreter
 		{
 			if( Regex.isOperation( statement ) )
 				processed = (String) interpreter.eval( statement );
-		} catch( EvalError e )
+		}
+		catch( EvalError e )
 		{
 			System.err.print( e.getErrorText() );
 		}
@@ -265,7 +276,8 @@ public class AlgoInterpreter
 	/**
 	 * Méthode permettant d'obtenir une ArrayList<Variable> représentant toutes les données utilisées dans l'algorithme
 	 *
-	 * @return Une ArrayList<Variable> représentant toutes les données utilisées dans l'algorithme
+	 * @return
+	 *      Une ArrayList<Variable> représentant toutes les données utilisées dans l'algorithme
 	 */
 	public ArrayList<Variable> getAlData()
 	{
@@ -275,7 +287,8 @@ public class AlgoInterpreter
 	/**
 	 * Point d'entrée du programme d'interprétation
 	 *
-	 * @param args Contiendra une chaîne représentant le chemin vers le fichier contenant l'algorithme à interpréter
+	 * @param args
+	 *      Contiendra une chaîne représentant le chemin vers le fichier contenant l'algorithme à interpréter
 	 */
 	public static void main( String[] args )
 	{
@@ -286,7 +299,8 @@ public class AlgoInterpreter
 		try
 		{
 			syntaxChecker = new SyntaxChecker( algoReader.getAlgorithm() );
-		} catch( Exception e )
+		}
+		catch( Exception e )
 		{
 			e.printStackTrace();
 		}

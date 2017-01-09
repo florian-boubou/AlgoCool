@@ -21,10 +21,7 @@ public class Test
 		{
 			System.err.println("Erreur");
 		}*/
-		
-		AlgoReader r = new AlgoReader("/test.algo");
-		algorithm = r.getAlgorithm();
-		ConsoleDisplay cd = new ConsoleDisplay(algorithm);
+		ConsoleDisplay cd = new ConsoleDisplay("/test.algo");
 		
 		
 		for(int i = 0 ; i < (algorithm.size() > 40 ? 40 : algorithm.size()) ; i++)

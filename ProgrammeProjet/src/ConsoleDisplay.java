@@ -19,12 +19,12 @@ public class ConsoleDisplay
 	/**
 	 * Constructeur de ConsoleDisplay
 	 *
-	 * @param algorithm
-	 * 		L'ArrayList<String> représentant l'algorithme
+	 * @param filePath
+	 * 		Le chemin vers le fichier .algo à interpréter
 	 */
-	public ConsoleDisplay(ArrayList<String> algorithm)
+	public ConsoleDisplay(String filePath)
 	{
-		this.algorithm = algorithm;
+		this.algorithm = new AlgoReader( filePath ).getAlgorithm();
 		interpreter = new AlgoInterpreter(algorithm);
 		interpreter.run();
 	}

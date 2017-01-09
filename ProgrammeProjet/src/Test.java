@@ -11,17 +11,17 @@ public class Test
 
 	public static void main(String[] args)
 	{
-		/*Interpreter bsh = new Interpreter();
+		Interpreter bsh = new Interpreter();
 		try
 		{
-			bsh.eval("a = 2");
-			System.out.println(bsh.get("a"));
+			System.out.println(bsh.eval("3 + 2"));
 		}
 		catch(Exception e)
 		{
 			System.err.println("Erreur");
-		}*/
-		ConsoleDisplay cd = new ConsoleDisplay("/test.algo");
+		}
+
+		/*ConsoleDisplay cd = new ConsoleDisplay("/test.algo");
 		algorithm = cd.getAlgorithm();
 		
 		for(int i = 0 ; i < (algorithm.size() > 40 ? 40 : algorithm.size()) ; i++)
@@ -30,6 +30,6 @@ public class Test
 			cd.display(i);
 			Scanner scanner = new Scanner(System.in);
 			scanner.nextLine();
-		}
+		}*/
 	}
 }

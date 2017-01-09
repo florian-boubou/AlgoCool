@@ -195,7 +195,7 @@ public class AlgoInterpreter
 				try
 				{
 					interpreter.eval( v.getName() + " = " + v.getStrValue() );
-					v.setValue( String.valueOf( interpreter.get( v.getName() ) ) );
+					v.setValue( String.valueOf( interpreter.get( v.getName() ) ) );//PROBLEME
 					System.out.println( "AFFECTATION : " + v.getName() + " = " + v.getStrValue()
 					                  );//TEST
 				} catch( EvalError e )

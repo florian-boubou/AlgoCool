@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class ConsoleDisplay
 {
 	private ArrayList<String> algorithm;
+	private ArrayList<String> consoleTrace;
 	private AlgoInterpreter   interpreter;
 	private final String background = "\033[37m" + "\033[40m";
 
@@ -24,7 +25,9 @@ public class ConsoleDisplay
 	 */
 	public ConsoleDisplay( String filePath )
 	{
+		this.consoleTrace = new ArrayList<>();
 		this.algorithm = new AlgoReader( filePath ).getAlgorithm();
+
 		interpreter = new AlgoInterpreter( algorithm );
 		interpreter.run();
 	}
@@ -59,6 +62,7 @@ public class ConsoleDisplay
 
 		int iVar = 0;
 
+		//Boucle pour afficher le code et les données
 		for ( int i = 0; i < ( algorithm.size() > 40 ? 40 : algorithm.size() ); i++ )
 		{
 			if ( i == 0 )
@@ -99,6 +103,24 @@ public class ConsoleDisplay
 														"◄—" ) ? "%-79s" : "%-80s",
 															   algorithm.get( i ) ) ) + background +
 						" | " + dataStr );
+		}
+
+		str.append( new String( new char[87] ).replace( '\0', '"' ) + "\n\n" );
+
+		str.append( new String( new char[11] ).replace( '\0', '"' ) + "\n" +
+					"| CONSOLE |\n" + new String( new char[87] ).replace( '\0', '"' ) + "\n" );
+
+		//Boucle pour afficher le code et les données
+		for ( int i = 3; i >= 0; i-- )
+		{
+			if ( consoleTrace.size() != 0 && consoleTrace.size() - i >= 0 )
+				str.append( background + String.format( "|%-85s|\n",
+														consoleTrace.get( consoleTrace.size() - i )
+													  ) );
+			else
+				str.append( background + String.format("|%-85s|\n", new String(new char[85])
+						.replace( '\0', ' ' )) );
+
 		}
 
 		str.append( new String( new char[87] ).replace( '\0', '"' ) + "\n" );

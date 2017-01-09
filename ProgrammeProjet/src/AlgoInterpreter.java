@@ -77,9 +77,6 @@ public class AlgoInterpreter
 				System.err.println( e.toString() );
 			}
 		}
-
-		for( ; lineIndex < algorithm.size(); lineIndex++ )
-			this.processLine();
 	}
 
 
@@ -178,7 +175,7 @@ public class AlgoInterpreter
 						evaluateCondition( loopsStack.peek().getCondition() ) );
 			}
 		}
-		
+		lineIndex++;
 		return null;
 	}
 

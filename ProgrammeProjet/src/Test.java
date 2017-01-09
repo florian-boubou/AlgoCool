@@ -7,11 +7,9 @@ import bsh.Interpreter;
 
 public class Test
 {
-	static ArrayList<String> algorithm;
-
 	public static void main(String[] args)
 	{
-		Interpreter bsh = new Interpreter();
+		/*Interpreter bsh = new Interpreter();
 		try
 		{
 			System.out.println(bsh.eval("3 + 2"));
@@ -19,17 +17,17 @@ public class Test
 		catch(Exception e)
 		{
 			System.err.println("Erreur");
-		}
-
-		/*ConsoleDisplay cd = new ConsoleDisplay("/test.algo");
-		algorithm = cd.getAlgorithm();
+		}*/
+		AlgoReader ar = new AlgoReader("/test.algo");
+		ConsoleDisplay cd = new ConsoleDisplay(ar.getAlgorithm());
 		
-		for(int i = 0 ; i < (algorithm.size() > 40 ? 40 : algorithm.size()) ; i++)
+		for(int i = 0 ; i < (ar.getAlgorithm().size() > 40 ? 40 : ar.getAlgorithm().size()) ; i++)
 		{
 			//interpreter ici
+			cd.refresh();
 			cd.display(i);
 			Scanner scanner = new Scanner(System.in);
 			scanner.nextLine();
-		}*/
+		}
 	}
 }

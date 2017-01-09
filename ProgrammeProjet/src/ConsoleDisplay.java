@@ -38,18 +38,21 @@ public class ConsoleDisplay
 	/**
 	 * Constructeur de ConsoleDisplay
 	 *
-	 * @param filePath
-	 * 		Le chemin vers le fichier .algo à interpréter
+	 * @param algorithm
+	 * 		L'arrayList contenant l'algorithme
 	 */
-	public ConsoleDisplay(String filePath)
+	public ConsoleDisplay(ArrayList<String> algorithm)
 	{
 		this.consoleTrace = new ArrayList<>();
-		this.algorithm = new AlgoReader(filePath).getAlgorithm();
+		this.algorithm = algorithm;
 		
 		interpreter = new AlgoInterpreter(algorithm);
 		interpreter.run();
 	}
-	
+
+	public void refresh(){
+		interpreter.processLine();
+	}
 	
 	/**
 	 * Méthode d'affichage de l'algorithme, de la trace des variables et de la trace d'exécution
@@ -59,13 +62,6 @@ public class ConsoleDisplay
 	 */
 	public void display(int current)
 	{
-		/*ArrayList<Variable> variables = interpreter.getData();
-		ArrayList<Variable> variables = new ArrayList<Variable>();
-		variables.add(new IntegerVar("x", "5"));
-		variables.add(new IntegerVar("y", "2"));
-		variables.add(new StringVar("CACA", "\"Coucou\""));
-		variables.add(new DoubleVar("z", "12.5"));*/
-		
 		String dataStr;
 		
 		StringBuilder str = new StringBuilder();

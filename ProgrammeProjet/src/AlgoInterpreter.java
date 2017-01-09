@@ -109,8 +109,25 @@ public class AlgoInterpreter
 				
 			}
 		}
+		else if (line.indexOf("◄—") != -1)
+		{
+			this.assignement(line);
+		}
 		
 		return null;
+	}
+
+	public void assignement(String line)
+	{
+		String var = line.substring(0, line.indexOf("◄—")).replaceAll(" ", "");
+		String val = line.substring(line.indexOf("◄—")+1).replaceAll(" ", "");
+
+		for(Variable v : alData){
+			if(v.getName().equals(var))
+			{
+				v.setValue(val);
+			}
+		}
 	}
 
 	public ArrayList<Variable> getAlData(){

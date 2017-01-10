@@ -182,7 +182,7 @@ public class SyntaxChecker
 				//On cherche à obtenir le var de la variable déclarée
 				testType = testLine.split( ":" )[1].trim();
 				//Si le var ne la variable déclarée ne correspond pas aux types définis pour l'interpréteur, on renvoie false
-				if( !reserved.getHashMapConfig().get( "var" ).contains( testType ) )
+				if( !reserved.getHashMapConfig().get( "type" ).contains( testType ) )
 					return false;
 
 				//On cherche à obtenir le nom de la variable déclarée

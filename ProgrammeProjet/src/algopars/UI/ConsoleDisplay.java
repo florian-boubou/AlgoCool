@@ -22,10 +22,10 @@ public class ConsoleDisplay
 	private         		ArrayList<String>       consoleTrace;
 	private         		Controller				controller;
 
-	private static 	final 	Color              		color = new Color();
-	private 		final 	String                  background = color.WHITE + color.BACKGROUND_BLACK;
-	private 		final   String                  backgroundCurrent = color.BLACK + color.BACKGROUND_WHITE;
-	private static  		HashMap<String, String> textColors = new HashMap<String, String>()
+	private static 	final 	Color              		color               = new Color();
+	private 		final 	String                  background          = color.WHITE + color.BACKGROUND_BLACK;
+	private 	    final   String                  backgroundCurrent   = color.BLACK + color.BACKGROUND_WHITE;
+	private static  		HashMap<String, String> textColors          = new HashMap<String, String>()
 	{{
 		put("ecrire", color.BLUE);
 		put("lire", color.YELLOW);
@@ -168,7 +168,9 @@ public class ConsoleDisplay
 
 		str.append(new String(new char[11]).replace('\0', '"') + "\n" +
 				"| CONSOLE |\n" + new String(new char[87]).replace('\0', '"') + "\n");
-
+		
+		this.consoleTrace = this.controller.getAlConsole();
+		
 		//Boucle pour afficher le code et les données
 		for(int i = 3 ; i >= 0 ; i--)
 		{

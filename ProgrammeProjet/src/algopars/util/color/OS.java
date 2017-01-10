@@ -1,8 +1,12 @@
 package algopars.util.color;
 
 /**
- * Created by yoann on 10/01/17.
- */
+* Enum OS qui stocke les valeurs d'OS possibles (les plus courants) et permet d'obtenir le système de la machine courante
+*
+* @author Clémence EDOUARD
+* @version 1.0.0a
+* @date 01/10/2017
+*/
 public enum OS {
 
     WINDOWS("win"),
@@ -12,13 +16,28 @@ public enum OS {
     ;
 
     private String[] patterns;
-
-    OS(String... patterns) {
+    
+    /**
+     * Constructeur de OS
+     * @param patterns
+     *      La valeur de création de l'OS
+     */
+    OS(String... patterns)
+    {
         this.patterns = patterns;
     }
-
-    private boolean match(String os) {
-        for (String p : patterns) {
+    
+    /**
+     * Méthode permettant de savoir si la chaîne passée en paramètre est une valeur d'OS
+     * @param os
+     *      La chaîne à tester
+     * @return
+     *      La réponse
+     */
+    private boolean match(String os)
+    {
+        for (String p : patterns)
+        {
             if (os.contains(p))
                 return true;
         }
@@ -27,11 +46,20 @@ public enum OS {
 
     private static       OS     OS;
     private static final String P_OS = System.getProperty("os.name").toLowerCase();
-
-    public static OS getOS() {
-        if (OS == null) {
-            for (OS os : values()) {
-                if (os.match(P_OS)) {
+    
+    /**
+     * Méthode permettant d'obtenir l'OS du système
+     * @return
+     *      L'OS
+     */
+    public static OS getOS()
+    {
+        if (OS == null)
+        {
+            for (OS os : values())
+            {
+                if (os.match(P_OS))
+                {
                     OS = os;
                     break;
                 }

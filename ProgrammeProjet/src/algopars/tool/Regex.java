@@ -10,19 +10,23 @@ package algopars.tool;
  */
 public class Regex
 {
-	public static final String REGEX_VARIABLE  = "^[a-z]\\w*(_\\w*)*$";
-	public static final String REGEX_CONSTANT  = "^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$";
-	public static final String REGEX_INTEGER   = "^[0-9]+$";
-	public static final String REGEX_DOUBLE    = "^[0-9]+,[0-9]+$";
-	public static final String REGEX_BOOLEAN   = "^(vrai|faux)$";
-	public static final String REGEX_STRING    = "^\"([^\"]|\\\\\")*\"$";
-	public static final String REGEX_CHAR      = "^'[^']'$";
-	public static final String REGEX_FUNCTION  =
-			"^[a-z][a-zA-Z]*\\( *(([a-z]\\w*(_\\w*)*)+|[0-9]+|\"([^\"]|\\\\\")*\") *([+×,&\\-\\\\] *(([a-z]\\w*(_\\w*)*)+|[0-9]+|\"([^\"]|\\\\\")*\") *)* *\\)$";
-	public static final String REGEX_OPERATION =
-			"^[0-9]+,?[0-9]* *([+&×\\-\\\\]|(MOD|DIV)){1} *[0-9]+,?[0-9]*$";
-	public static final String REGEX_CONDITION = "^\\s*si .+ alors\\s*$";
-	public static final String REGEX_LOOP      = "^\\s*tant que .+ faire\\s*$";
+	public static final String REGEX_VARIABLE       = "^[a-z]\\w*(_\\w*)*$";
+	public static final String REGEX_CONSTANT       = "^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$";
+	public static final String REGEX_INTEGER        = "^[0-9]+$";
+	public static final String REGEX_DOUBLE         = "^[0-9]+,[0-9]+$";
+	public static final String REGEX_BOOLEAN        = "^(vrai|faux)$";
+	public static final String REGEX_STRING         = "dvjkchqsjk()^\"([^\"]|\\\\\")*\"$";
+	public static final String REGEX_CHAR           = "^'[^']'$";
+	public static final String REGEX_FUNCTION       = "^[a-z][a-zA-Z]*\\(.*\\)$";
+	
+	public static final String REGEX_OPERATION      = "^[0-9]+,?[0-9]* *([+×\\-\\\\]|(MOD|DIV)){1} *[0-9]+,?[0-9]* *" +
+	                                                  "( *([+×\\-\\\\]|(MOD|DIV)){1} *[0-9]+,?[0-9]*)*$";
+	
+	public static final String REGEX_CONCATENATION  = "^\\s*(\"[^\"\\\\]*\"|\\w*)\\s*&\\s*(\"[^\"\\\\]*\"|\\w*)\\s*" +
+	                                                  "(\\s*&\\s*(\"[^\"\\\\]*\"|\\w*)\\s*)*$";
+	
+	public static final String REGEX_CONDITION      = "^\\s*si .+ alors\\s*$";
+	public static final String REGEX_LOOP           = "^\\s*tant que .+ faire\\s*$";
 
 	/**
 	 * Méthode permettant de savoir si une chaîne correspond bien au standard de variable
@@ -113,7 +117,7 @@ public class Regex
 	}
 
 	/**
-	 * Méthode permettant de savoir si une chaîne correspond bien à une opération
+	 * Méthode permettant de savoir si une chaîne correspond bien à une opération mathématique
 	 *
 	 * @param s La chaîne à analyser
 	 * @return Un booléen indiquant la réponse
@@ -121,6 +125,17 @@ public class Regex
 	public static boolean isOperation( String s )
 	{
 		return s.matches( REGEX_OPERATION );
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à une concaténation
+	 *
+	 * @param s La chaîne à analyser
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isConcatenation( String s )
+	{
+		return s.matches( REGEX_CONCATENATION );
 	}
 
 	/**
@@ -143,5 +158,17 @@ public class Regex
 	public static boolean isLoop( String s )
 	{
 		return s.matches( REGEX_LOOP );
+	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à quelque chose de passable dans un ecrire
+	 *
+	 * @param s La chaîne à analyser
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isWritable(String s)
+	{
+		return Regex.isInteger(s) || Regex.isDouble(s)      || Regex.isCharacter(s) || Regex.isString(s) ||
+		       Regex.isBoolean(s) || Regex.isVariable(s)    || Regex.isConstant(s);
 	}
 }

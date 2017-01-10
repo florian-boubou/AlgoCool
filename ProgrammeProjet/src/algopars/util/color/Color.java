@@ -1,10 +1,14 @@
 package algopars.util.color;
 
 /**
- * Created by clemence on 10/01/17.
+ * Classe Color qui permet d'obtenir les caractères ANSI de couleur en fonction de l'OS de la machine courante
+ *
+ * @author Clémence EDOUARD
+ * @version 1.0.0a
+ * @date 01/10/2017
  */
-public class Color {
-
+public class Color
+{
     public static String WHITE;
     public static String BLACK;
     public static String BLUE;
@@ -15,8 +19,12 @@ public class Color {
     public static String BACKGROUND_WHITE;
     public static String BACKGROUND_BLACK;
     public static String BOLD;
-
-    static {
+    
+    /**
+     * Construction de l'ensemble des valeurs selon l'OS
+     */
+    static
+    {
         OS os = OS.getOS();
         if(os == OS.LINUX || os == OS.MAC)
         {

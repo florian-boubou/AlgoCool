@@ -12,46 +12,52 @@ import java.util.ArrayList;
  */
 public abstract class Transformer
 {
-	public String syntaxTransformer(String statement)
+	public String transformAffectation( String pseudoCode )
 	{
-		String transformed = new String(statement);
-
-		if( transformed.contains("=") ) transformed.replace( "=", "==" );
-		if( transformed.contains("◄—")) transformed.replace( "◄—", "=" );
-		if( transformed.contains("ET")) transformed.replace( "ET", "&" );
-		if( transformed.contains("OU")) transformed.replace( "OU", "|" );
-
-		if( transformed.contains(Regex.REGEX_OPERATION))
+		return pseudoCode.replace("◄—", "=");
+	}
+	
+	public String transformExpression( String pseudoCode )
+	{
+		String javaCode = new String(pseudoCode);
+		
+		if( !javaCode.matches(Regex.REGEX_OPERATION) )
+			return pseudoCode;
+		else
 		{
-			if ( transformed.contains( "×" ) ) transformed.replace( "×", "*" );
-			if ( transformed.contains("MOD") ) transformed.replace("MOD", "%");
-			if ( transformed.contains("DIV") ) transformed.replace("DIV", "/");
+			if( javaCode.contains( "×" ) ) javaCode = javaCode.replace( "×", "*" );
+			if( javaCode.contains("MOD") ) javaCode = javaCode.replace("MOD", "%");
+			if( javaCode.contains("DIV") ) javaCode = javaCode.replace("DIV", "/");
+			
+			if( Regex.isConcatenation( javaCode ) ) javaCode = javaCode.replace('&', '+');
+			
+			return javaCode;
 		}
-
-		return statement;
 	}
 
 	/**
 	 * Méthode permettant de transformer une expression booléenne pseudo-code en une expression
 	 * booléenne Java
 	 *
-	 * @param pseudoCode L'expression booléenne en pseudo-code
-	 * @return L'expression booléenne en Java
+	 * @param pseudoCode
+	 *      L'expression booléenne en pseudo-code
+	 * @return
+	 *      L'expression booléenne en Java
 	 */
 	public static String transformCondition( String pseudoCode )
 	{
 		String javaCode = new String( pseudoCode );
 		//Transformations classiques pseudo-code -> Java
-		javaCode = javaCode.replaceAll( "/=", "!=" );
-		javaCode = javaCode.replaceAll( "ET|et", "&&" );
-		javaCode = javaCode.replaceAll( "OU|ou", "||" );
+		javaCode = javaCode.replaceAll( "/="    , "!=" );
+		javaCode = javaCode.replaceAll( "ET|et" , "&&" );
+		javaCode = javaCode.replaceAll( "OU|ou" , "||" );
 
 		//On stocke les opérateurs logiques pour les réassigner plus tard
 		ArrayList<String> logicOps = new ArrayList<>();
 		{
 			String tmp = new String( javaCode );
 			int    opET, opOU;
-
+			
 			opET = opOU = 0;
 
 			for( ; (opET = tmp.indexOf( "&&" )) != -1 || (opOU = tmp.indexOf( "||" )) != -1; )

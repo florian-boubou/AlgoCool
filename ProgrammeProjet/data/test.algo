@@ -7,7 +7,7 @@ DEBUT
     x   ◄— 5
     y   ◄— 2
     si x = 3 alors
-        y ◄— 0
+        ecrire("joie")
     sinon
         y ◄— 1
     fsi

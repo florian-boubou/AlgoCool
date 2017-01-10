@@ -1,5 +1,6 @@
 package algopars.util;
 
+import algopars.Controller;
 import bsh.EvalError;
 import bsh.Interpreter;
 import algopars.util.parsing.SyntaxChecker;
@@ -7,6 +8,7 @@ import algopars.util.var.DataFactory;
 import algopars.util.var.Variable;
 import algopars.tool.Loop;
 import algopars.tool.Regex;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +17,6 @@ import java.util.Stack;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
-
-
-
 
 /**
  * Classe algopars.util.AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
@@ -34,8 +33,10 @@ public class AlgoInterpreter
 
 	private ArrayList<String>   algorithm;
 	private int                 lineIndex;
+	
 	private ArrayList<Variable> alData;
 	private ArrayList<Variable> tracedVar;
+	private ArrayList<String>   alConsole;
 
 	private Stack<Boolean> 		conditionsStack;
 	private Stack<Loop>    		loopsStack;
@@ -43,23 +44,27 @@ public class AlgoInterpreter
 	/**
 	 * Constructeur d'algopars.util.AlgoInterpreter
 	 *
-	 * @param algorithm L'ArrayList<String> représentant l'algorithme à interpréter
+	 * @param algorithm
+	 *      L'ArrayList<String> représentant l'algorithme à interpréter
 	 */
 	public AlgoInterpreter( ArrayList<String> algorithm )
 	{
 		try
 		{
-			interpreter = new Interpreter();
-			df = new DataFactory();
-			syntaxChecker = new SyntaxChecker( algorithm );
-
-			this.algorithm = algorithm;
-			lineIndex = 0;
-
-			alData = new ArrayList<>();
-			tracedVar = new ArrayList<>();
-			conditionsStack = new Stack<>();
-			loopsStack = new Stack<>();
+			
+			this.interpreter     = new Interpreter();
+			this.df              = new DataFactory();
+			this.syntaxChecker   = new SyntaxChecker( algorithm );
+			
+			this.lineIndex       = 0;
+			this.algorithm       = algorithm;
+			
+			this.alData          = new ArrayList<>();
+			this.tracedVar       = new ArrayList<>();
+			this.alConsole       = new ArrayList<>();
+			
+			this.conditionsStack = new Stack<>();
+			this.loopsStack      = new Stack<>();
 		}
 		catch( Exception e )
 		{
@@ -127,10 +132,8 @@ public class AlgoInterpreter
 
 	/**
 	 * Méthodant interprétant l'algorithme ligne par ligne
-	 *
-	 * @return Ce qui sera possiblement à afficher après l'interprétation de cette ligne
 	 */
-	public String processLine()
+	public void processLine()
 	{
 		String line = algorithm.get( lineIndex ).trim();
 
@@ -157,7 +160,7 @@ public class AlgoInterpreter
 				switch( fonc[0] )
 				{
 					case "ecrire":
-						return write( fonc[1].replace( ')', ' ' ).trim() );
+						write( fonc[1].replace( ')', ' ' ).trim() );
 					case "lire":
 						read(fonc[1]);
 					default:
@@ -185,7 +188,6 @@ public class AlgoInterpreter
 			}
 		}
 		lineIndex++;
-		return null;
 	}
 
 	/**
@@ -207,9 +209,8 @@ public class AlgoInterpreter
 				{
 					interpreter.eval( (v.getName() + " = " + v.getStrValue()) );
 					v.setValue( String.valueOf( interpreter.get( v.getName() ) ) );//PROBLEME
-					System.out.println( "AFFECTATION : " + v.getName() + " = " + v.getStrValue()
-									  );//TEST
-				} catch( EvalError e )
+				}
+				catch( EvalError e )
 				{
 					System.err.println( e.toString() );
 				}
@@ -230,10 +231,9 @@ public class AlgoInterpreter
 
 		try
 		{
-			System.out.println( "CONDITION : " + condition + " = " + (Boolean) interpreter.eval(
-					condition ) );//TEST
 			return (Boolean) interpreter.eval( condition );
-		} catch( EvalError evalError )
+		}
+		catch( EvalError evalError )
 		{
 			evalError.printStackTrace();
 		}
@@ -246,14 +246,20 @@ public class AlgoInterpreter
 	 *
 	 * @param toWrite
 	 *      La chaîne représentant ce qu'il y a à écrire
-	 * @return
-	 *      La chaîne de ce qui sera écrit
 	 */
-	public String write( String toWrite )
+	public void write( String toWrite )
 	{
-		return this.process( toWrite );
+		String processed = new String(toWrite);
+		
+		if( Regex.isWritable( processed ) ) this.alConsole.add( processed );
 	}
-
+	
+	/**
+	 * Méthode qui gère la primitive "lire"
+	 *
+	 * @param vars
+	 *      La chaîne représentant ce qu'il y a à lire
+	 */
 	public void read(String vars)
 	{
 		String[] tabS = vars.split( "\\," );
@@ -284,39 +290,21 @@ public class AlgoInterpreter
 			if ( s.equals( "oui" ) ) tracedVar.add( var );
 		}
 	}
-	/**
-	 * Méthode permettant d'évaluer une expression passée en paramètre
-	 *
-	 * @param statement
-	 *      L'expression à évaluer
-	 * @return
-	 *      L'évaluation de l'expression
-	 */
-	public String process( String statement )
-	{
-		String processed = null;
-
-		try
-		{
-			if( Regex.isOperation( statement ) )
-				processed = (String) interpreter.eval( statement );
-		}
-		catch( EvalError e )
-		{
-			System.err.print( e.getErrorText() );
-		}
-
-		return processed;
-	}
+	
 
 	/**
-	 * Méthode permettant d'obtenir une ArrayList<Variable> représentant toutes les données utilisées dans l'algorithme
+	 * Méthode permettant d'obtenir une ArrayList<Variable> représentant toutes les données à tracer
 	 *
 	 * @return
-	 *      Une ArrayList<Variable> représentant toutes les données utilisées dans l'algorithme
+	 *      Une ArrayList<Variable> représentant toutes les données à tracer
 	 */
-	public ArrayList<Variable> getAlData()
-	{
-		return tracedVar;
-	}
+	public ArrayList<Variable> getAlData()      { return this.tracedVar; }
+	
+	/**
+	 * Méthode permettant d'obtenir une ArrayList<String> représentant la trace d'éxécution
+	 *
+	 * @return
+	 *      Une ArrayList<String> représentant la trace d'exécution
+	 */
+	public ArrayList<String>   getAlConsole()   { return this.alConsole; }
 }

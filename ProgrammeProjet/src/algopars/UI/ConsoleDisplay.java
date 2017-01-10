@@ -1,13 +1,14 @@
 package algopars.UI;
 
 
-import algopars.util.AlgoInterpreter;
+import algopars.util.*;
+import algopars.util.color.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Classe algopars.UI.ConsoleDisplay qui se charge d'afficher tout le tintouin
+ * Classe ConsoleDisplay qui se charge d'afficher tout le tintouin
  *
  * @author Antoine WARET, Clémence EDOUARD
  * @version 1.0.0a
@@ -18,26 +19,29 @@ public class ConsoleDisplay
 	private         ArrayList<String>       algorithm;
 	private         ArrayList<String>       consoleTrace;
 	private         AlgoInterpreter         interpreter;
-	private final   String                  background = "\033[37m" + "\033[40m";
+
+	private static final Color              color = new Color();
+	private final   String                  background = color.WHITE + color.BACKGROUND_BLACK;
+	private final   String                  backgroundCurrent = color.BLACK + color.BACKGROUND_WHITE;
 	private static  HashMap<String, String> textColors = new HashMap<String, String>()
 	{{
-		put("ecrire", "\033[34m" + "\033[40m");
-		put("lire", "\033[33m" + "\033[40m");
-		put("si", "\033[36m" + "\033[40m");
-		put("alors", "\033[36m" + "\033[40m");
-		put("sinon", "\033[36m" + "\033[40m");
-		put("fsi", "\033[36m" + "\033[40m");
-		put("tant que", "\033[36m" + "\033[40m");
-		put("faire", "\033[36m" + "\033[40m");
-		put("ftq", "\033[36m" + "\033[40m");
-		put("selon", "\033[36m" + "\033[40m");
-		put("choix", "\033[36m" + "\033[40m");
-		put("defaut", "\033[36m" + "\033[40m");
+		put("ecrire", color.BLUE);
+		put("lire", color.YELLOW);
+		put("^[f]?si[non]?\\s$", color.CYAN);
+		put("fsi", color.CYAN);
+		put("sinon", color.CYAN);
+		put("alors", color.CYAN);
+		put("tant que", color.CYAN);
+		put("faire", color.CYAN);
+		put("ftq", color.CYAN);
+		put("selon", color.CYAN);
+		put("choix", color.CYAN);
+		put("defaut", color.CYAN);
 	}};
-	
-	
+
+
 	/**
-	 * Constructeur de algopars.UI.ConsoleDisplay
+	 * Constructeur de ConsoleDisplay
 	 *
 	 * @param algorithm
 	 * 		L'arrayList contenant l'algorithme
@@ -46,15 +50,15 @@ public class ConsoleDisplay
 	{
 		this.consoleTrace = new ArrayList<>();
 		this.algorithm = algorithm;
-		
-		interpreter = new AlgoInterpreter( algorithm);
+
+		interpreter = new AlgoInterpreter(algorithm);
 		interpreter.run();
 	}
 
 	public void refresh(){
 		interpreter.processLine();
 	}
-	
+
 	/**
 	 * Méthode d'affichage de l'algorithme, de la trace des variables et de la trace d'exécution
 	 *
@@ -64,42 +68,42 @@ public class ConsoleDisplay
 	public void display(int current)
 	{
 		String dataStr;
-		
+
 		StringBuilder str = new StringBuilder();
 		str.append(background + new String(new char[10]).replace('\0', '"') +
-		           new String(new char[78]).replace('\0', ' ') +
-		           new String(new char[11]).replace('\0', '"') + "\n");
-		
+				new String(new char[78]).replace('\0', ' ') +
+				new String(new char[11]).replace('\0', '"') + "\n");
+
 		str.append("|  CODE  |" + new String(new char[78]).replace('\0', ' ') +
-		           "| DONNEES" + " |\n");
-		
+				"| DONNEES" + " |\n");
+
 		str.append(new String(new char[87]).replace('\0', '"') + " " +
-		           new String(new char[44]).replace('\0', '"') + "\n");
-		
+				new String(new char[44]).replace('\0', '"') + "\n");
+
 		int iVar = 0;
-		
+
 		//Boucle pour afficher le code et les données
 		for(int i = 0 ; i < (algorithm.size() > 40 ? 40 : algorithm.size()) ; i++)
 		{
 			if(i == 0)
 			{
 				dataStr = background + "|" + String.format("%-10s", "NOM") + "|"
-				          + String.format("%-10s", "TYPE") + "|"
-				          + String.format("%-20s", "VALEUR") + "|\n";
+						+ String.format("%-10s", "TYPE") + "|"
+						+ String.format("%-20s", "VALEUR") + "|\n";
 			}
 			else if(iVar < interpreter.getAlData().size())
 			{
 				dataStr = "|" +
-				          String.format("%-10s",
-				                        interpreter.getAlData().get(iVar).getName())
-				          + "|" +
-				          String.format("%-10s",
-				                        interpreter.getAlData().get(iVar).getType())
-				          + "|" +
-				          String.format("%-20s", interpreter.getAlData().
-						          get(iVar).getStrValue() == null ?
-						          "" : interpreter.getAlData().get(iVar).getStrValue()) +
-				          "|\n";
+						String.format("%-10s",
+								interpreter.getAlData().get(iVar).getName())
+						+ "|" +
+						String.format("%-10s",
+								interpreter.getAlData().get(iVar).getType())
+						+ "|" +
+						String.format("%-20s", interpreter.getAlData().
+								get(iVar).getStrValue() == null ?
+								"" : interpreter.getAlData().get(iVar).getStrValue()) +
+						"|\n";
 				iVar++;
 			}
 			else if(iVar == interpreter.getAlData().size())
@@ -111,41 +115,42 @@ public class ConsoleDisplay
 			{
 				dataStr = "\n";
 			}
-			
-			String line = algorithm.get(i);
+
+			str.append(background + "| " +
+					String.format("%-80s", (current == i ? color.BACKGROUND_WHITE + color.BLACK : "") +
+							String.format("%2d", i) + " " +
+							String.format(algorithm.get(i).contains(
+									"◄—") ? "%-79s" : "%-80s",
+									algorithm.get(i))) + background +
+					" | " + dataStr);
+
+			String line = str.toString();
 			for(String element : textColors.keySet())
 			{
 				if(line.indexOf(element) != -1)
 				{
-					algorithm.set(i, line.substring(0, line.indexOf(element))
-					                 + textColors.get(element)
-					                 + line.substring(line.indexOf(element), line.indexOf(element) + element.length())
-					                 + line.substring(line.indexOf(element) + element.length()));
+					line = line.replaceAll(element, textColors.get(element)
+							+ (current == i ? color.BACKGROUND_WHITE : color.BACKGROUND_BLACK)
+							+ element
+							+ (current == i ? backgroundCurrent : background)
+					);
 				}
 			}
-			
-			str.append(background + "| " +
-			           String.format("%-80s", (current == i ? "\033[47m" + "\033[30m" : "") +
-			                                  String.format("%2d", i) + " " +
-			                                  String.format(algorithm.get(i).contains(
-					                                  "◄—") ? "%-79s" : "%-80s",
-			                                                algorithm.get(i))) + background +
-			           " | " + dataStr);
-			
+
+			str.replace(0, str.length()-1, line);
 		}
-		
+
 		str.append(new String(new char[87]).replace('\0', '"') + "\n\n");
-		
+
 		str.append(new String(new char[11]).replace('\0', '"') + "\n" +
-		           "| CONSOLE |\n" + new String(new char[87]).replace('\0', '"') + "\n");
-		
+				"| CONSOLE |\n" + new String(new char[87]).replace('\0', '"') + "\n");
+
 		//Boucle pour afficher le code et les données
 		for(int i = 3 ; i >= 0 ; i--)
 		{
 			if(consoleTrace.size() != 0 && consoleTrace.size() - i >= 0)
 			{
-				str.append(background + String.format("|%-85s|\n",
-				                                      consoleTrace.get(consoleTrace.size() - i)
+				str.append(background + String.format("|%-85s|\n", consoleTrace.get(consoleTrace.size() - i)
 				));
 			}
 			else
@@ -153,11 +158,13 @@ public class ConsoleDisplay
 				str.append(background + String.format("|%-85s|\n", new String(new char[85])
 						.replace('\0', ' ')));
 			}
-			
+
 		}
-		
+
 		str.append(new String(new char[87]).replace('\0', '"') + "\n");
-		
+
 		System.out.println(str);
 	}
 }
+
+

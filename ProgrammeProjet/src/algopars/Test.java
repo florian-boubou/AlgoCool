@@ -1,9 +1,10 @@
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.*;
+package algopars;
 
-import bsh.Interpreter;
+
+import java.util.Scanner;
+
+import algopars.UI.ConsoleDisplay;
+import algopars.util.AlgoReader;
 
 public class Test
 {
@@ -18,8 +19,8 @@ public class Test
 		{
 			System.err.println("Erreur");
 		}*/
-		AlgoReader ar = new AlgoReader("/test.algo");
-		ConsoleDisplay cd = new ConsoleDisplay(ar.getAlgorithm());
+		AlgoReader ar = new AlgoReader( "/test.algo");
+		ConsoleDisplay cd = new ConsoleDisplay( ar.getAlgorithm());
 		
 		for(int i = 0 ; i < (ar.getAlgorithm().size() > 40 ? 40 : ar.getAlgorithm().size()) ; i++)
 		{
@@ -27,6 +28,7 @@ public class Test
 			cd.refresh();
 			cd.display(i);
 			Scanner scanner = new Scanner(System.in);
+
 			scanner.nextLine();
 		}
 	}

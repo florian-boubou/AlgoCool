@@ -1,10 +1,12 @@
-import engine.type.*;
-import tool.Regex;
+package algopars.util.var;
+
+
+import algopars.tool.Regex;
 
 import java.util.LinkedHashMap;
 
 /**
- * Classe AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
+ * Classe algopars.util.AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
  *
  * @author Antoine WARET
  * @version 1.0.0a
@@ -27,9 +29,9 @@ public class DataFactory
 		 * Constructeur de Type
 		 *
 		 * @param pcType
-		 * 		Le nom du type
+		 * 		Le nom du var
 		 * @param regexType
-		 * 		La regex de bonne forme du type
+		 * 		La regex de bonne forme du var
 		 */
 		Type(String pcType, String regexType)
 		{
@@ -38,9 +40,9 @@ public class DataFactory
 		}
 		
 		/**
-		 * Méthode retournant le nom du type
+		 * Méthode retournant le nom du var
 		 *
-		 * @return Le nom du type
+		 * @return Le nom du var
 		 */
 		public String getpCType()
 		{
@@ -48,9 +50,9 @@ public class DataFactory
 		}
 		
 		/**
-		 * Méthode retournant la regex de bonne forme du type
+		 * Méthode retournant la regex de bonne forme du var
 		 *
-		 * @return La regex de bonne forme du type
+		 * @return La regex de bonne forme du var
 		 */
 		public String getRegexType()
 		{
@@ -61,7 +63,7 @@ public class DataFactory
 	private LinkedHashMap<String, Variable> hMapData;
 	
 	/**
-	 * Constructeur de DataFactory
+	 * Constructeur de algopars.util.var.DataFactory
 	 */
 	public DataFactory()
 	{
@@ -75,12 +77,12 @@ public class DataFactory
 	 * @param varName
 	 * 		Le nom de la variable
 	 * @param type
-	 * 		Le type de la variable
+	 * 		Le var de la variable
 	 * @param value
 	 * 		La valeur de la variabel
 	 *
 	 * @throws Exception
-	 * 		En cas de type invalide
+	 * 		En cas de var invalide
 	 */
 	public void dataDeclaration(String varName, String type, String value) throws Exception
 	{
@@ -106,17 +108,17 @@ public class DataFactory
 				hMapData.put(varName, new BooleanVar(varName, value));
 				break;
 			default:
-				throw new Exception("Erreur: type invalide");
+				throw new Exception("Erreur: var invalide");
 		}
 	}
 	
 	/**
-	 * Méthode permettant de déterminer le type d'une variable dont la valeur est passée en paramètre
+	 * Méthode permettant de déterminer le var d'une variable dont la valeur est passée en paramètre
 	 *
 	 * @param value
 	 * 		La valeur de la variable
 	 *
-	 * @return Le type determiné de la variable
+	 * @return Le var determiné de la variable
 	 */
 	private String determineType(String value)
 	{

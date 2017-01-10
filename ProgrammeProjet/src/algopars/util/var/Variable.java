@@ -1,4 +1,4 @@
-package engine.type;
+package algopars.util.var;
 
 
 /**
@@ -41,9 +41,9 @@ public abstract class Variable
 	}
 	
 	/**
-	 * Méthode permettant d'obtenir le type de la variable sous forme de string
+	 * Méthode permettant d'obtenir le var de la variable sous forme de string
 	 *
-	 * @return Le type de la variable
+	 * @return Le var de la variable
 	 */
 	public String getType()
 	{

@@ -1,9 +1,13 @@
+package algopars.util;
+
+
 import bsh.EvalError;
 import bsh.Interpreter;
-import engine.SyntaxChecker;
-import engine.type.Variable;
-import tool.Loop;
-import tool.Regex;
+import algopars.util.parsing.SyntaxChecker;
+import algopars.util.var.DataFactory;
+import algopars.util.var.Variable;
+import algopars.tool.Loop;
+import algopars.tool.Regex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +15,7 @@ import java.util.Stack;
 
 
 /**
- * Classe AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
+ * Classe algopars.util.AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
  *
  * @author Antoine WARET, Mathieu CHOUGUI
  * @version 1.0.0a
@@ -31,7 +35,7 @@ public class AlgoInterpreter
 	private Stack<Loop>    loopsStack;
 
 	/**
-	 * Constructeur d'AlgoInterpreter
+	 * Constructeur d'algopars.util.AlgoInterpreter
 	 *
 	 * @param algorithm L'ArrayList<String> représentant l'algorithme à interpréter
 	 */
@@ -81,7 +85,7 @@ public class AlgoInterpreter
 
 
 	/**
-	 * Méthode stockant toutes les variables déclarées dans la DataFactory
+	 * Méthode stockant toutes les variables déclarées dans la algopars.util.var.DataFactory
 	 *
 	 * @param data L'ArrayList<String> correspondante à la partie données de l'algorithme
 	 */
@@ -122,7 +126,6 @@ public class AlgoInterpreter
 	public String processLine()
 	{
 		String line = algorithm.get( lineIndex ).trim();
-		System.out.println( line ); //TEST
 
 		if( line.equals( "fsi" ) )
 			conditionsStack.pop();
@@ -144,7 +147,7 @@ public class AlgoInterpreter
 
 		if( conditionsStack.empty() || !conditionsStack.empty() && conditionsStack.peek() )
 		{
-			if( tool.Regex.isFunction( line ) )
+			if( algopars.tool.Regex.isFunction( line ) )
 			{
 				String[] fonc = line.split( "\\(" );
 				switch( fonc[0] )
@@ -159,13 +162,13 @@ public class AlgoInterpreter
 			{
 				this.assignement( line );
 			}
-			else if( tool.Regex.isCondition( line ) )
+			else if( algopars.tool.Regex.isCondition( line ) )
 			{
 				line = new String( line.replaceAll( "\\s+", " " ) ).trim();
 				line = line.substring( line.indexOf( "si" ) + 2, line.indexOf( "alors" ) ).trim();
 				this.conditionsStack.push( this.evaluateCondition( line ) );
 			}
-			else if( tool.Regex.isLoop( line ) )
+			else if( algopars.tool.Regex.isLoop( line ) )
 			{
 				this.loopsStack.push( new Loop( lineIndex + 1,
 				                                line.substring( line.indexOf( "que" ) + 3,
@@ -217,7 +220,7 @@ public class AlgoInterpreter
 	 */
 	public Boolean evaluateCondition( String condition )
 	{
-		condition = tool.Transformer.transformCondition( condition );
+		condition = algopars.tool.Transformer.transformCondition( condition );
 
 		try
 		{

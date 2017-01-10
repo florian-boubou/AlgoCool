@@ -1,12 +1,13 @@
-import engine.type.*;
+package algopars.UI;
+
+
+import algopars.util.AlgoInterpreter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
- * Classe ConsoleDisplay qui se charge d'afficher tout le tintouin
+ * Classe algopars.UI.ConsoleDisplay qui se charge d'afficher tout le tintouin
  *
  * @author Antoine WARET, Clémence EDOUARD
  * @version 1.0.0a
@@ -36,7 +37,7 @@ public class ConsoleDisplay
 	
 	
 	/**
-	 * Constructeur de ConsoleDisplay
+	 * Constructeur de algopars.UI.ConsoleDisplay
 	 *
 	 * @param algorithm
 	 * 		L'arrayList contenant l'algorithme
@@ -46,7 +47,7 @@ public class ConsoleDisplay
 		this.consoleTrace = new ArrayList<>();
 		this.algorithm = algorithm;
 		
-		interpreter = new AlgoInterpreter(algorithm);
+		interpreter = new AlgoInterpreter( algorithm);
 		interpreter.run();
 	}
 

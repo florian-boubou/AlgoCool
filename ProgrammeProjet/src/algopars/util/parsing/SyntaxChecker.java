@@ -1,6 +1,6 @@
-package engine;
+package algopars.util.parsing;
 
-import tool.Regex;
+import algopars.tool.Regex;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -179,10 +179,10 @@ public class SyntaxChecker
 						":" ).length == 2) )
 					return false;
 
-				//On cherche à obtenir le type de la variable déclarée
+				//On cherche à obtenir le var de la variable déclarée
 				testType = testLine.split( ":" )[1].trim();
-				//Si le type ne la variable déclarée ne correspond pas aux types définis pour l'interpréteur, on renvoie false
-				if( !reserved.getHashMapConfig().get( "type" ).contains( testType ) )
+				//Si le var ne la variable déclarée ne correspond pas aux types définis pour l'interpréteur, on renvoie false
+				if( !reserved.getHashMapConfig().get( "var" ).contains( testType ) )
 					return false;
 
 				//On cherche à obtenir le nom de la variable déclarée
@@ -260,10 +260,10 @@ public class SyntaxChecker
 	}
 
 	/**
-	 * Permet de vérifier si la valeur d'une variable correspond bien à son type
+	 * Permet de vérifier si la valeur d'une variable correspond bien à son var
 	 * @param var le nom de la variable à analyser
 	 * @param val la valeur de la variable à analyser
-	 * @return si le type correspond bien au type spécifié ou non
+	 * @return si le var correspond bien au var spécifié ou non
 	 */
 	public boolean typeCheck( String var, String val )
 	{

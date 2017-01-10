@@ -1,4 +1,4 @@
-package engine.type;
+package algopars.util.var;
 
 /**
  * Classe StringVar gérant les différents types de Variables

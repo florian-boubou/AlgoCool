@@ -1,10 +1,13 @@
+package algopars.util;
+
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
- * Classe AlgoReader qui lit le fichier contenant l'algorithme et le transforme en ArrayList<String>
+ * Classe algopars.util.AlgoReader qui lit le fichier contenant l'algorithme et le transforme en ArrayList<String>
  *
  * @author Antoine WARET
  * @version 1.0.0a
@@ -15,7 +18,7 @@ public class AlgoReader
 	private ArrayList<String> algorithm;
 	
 	/**
-	 * Constructeur d'AlgoReader
+	 * Constructeur d'algopars.util.AlgoReader
 	 *
 	 * @param filePath
 	 * 		String décrivant le chemin faire le fichier contenant l'algorithme

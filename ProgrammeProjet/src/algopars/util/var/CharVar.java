@@ -1,15 +1,15 @@
-package engine.type;
+package algopars.util.var;
 
 
 /**
- * Classe représentant une variable de type caractère
+ * Classe représentant une variable de var caractère
  *
  * @author Corentin Athinault, Mathieu Chougui, Clémence Edouard
  * @version 1.0b du 06/01/2017
  */
-public class IntegerVar extends Variable implements Comparable<IntegerVar>
+public class CharVar extends Variable implements Comparable<CharVar>
 {
-	private int value;
+	private char value;
 
 	/**
 	 * Constructeur de la classe.
@@ -17,12 +17,12 @@ public class IntegerVar extends Variable implements Comparable<IntegerVar>
 	 * @param name     Le nom de la variable
 	 * @param strValue La valeur de la variable
 	 */
-	public IntegerVar( String name, String strValue )
+	public CharVar( String name, String strValue )
 	{
 		super( name, strValue );
-		type = "entier";
+		type = "caractere";
 		if(strValue != null)
-			this.value = Integer.parseInt( strValue );
+			this.value = strValue.charAt( 0 );
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class IntegerVar extends Variable implements Comparable<IntegerVar>
 	 *
 	 * @return La valeur de la variable
 	 */
-	public int getValue()
+	public char getValue()
 	{
 		return value;
 	}
@@ -42,20 +42,20 @@ public class IntegerVar extends Variable implements Comparable<IntegerVar>
 	 */
 	public void setValue( String value1 )
 	{
-		if( !constant) {
+		if( !constant && value1 != null) {
 			strValue = value1;
-			this.value = Integer.parseInt( value1 );
+			this.value = value1.charAt( 0 );
 		}
 	}
 
 	/**
-	 * Méthode permettant de comparer l'objet courant et un autre de même type
+	 * Méthode permettant de comparer l'objet courant et un autre de même var
 	 *
 	 * @param other L'objet avec lequelle comparer l'objet courant
 	 * @return Une valeur permettant de comparer les deux objets
 	 */
-	public int compareTo( IntegerVar other )
+	public int compareTo( CharVar other )
 	{
-		return (this.value - other.getValue());
+		return (int) this.value - other.value;
 	}
 }

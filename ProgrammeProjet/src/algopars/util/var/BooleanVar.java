@@ -1,8 +1,8 @@
-package engine.type;
+package algopars.util.var;
 
 
 /**
- * Classe représentant une variable de type booléen
+ * Classe représentant une variable de var booléen
  *
  * @author Corentin Athinault, Mathieu Chougui, Clémence Edouard
  * @version 1.0b du 06/01/2017

@@ -11,6 +11,7 @@ import algopars.util.AlgoInterpreter;
 import algopars.util.var.Variable;
 
 public class Controller
+
 {
 	private AlgoInterpreter	algoInterpreter;
 	private ConsoleDisplay	consoleDisplay;
@@ -28,6 +29,8 @@ public class Controller
 		this.algorithm			= new AlgoReader( filePath ).getAlgorithm();
 		this.algoInterpreter	= new AlgoInterpreter( algorithm );
 		this.consoleDisplay		= new ConsoleDisplay( this );
+
+		this.algoInterpreter.chooseVar();
 
 		for(int i = 0; i < (algorithm.size() > 40 ? 40 : algorithm.size());i++)
 		{

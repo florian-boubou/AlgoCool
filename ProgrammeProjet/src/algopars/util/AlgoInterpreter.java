@@ -30,6 +30,7 @@ public class AlgoInterpreter
 	private ArrayList<String>   algorithm;
 	private int                 lineIndex;
 	private ArrayList<Variable> alData;
+	private ArrayList<Variable> tracedVar;
 
 	private Stack<Boolean> 		conditionsStack;
 	private Stack<Loop>    		loopsStack;
@@ -51,6 +52,7 @@ public class AlgoInterpreter
 			lineIndex = 0;
 
 			alData = new ArrayList<>();
+			tracedVar = new ArrayList<>();
 			conditionsStack = new Stack<>();
 			loopsStack = new Stack<>();
 		}
@@ -146,11 +148,13 @@ public class AlgoInterpreter
 		{
 			if( algopars.tool.Regex.isFunction( line ) )
 			{
-				String[] fonc = line.split( "\\(" );
+				String[] fonc = line.split( "\\(|\\)" );
 				switch( fonc[0] )
 				{
 					case "ecrire":
 						return write( fonc[1].replace( ')', ' ' ).trim() );
+					case "lire":
+						read(fonc[1]);
 					default:
 						break;
 				}
@@ -245,6 +249,32 @@ public class AlgoInterpreter
 		return this.process( toWrite );
 	}
 
+	public void read(String vars)
+	{
+		String[] tabS = vars.split( "\\," );
+		Scanner sc = null;
+		for ( Variable var : alData )
+		{
+			for ( int i = 0; i<tabS.length;i++ )
+				if(var.getName().equals( tabS[i] ))
+				{
+					sc = new Scanner( System.in );
+					var.setValue( "12" );
+				}
+		}
+	}
+
+	public void chooseVar()
+	{
+		Scanner sc;
+		for(Variable var : this.alData)
+		{
+			System.out.println( "voulez vous tracer la variable " + var.getName() + " ? (oui ou non)" );
+			sc = new Scanner( System.in );
+			String s = sc.nextLine();
+			if ( s.equals( "oui" ) ) tracedVar.add( var );
+		}
+	}
 	/**
 	 * Méthode permettant d'évaluer une expression passée en paramètre
 	 *
@@ -278,6 +308,6 @@ public class AlgoInterpreter
 	 */
 	public ArrayList<Variable> getAlData()
 	{
-		return alData;
+		return tracedVar;
 	}
 }

@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+
 
 
 /**
@@ -172,8 +177,8 @@ public class AlgoInterpreter
 			else if( algopars.tool.Regex.isLoop( line ) )
 			{
 				this.loopsStack.push( new Loop( lineIndex + 1,
-				                                line.substring( line.indexOf( "que" ) + 3,
-				                                                line.indexOf( "faire" ) ) ) );
+												line.substring( line.indexOf( "que" ) + 3,
+																line.indexOf( "faire" ) ) ) );
 
 				this.loopsStack.peek().setConditionValue(
 						evaluateCondition( loopsStack.peek().getCondition() ) );
@@ -203,7 +208,7 @@ public class AlgoInterpreter
 					interpreter.eval( (v.getName() + " = " + v.getStrValue()) );
 					v.setValue( String.valueOf( interpreter.get( v.getName() ) ) );//PROBLEME
 					System.out.println( "AFFECTATION : " + v.getName() + " = " + v.getStrValue()
-					                  );//TEST
+									  );//TEST
 				} catch( EvalError e )
 				{
 					System.err.println( e.toString() );
@@ -252,14 +257,18 @@ public class AlgoInterpreter
 	public void read(String vars)
 	{
 		String[] tabS = vars.split( "\\," );
-		Scanner sc = null;
+		BufferedReader entree = new BufferedReader (new InputStreamReader(System.in));
 		for ( Variable var : alData )
 		{
 			for ( int i = 0; i<tabS.length;i++ )
 				if(var.getName().equals( tabS[i] ))
 				{
-					sc = new Scanner( System.in );
-					var.setValue( "12" );
+					System.out.println("entrez une valeur pour "+var.getName());
+					try
+					{
+						var.setValue( entree.readLine());
+					}
+					catch(Exception e){}
 				}
 		}
 	}

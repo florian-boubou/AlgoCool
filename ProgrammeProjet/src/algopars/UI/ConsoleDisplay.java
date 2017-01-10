@@ -82,6 +82,7 @@ public class ConsoleDisplay
 
 		int iVar = 0;
 
+
 		//Boucle pour afficher le code et les données
 		for(int i = 0 ; i < (algorithm.size() > 40 ? 40 : algorithm.size()) ; i++)
 		{
@@ -116,29 +117,31 @@ public class ConsoleDisplay
 				dataStr = "\n";
 			}
 
-			str.append(background + "| " +
+			String line = background + "| " +
 					String.format("%-80s", (current == i ? color.BACKGROUND_WHITE + color.BLACK : "") +
 							String.format("%2d", i) + " " +
 							String.format(algorithm.get(i).contains(
 									"◄—") ? "%-79s" : "%-80s",
 									algorithm.get(i))) + background +
-					" | " + dataStr);
+					" | " + dataStr;
 
-			String line = str.toString();
 			for(String element : textColors.keySet())
 			{
-				if(line.indexOf(element) != -1)
+				if(line.contains(element))
 				{
-					line = line.replaceAll(element, textColors.get(element)
-							+ (current == i ? color.BACKGROUND_WHITE : color.BACKGROUND_BLACK)
+					line = line.replaceAll(element, (current == i ? backgroundCurrent : background)
+							+ textColors.get(element)
 							+ element
 							+ (current == i ? backgroundCurrent : background)
 					);
 				}
 			}
 
-			str.replace(0, str.length()-1, line);
+
+			str.append(line);
+
 		}
+
 
 		str.append(new String(new char[87]).replace('\0', '"') + "\n\n");
 

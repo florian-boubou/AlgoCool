@@ -6,6 +6,7 @@ import algopars.util.color.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Classe ConsoleDisplay qui se charge d'afficher tout le tintouin
@@ -23,21 +24,32 @@ public class ConsoleDisplay
 	private static final Color              color = new Color();
 	private final   String                  background = color.WHITE + color.BACKGROUND_BLACK;
 	private final   String                  backgroundCurrent = color.BLACK + color.BACKGROUND_WHITE;
-	private static  HashMap<String, String> textColors = new HashMap<String, String>()
-	{{
-		put("ecrire", color.BLUE);
-		put("lire", color.YELLOW);
-		put("^[f]?si[non]?\\s$", color.CYAN);
-		put("fsi", color.CYAN);
-		put("sinon", color.CYAN);
-		put("alors", color.CYAN);
-		put("tant que", color.CYAN);
-		put("faire", color.CYAN);
-		put("ftq", color.CYAN);
-		put("selon", color.CYAN);
-		put("choix", color.CYAN);
-		put("defaut", color.CYAN);
-	}};
+
+    private static LinkedList<Keyword> keywords = new LinkedList<Keyword>(){{
+        String regexCyan = "^.*(alors|tant que|faire|ftq|selon|choix|defaut).*$";
+        String regexSi = "^.*\\s+si\\s+.*$";
+        String regexSinon = "^.*sinon.*$";
+        String regexFsi = "^.*fsi.*$";
+        String regexBold = "^.*(ALGORITHME|DEBUT|FIN).*$";
+
+        add(new Keyword("^\\s*ecrire\\(.*\\)\\s*$","ecrire",color.BLUE));
+        add(new Keyword("^\\s*lire\\(.*\\)\\s*$", "lire", color.YELLOW));
+
+        add(new Keyword(regexSi, "si", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexFsi, "fsi", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexSinon, "sinon", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexCyan, "alors", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexCyan, "tant que", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexCyan, "faire", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexCyan, "ftq", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexCyan, "selon", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexCyan, "choix", color.CYAN));//SI A RAJOUTER
+        add(new Keyword(regexCyan, "defaut", color.CYAN));//SI A RAJOUTER
+
+        add(new Keyword(regexBold,"ALGORITHME", color.BOLD));
+        add(new Keyword(regexBold,"DEBUT", color.BOLD));
+        add(new Keyword(regexBold,"FIN", color.BOLD));
+    }};
 
 
 	/**
@@ -125,13 +137,15 @@ public class ConsoleDisplay
 									algorithm.get(i))) + background +
 					" | " + dataStr;
 
-			for(String element : textColors.keySet())
+			for(Keyword k:keywords)
 			{
-				if(line.contains(element))
+                boolean b = algorithm.get(i).matches(k.getRegex());
+				if(b)
 				{
-					line = line.replaceAll(element, (current == i ? backgroundCurrent : background)
-							+ textColors.get(element)
-							+ element
+					line = line.replaceAll(k.getKeyword(),
+							(current == i ? backgroundCurrent : background)
+							+ k.getColor()
+							+ k.getKeyword()
 							+ (current == i ? backgroundCurrent : background)
 					);
 				}

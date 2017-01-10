@@ -14,6 +14,7 @@ public class Color {
     public static String RED;
     public static String BACKGROUND_WHITE;
     public static String BACKGROUND_BLACK;
+    public static String BOLD;
 
     static {
         OS os = OS.getOS();
@@ -28,6 +29,7 @@ public class Color {
             RED    = "\033[31m";
             BACKGROUND_WHITE = "\033[47m";
             BACKGROUND_BLACK = "\033[40m";
+            BOLD = "\033[1m";
         }
 
         else if(os == OS.WINDOWS)
@@ -41,6 +43,7 @@ public class Color {
             RED    = "\\x1b[31m";
             BACKGROUND_WHITE = "\\x1b[47m";
             BACKGROUND_BLACK = "\\x1b[40m";
+            BOLD = "\\x1b[1m";
         }
 
 

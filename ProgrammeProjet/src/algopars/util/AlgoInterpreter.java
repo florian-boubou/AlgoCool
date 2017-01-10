@@ -1,6 +1,5 @@
 package algopars.util;
 
-
 import bsh.EvalError;
 import bsh.Interpreter;
 import algopars.util.parsing.SyntaxChecker;
@@ -11,6 +10,7 @@ import algopars.tool.Regex;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Stack;
 
 
@@ -23,16 +23,17 @@ import java.util.Stack;
  */
 public class AlgoInterpreter
 {
-	private Interpreter   interpreter;
-	private DataFactory   df;
-	private SyntaxChecker syntaxChecker;
+	private Interpreter   		interpreter;
+	private DataFactory   		df;
+	private SyntaxChecker 		syntaxChecker;
 
 	private ArrayList<String>   algorithm;
 	private int                 lineIndex;
 	private ArrayList<Variable> alData;
+	private ArrayList<Variable> tracedVar;
 
-	private Stack<Boolean> conditionsStack;
-	private Stack<Loop>    loopsStack;
+	private Stack<Boolean> 		conditionsStack;
+	private Stack<Loop>    		loopsStack;
 
 	/**
 	 * Constructeur d'algopars.util.AlgoInterpreter
@@ -51,19 +52,20 @@ public class AlgoInterpreter
 			lineIndex = 0;
 
 			alData = new ArrayList<>();
+			tracedVar = new ArrayList<>();
 			conditionsStack = new Stack<>();
 			loopsStack = new Stack<>();
-		} catch( Exception e )
+		}
+		catch( Exception e )
 		{
 			System.err.println( e.getMessage() );
 		}
+
+		this.initializeData();
+
 	}
 
-
-	/**
-	 * Méthode lançant l'interprétation
-	 */
-	public void run()
+	private void initializeData()
 	{
 		syntaxChecker.dataCheck();
 		this.declareData( syntaxChecker.gethData() );
@@ -76,13 +78,13 @@ public class AlgoInterpreter
 			try
 			{
 				interpreter.eval( v.getName() + " = " + v.getStrValue() );
-			} catch( EvalError e )
+			}
+			catch( EvalError e )
 			{
 				System.err.println( e.toString() );
 			}
 		}
 	}
-
 
 	/**
 	 * Méthode stockant toutes les variables déclarées dans la algopars.util.var.DataFactory
@@ -130,10 +132,7 @@ public class AlgoInterpreter
 		if( line.equals( "fsi" ) )
 			conditionsStack.pop();
 		else if( line.equals( "sinon" ) )
-		{
-			Boolean b = conditionsStack.peek();
-			b = !b;
-		}
+			conditionsStack.push( !conditionsStack.pop() );
 		else if( line.equals( "ftq" ) )
 		{
 			loopsStack.peek().setConditionValue(
@@ -149,11 +148,13 @@ public class AlgoInterpreter
 		{
 			if( algopars.tool.Regex.isFunction( line ) )
 			{
-				String[] fonc = line.split( "\\(" );
+				String[] fonc = line.split( "\\(|\\)" );
 				switch( fonc[0] )
 				{
 					case "ecrire":
 						return write( fonc[1].replace( ')', ' ' ).trim() );
+					case "lire":
+						read(fonc[1]);
 					default:
 						break;
 				}
@@ -248,6 +249,32 @@ public class AlgoInterpreter
 		return this.process( toWrite );
 	}
 
+	public void read(String vars)
+	{
+		String[] tabS = vars.split( "\\," );
+		Scanner sc = null;
+		for ( Variable var : alData )
+		{
+			for ( int i = 0; i<tabS.length;i++ )
+				if(var.getName().equals( tabS[i] ))
+				{
+					sc = new Scanner( System.in );
+					var.setValue( "12" );
+				}
+		}
+	}
+
+	public void chooseVar()
+	{
+		Scanner sc;
+		for(Variable var : this.alData)
+		{
+			System.out.println( "voulez vous tracer la variable " + var.getName() + " ? (oui ou non)" );
+			sc = new Scanner( System.in );
+			String s = sc.nextLine();
+			if ( s.equals( "oui" ) ) tracedVar.add( var );
+		}
+	}
 	/**
 	 * Méthode permettant d'évaluer une expression passée en paramètre
 	 *
@@ -281,33 +308,6 @@ public class AlgoInterpreter
 	 */
 	public ArrayList<Variable> getAlData()
 	{
-		return alData;
-	}
-
-	/**
-	 * Point d'entrée du programme d'interprétation
-	 *
-	 * @param args
-	 *      Contiendra une chaîne représentant le chemin vers le fichier contenant l'algorithme à interpréter
-	 */
-	public static void main( String[] args )
-	{
-		AlgoReader      algoReader    = new AlgoReader( "/test.algo" );
-		AlgoInterpreter algoInterpreter;
-		SyntaxChecker   syntaxChecker = null;
-
-		try
-		{
-			syntaxChecker = new SyntaxChecker( algoReader.getAlgorithm() );
-		}
-		catch( Exception e )
-		{
-			e.printStackTrace();
-		}
-		if( syntaxChecker.headerCheck() && syntaxChecker.dataCheck() /*&& syntaxChecker.bodyCheck()*/ )
-		{
-			algoInterpreter = new AlgoInterpreter( algoReader.getAlgorithm() );
-			algoInterpreter.run();
-		}
+		return tracedVar;
 	}
 }

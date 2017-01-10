@@ -1,6 +1,7 @@
 package algopars.UI;
 
 
+import algopars.Controller;
 import algopars.util.*;
 import algopars.util.color.Color;
 
@@ -16,14 +17,14 @@ import java.util.HashMap;
  */
 public class ConsoleDisplay
 {
-	private         ArrayList<String>       algorithm;
-	private         ArrayList<String>       consoleTrace;
-	private         AlgoInterpreter         interpreter;
+	private         		ArrayList<String>       algorithm;
+	private         		ArrayList<String>       consoleTrace;
+	private         		Controller				controller;
 
-	private static final Color              color = new Color();
-	private final   String                  background = color.WHITE + color.BACKGROUND_BLACK;
-	private final   String                  backgroundCurrent = color.BLACK + color.BACKGROUND_WHITE;
-	private static  HashMap<String, String> textColors = new HashMap<String, String>()
+	private static 	final 	Color              		color = new Color();
+	private 		final 	String                  background = color.WHITE + color.BACKGROUND_BLACK;
+	private 		final   String                  backgroundCurrent = color.BLACK + color.BACKGROUND_WHITE;
+	private static  		HashMap<String, String> textColors = new HashMap<String, String>()
 	{{
 		put("ecrire", color.BLUE);
 		put("lire", color.YELLOW);
@@ -43,20 +44,14 @@ public class ConsoleDisplay
 	/**
 	 * Constructeur de ConsoleDisplay
 	 *
-	 * @param algorithm
-	 * 		L'arrayList contenant l'algorithme
+	 * @param controller
+	 * 		Le lien entre l'affichage et le métier
 	 */
-	public ConsoleDisplay(ArrayList<String> algorithm)
+	public ConsoleDisplay( Controller controller )
 	{
-		this.consoleTrace = new ArrayList<>();
-		this.algorithm = algorithm;
-
-		interpreter = new AlgoInterpreter(algorithm);
-		interpreter.run();
-	}
-
-	public void refresh(){
-		interpreter.processLine();
+		this.controller		= controller;
+		this.consoleTrace	= new ArrayList<>();
+		this.algorithm		= controller.getAlgorithm();
 	}
 
 	/**
@@ -92,22 +87,22 @@ public class ConsoleDisplay
 						+ String.format("%-10s", "TYPE") + "|"
 						+ String.format("%-20s", "VALEUR") + "|\n";
 			}
-			else if(iVar < interpreter.getAlData().size())
+			else if(iVar < this.controller.getAlData().size())
 			{
 				dataStr = "|" +
 						String.format("%-10s",
-								interpreter.getAlData().get(iVar).getName())
+								this.controller.getAlData().get(iVar).getName())
 						+ "|" +
 						String.format("%-10s",
-								interpreter.getAlData().get(iVar).getType())
+								this.controller.getAlData().get(iVar).getType())
 						+ "|" +
-						String.format("%-20s", interpreter.getAlData().
+						String.format("%-20s", this.controller.getAlData().
 								get(iVar).getStrValue() == null ?
-								"" : interpreter.getAlData().get(iVar).getStrValue()) +
+								"" : this.controller.getAlData().get(iVar).getStrValue()) +
 						"|\n";
 				iVar++;
 			}
-			else if(iVar == interpreter.getAlData().size())
+			else if(iVar == this.controller.getAlData().size())
 			{
 				dataStr = new String(new char[44]).replace('\0', '"') + "\n";
 				iVar++;
@@ -136,10 +131,7 @@ public class ConsoleDisplay
 					);
 				}
 			}
-
-
 			str.append(line);
-
 		}
 
 

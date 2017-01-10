@@ -6,5 +6,9 @@ variable :
 DEBUT
     x   ◄— 5
     y   ◄— 2
-    ecrire("Joie")
+    si x = 3 alors
+        y ◄— 0
+    sinon
+        y ◄— 1
+    fsi
 FIN

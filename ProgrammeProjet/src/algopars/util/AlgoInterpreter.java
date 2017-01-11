@@ -271,9 +271,8 @@ public class AlgoInterpreter
 					try
 					{
 						String value = entree.readLine();
-
 						interpreter.eval( var.getName() + "=" + value );
-						var.setValue( entree.readLine() );
+						var.setValue( value );
 					} catch ( Exception e ) {}
 				}
 		}

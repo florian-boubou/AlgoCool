@@ -154,10 +154,11 @@ public class ConsoleDisplay
 		str.append(new String(new char[11]).replace('\0', '"') + "\n" +
 				"| CONSOLE |\n" + new String(new char[87]).replace('\0', '"') + "\n");
 		
+
 		this.consoleTrace = this.controller.getAlConsole();
-		
+
 		//Boucle pour afficher le code et les données
-		for(int i = 3 ; i >= 0 ; i--)
+		for(int i = 4 ; i > 0 ; i--)
 		{
 			if(consoleTrace.size() != 0 && consoleTrace.size() - i >= 0)
 			{

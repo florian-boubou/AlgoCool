@@ -11,13 +11,11 @@ import algopars.util.AlgoInterpreter;
 import algopars.util.var.Variable;
 
 public class Controller
-
 {
 	private AlgoInterpreter	algoInterpreter;
 	private ConsoleDisplay	consoleDisplay;
 
 	private ArrayList<String> algorithm;
-
 
 	/**
 	 * Constructeur de Controller

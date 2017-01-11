@@ -137,7 +137,11 @@ public class AlgoInterpreter
 	 */
 	public void processLine()
 	{
-		String line = algorithm.get( lineIndex ).trim();
+		String line = algorithm.get( ++lineIndex ).trim();
+		if( algopars.tool.Regex.isComment(line))
+		{
+			line = line.substring(0, line.indexOf("//"));
+		}
 
 		if ( line.equals( "fsi" ) )
 			conditionsStack.pop();
@@ -162,9 +166,11 @@ public class AlgoInterpreter
 				switch ( fonc[0] )
 				{
 					case "ecrire":
-						write( fonc[1].replace( ')', ' ' ).trim() );
+						write( fonc[1] );
+						break;
 					case "lire":
 						read( fonc[1] );
+						break;
 					default:
 						break;
 				}
@@ -191,7 +197,6 @@ public class AlgoInterpreter
 		}
 		lineIndex++;
 	}
-
 
 	/**
 	 * Méthode permettant d'interpréter les lignes d'affectation de variables
@@ -249,7 +254,21 @@ public class AlgoInterpreter
 	{
 		String processed = new String( toWrite );
 
-		if ( Regex.isWritable( processed ) ) this.alConsole.add( processed );
+		if ( Regex.isWritable( processed ) )
+		{
+			if( Regex.isString( processed ) )
+				processed = processed.split( "\"" )[1];
+			else if( Regex.isVariable( processed ) )
+			{
+				for( Variable v : this.alData )
+				{
+					if( v.getName().equals( processed ) ) processed = v.getStrValue();
+				}
+
+			}
+
+			this.alConsole.add( processed );
+		}
 	}
 
 
@@ -308,23 +327,4 @@ public class AlgoInterpreter
 	 */
 	public ArrayList<String> getAlConsole() { return this.alConsole; }
 
-	public static void main(String[] args)
-	{
-		ArrayList<String> algo = new ArrayList<>(  );
-		algo.add("ALGORITHME Machin");
-		algo.add("variable :");
-		algo.add("x, y : entier");
-		algo.add( "DEBUT" );
-		algo.add("x ◄— 5");
-		algo.add("y ◄— x - 2");
-		algo.add("FIN");
-		AlgoInterpreter in = new AlgoInterpreter( algo );
-
-		in.lineIndex = 4;
-		in.processLine();
-		in.lineIndex = 5;
-		in.processLine();
-
-		System.out.println(in.alData.get( 1 ));
-	}
 }

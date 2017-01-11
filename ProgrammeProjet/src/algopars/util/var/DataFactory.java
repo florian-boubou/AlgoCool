@@ -90,6 +90,10 @@ public class DataFactory
 		{
 			type = determineType(value);
 		}
+
+		if(hMapData.get(varName) != null)
+			throw new Exception("Erreur: var" + varName + "existe déjà");
+
 		switch(type)
 		{
 			case "entier":

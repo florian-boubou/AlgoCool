@@ -15,7 +15,7 @@ public class Regex
 	public static final String REGEX_INTEGER        = "^[0-9]+$";
 	public static final String REGEX_DOUBLE         = "^[0-9]+,[0-9]+$";
 	public static final String REGEX_BOOLEAN        = "^(vrai|faux)$";
-	public static final String REGEX_STRING         = "dvjkchqsjk()^\"([^\"]|\\\\\")*\"$";
+	public static final String REGEX_STRING         = "^\"([^\"]|\\\\\")*\"$";
 	public static final String REGEX_CHAR           = "^'[^']'$";
 	public static final String REGEX_FUNCTION       = "^[a-z][a-zA-Z]*\\(.*\\)$";
 	
@@ -27,6 +27,7 @@ public class Regex
 	
 	public static final String REGEX_CONDITION      = "^\\s*si .+ alors\\s*$";
 	public static final String REGEX_LOOP           = "^\\s*tant que .+ faire\\s*$";
+	public static final String REGEX_COMMENT        = "^\\s*.*//.*\\s*$";
 
 	/**
 	 * Méthode permettant de savoir si une chaîne correspond bien au standard de variable
@@ -170,5 +171,16 @@ public class Regex
 	{
 		return Regex.isInteger(s) || Regex.isDouble(s)      || Regex.isCharacter(s) || Regex.isString(s) ||
 		       Regex.isBoolean(s) || Regex.isVariable(s)    || Regex.isConstant(s);
+	}
+
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à une opération
+	 *
+	 * @param s La chaîne à analyser
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isComment( String s )
+	{
+		return s.matches( REGEX_COMMENT );
 	}
 }

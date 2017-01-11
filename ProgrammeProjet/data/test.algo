@@ -1,14 +1,15 @@
 ALGORITHME Algo
-constante:
-TAILLE ◄— 58
 variable :
-    x, y : entier
+    x : entier
 DEBUT
-    x   ◄— 5
-    y   ◄— 2
-    si x = 3 alors
-        ecrire("joie")
+    lire(x)
+    ecrire("joie")
+    ecrire(x)
+    ecrire("allegresse")
+    si x = 12 alors
+        ecrire("x est égal à 12")
+        ecrire("Le 5ème va vous étonner")
     sinon
-        y ◄— 1
+        ecrire("x n'est pas égal à 12")
     fsi
 FIN

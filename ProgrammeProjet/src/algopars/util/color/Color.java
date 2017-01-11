@@ -18,6 +18,9 @@ public class Color
     public static String RED;
     public static String BACKGROUND_WHITE;
     public static String BACKGROUND_BLACK;
+    public static String BACKGROUND_GREEN;
+    public static String BACKGROUND_RED;
+
     public static String BOLD;
     
     /**
@@ -37,23 +40,25 @@ public class Color
             RED    = "\033[31m";
             BACKGROUND_WHITE = "\033[47m";
             BACKGROUND_BLACK = "\033[40m";
+            BACKGROUND_GREEN = "\033[42m";
+            BACKGROUND_RED = "\033[41m";
             BOLD = "\033[1m";
         }
 
         else if(os == OS.WINDOWS)
         {
-            WHITE  = "\\x1b[37m";
-            BLACK  = "\\x1b[30m";
-            BLUE   = "\\x1b[34m";
-            CYAN   = "\\x1b[36m";
-            YELLOW = "\\x1b[33m";
-            GREEN  = "\\x1b[32m";
-            RED    = "\\x1b[31m";
-            BACKGROUND_WHITE = "\\x1b[47m";
-            BACKGROUND_BLACK = "\\x1b[40m";
-            BOLD = "\\x1b[1m";
+            WHITE  = "\u001b[37m";
+            BLACK  = "\u001b[30m";
+            BLUE   = "\u001b[34m";
+            CYAN   = "\u001b[36m";
+            YELLOW = "\u001b[33m";
+            GREEN  = "\u001b[32m";
+            RED    = "\u001b[31m";
+            BACKGROUND_WHITE = "\u001b[47m";
+            BACKGROUND_BLACK = "\u001b[40m";
+            BACKGROUND_GREEN = "\u001b[42m";
+            BACKGROUND_RED = "\u001b[41m";
+            BOLD = "\u001b[1m";
         }
-
-
     }
 }

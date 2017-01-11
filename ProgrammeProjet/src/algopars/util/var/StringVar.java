@@ -36,6 +36,12 @@ public class StringVar extends Variable
 	{
 		return value;
 	}
+
+	@Override
+	public String getJavaType()
+	{
+		return "String";
+	}
 	
 	/**
 	 * Méthode permettant de modifier la valeur de la StringVar

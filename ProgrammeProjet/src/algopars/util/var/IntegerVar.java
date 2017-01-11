@@ -35,6 +35,12 @@ public class IntegerVar extends Variable implements Comparable<IntegerVar>
 		return value;
 	}
 
+	@Override
+	public String getJavaType()
+	{
+		return "int";
+	}
+
 	/**
 	 * Méthode permettant de modifier la valeur de la variable
 	 *

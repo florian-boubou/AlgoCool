@@ -35,6 +35,12 @@ public class DoubleVar extends Variable implements Comparable<DoubleVar>
 		return value;
 	}
 
+	@Override
+	public String getJavaType()
+	{
+		return "double";
+	}
+
 	/**
 	 * Méthode permettant de modifier la valeur de la variable
 	 *

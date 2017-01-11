@@ -37,6 +37,14 @@ public class BooleanVar extends Variable
 		return value;
 	}
 
+
+	@Override
+	public String getJavaType()
+	{
+		return "boolean";
+	}
+
+
 	/**
 	 * Méthode permettant de modifier la valeur de la variable
 	 *

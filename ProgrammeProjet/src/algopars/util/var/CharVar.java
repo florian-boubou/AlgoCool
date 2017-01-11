@@ -35,6 +35,12 @@ public class CharVar extends Variable implements Comparable<CharVar>
 		return value;
 	}
 
+	@Override
+	public String getJavaType()
+	{
+		return "character";
+	}
+
 	/**
 	 * Méthode permettant de modifier la valeur de la variable
 	 *

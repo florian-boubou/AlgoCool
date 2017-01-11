@@ -4,7 +4,11 @@ TAILLE ◄— 58
 variable :
     x, y : entier
 DEBUT
-    x   ◄— 5
-    y   ◄— 2
-    ecrire(x)
+    x ◄— 5
+    y ◄— x - 2
+    si x = 3 alors
+        ecrire("joie")
+    sinon
+        y ◄— 1
+    fsi
 FIN

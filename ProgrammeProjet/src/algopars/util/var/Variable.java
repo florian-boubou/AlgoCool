@@ -51,6 +51,13 @@ public abstract class Variable
 	}
 
 	/**
+	 * Méthode permettant d'obtenir le type Java de la variable sous forme de String
+	 *
+	 * @return Le type Java
+	 */
+	public abstract String getJavaType();
+
+	/**
 	 * Méthode permettant d'obtenir le nom de la variable
 	 *
 	 * @return Le nom de la variable

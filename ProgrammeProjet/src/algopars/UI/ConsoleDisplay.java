@@ -25,21 +25,6 @@ public class ConsoleDisplay
 	private static 	final 	Color              		color               = new Color();
 	private 		final 	String                  background          = color.WHITE + color.BACKGROUND_BLACK;
 	private 	    final   String                  backgroundCurrent   = color.BLACK + color.BACKGROUND_WHITE;
-	private static  		HashMap<String, String> textColors          = new HashMap<String, String>()
-	{{
-		put("ecrire", color.BLUE);
-		put("lire", color.YELLOW);
-		put("^[f]?si[non]?\\s$", color.CYAN);
-		put("fsi", color.CYAN);
-		put("sinon", color.CYAN);
-		put("alors", color.CYAN);
-		put("tant que", color.CYAN);
-		put("faire", color.CYAN);
-		put("ftq", color.CYAN);
-		put("selon", color.CYAN);
-		put("choix", color.CYAN);
-		put("defaut", color.CYAN);
-	}};
 
     private static LinkedList<Keyword> keywords = new LinkedList<Keyword>(){{
         String regexCyan = "^.*(alors|tant que|faire|ftq|selon|choix|defaut).*$";

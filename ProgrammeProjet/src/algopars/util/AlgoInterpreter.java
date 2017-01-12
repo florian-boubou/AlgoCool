@@ -157,9 +157,14 @@ public class AlgoInterpreter
 				loopsStack.pop();
 			}
 		}
-		else if ( line.equals( "fsi" ) )
+		else if ( line.equals( "fsi" ) ){
 			//On enlève la dernière valeur de condtion
 			conditionsStack.pop();
+			if(conditionsStack.empty()){
+				lineIndex++;
+				return true;
+			}
+		}
 
 		if ( line.equals( "sinon" ) )
 		{
@@ -378,7 +383,7 @@ public class AlgoInterpreter
 	 */
 	public ArrayList<String> getAlConsole() { return this.alConsole; }
 
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		ArrayList<String> algo = new ArrayList<>(  );
 		algo.add("ALGORITHME Machin");
@@ -396,7 +401,7 @@ public class AlgoInterpreter
 		in.processLine();
 
 		System.out.println(in.alData.get( 1 ));
-	}
+	}*/
 
 	public char getLastConditionValue()
 	{
@@ -406,13 +411,6 @@ public class AlgoInterpreter
 		return conditionsStack.peek() ? 'g':'r';
 	}
 
-
-	public int getLineIndex()
-	{
-		return lineIndex;
-	}
-
-
 	public boolean isLoopAlreadyStacked(Loop loop)
 	{
 		for(Loop l : loopsStack)
@@ -421,4 +419,6 @@ public class AlgoInterpreter
 
 		return false;
 	}
+
+	public int getLineIndex() { return lineIndex; }
 }

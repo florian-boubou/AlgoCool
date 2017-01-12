@@ -12,8 +12,7 @@ public class Loop
 {
 	private int     startIndex;
 	private String  condition;
-	private boolean conditionValue;
-	
+
 	/**
 	 * Constructeur de Loop
 	 * @param startIndex
@@ -25,7 +24,6 @@ public class Loop
 	{
 		this.startIndex = startIndex;
 		this.condition = condition;
-		this.conditionValue = false;
 	}
 	
 	/**
@@ -47,24 +45,12 @@ public class Loop
 	{
 		return condition;
 	}
-	
-	/**
-	 * Méthode permettant d'obtenir la valeur de vérité de la condition du Loop
-	 * @return
-	 *      La valeur de vérité de la condition du Loop
-	 */
-	public boolean getConditionValue()
+
+
+	@Override
+	public boolean equals( Object obj )
 	{
-		return conditionValue;
-	}
-	
-	/**
-	 * Méthode permettant de modifier la valeur de vérité de la condition du Loop
-	 * @param conditionValue
-	 *      La nouvelle valeur de vérité de la condition du Loop
-	 */
-	public void setConditionValue(boolean conditionValue)
-	{
-		this.conditionValue = conditionValue;
+		Loop other = (Loop)obj;
+		return this.condition.equals( other.condition ) && this.startIndex == other.startIndex;
 	}
 }

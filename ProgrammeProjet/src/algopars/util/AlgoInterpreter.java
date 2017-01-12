@@ -1,7 +1,5 @@
 package algopars.util;
 
-
-import algopars.Controller;
 import bsh.EvalError;
 import bsh.Interpreter;
 import algopars.util.parsing.SyntaxChecker;
@@ -9,7 +7,6 @@ import algopars.util.var.DataFactory;
 import algopars.util.var.Variable;
 import algopars.tool.Loop;
 import algopars.tool.Regex;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.SyntaxException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +14,6 @@ import java.util.Scanner;
 import java.util.Stack;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.IOException;
 
 /**
  * Classe algopars.util.AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
@@ -135,26 +131,91 @@ public class AlgoInterpreter
 	/**
 	 * Méthodant interprétant l'algorithme ligne par ligne
 	 */
-	public void processLine()
+	public boolean processLine()
 	{
 		String line = algorithm.get( lineIndex ).trim();
 
-		if ( line.equals( "fsi" ) )
-			conditionsStack.pop();
-		else if ( line.equals( "sinon" ) )
-			conditionsStack.push( ! conditionsStack.pop() );
-		else if ( line.equals( "ftq" ) )
+		if( algopars.tool.Regex.isComment(line))
 		{
-			loopsStack.peek().setConditionValue(
-					evaluateCondition( loopsStack.peek().getCondition() ) );
-
-			if ( loopsStack.peek().getConditionValue() )
-				this.lineIndex = loopsStack.peek().getStartIndex();
-
-			line = algorithm.get( lineIndex );
+			line = line.substring(0, line.indexOf("//"));
 		}
 
-		if ( conditionsStack.empty() || conditionsStack.peek() )
+		if ( line.equals( "ftq" ) )
+		{
+			//On ré-évalue la valeur de la condition de boucle
+			conditionsStack.pop();
+			conditionsStack.push( evaluateCondition( loopsStack.peek().getCondition() ) );
+
+			if ( conditionsStack.peek() )
+			{
+				this.lineIndex = loopsStack.peek().getStartIndex();
+				line = algorithm.get( lineIndex );
+			}
+			else
+			{
+				conditionsStack.pop();
+				loopsStack.pop();
+			}
+		}
+		else if ( line.equals( "fsi" ) )
+			//On enlève la dernière valeur de condtion
+			conditionsStack.pop();
+
+		if ( line.equals( "sinon" ) )
+		{
+			//Inverse la dernière valeur booléenne de la pile de conditions
+			conditionsStack.push( ! conditionsStack.pop() );
+
+			if(containsFalse() && isCurrentConditionFirstFalse())
+			{
+				lineIndex++;
+				return true;
+			}
+
+		}
+
+		if ( algopars.tool.Regex.isCondition( line ) )
+		{
+			line = line.replaceAll( "\\s+", " " ).trim();
+			//On ne récupère que la valeur de la condition
+			line = line.substring( line.indexOf( "si" ) + 2, line.indexOf( "alors" ) ).trim();
+			//On récupère la valeur de la condition
+			this.conditionsStack.push( this.evaluateCondition( line ) );
+
+			if(containsFalse() && isCurrentConditionFirstFalse())
+			{
+				lineIndex++;
+				return true;
+			}
+		}
+		else if ( algopars.tool.Regex.isLoop( line )  )
+		{
+			Loop l = new Loop( lineIndex,
+							   line.substring( line.indexOf( "que" ) + 3,
+											   line.indexOf( "faire" ) ) );
+
+			if(isLoopAlreadyStacked(l))
+			{
+				lineIndex++;
+				return true;
+			}
+
+			//On ajoute à la pile une nouvelle Loop symbolisant notre boucle
+			this.loopsStack.push( l );
+
+			//On ajoute la valeur de la condition de la boucle à la pile
+			conditionsStack.push( evaluateCondition( loopsStack.peek().getCondition() ));
+
+			if(containsFalse() && isCurrentConditionFirstFalse())
+			{
+				lineIndex++;
+				return true;
+			}
+		}
+
+		//Toutes les opération à ignorer si un faux est trouvé : permet de quand même construire
+		// la pile
+		if(! containsFalse())
 		{
 			if ( algopars.tool.Regex.isFunction( line ) )
 			{
@@ -173,23 +234,32 @@ public class AlgoInterpreter
 			{
 				this.assignement( line );
 			}
-			else if ( algopars.tool.Regex.isCondition( line ) )
-			{
-				line = new String( line.replaceAll( "\\s+", " " ) ).trim();
-				line = line.substring( line.indexOf( "si" ) + 2, line.indexOf( "alors" ) ).trim();
-				this.conditionsStack.push( this.evaluateCondition( line ) );
-			}
-			else if ( algopars.tool.Regex.isLoop( line ) )
-			{
-				this.loopsStack.push( new Loop( lineIndex + 1,
-												line.substring( line.indexOf( "que" ) + 3,
-																line.indexOf( "faire" ) ) ) );
-
-				this.loopsStack.peek().setConditionValue(
-						evaluateCondition( loopsStack.peek().getCondition() ) );
-			}
 		}
+
 		lineIndex++;
+
+		return conditionsStack.empty()?true:!containsFalse();
+	}
+
+
+	private boolean containsFalse()
+	{
+		for(Boolean b : conditionsStack )
+			if(!b)
+				return true;
+
+		return false;
+	}
+
+	private boolean isCurrentConditionFirstFalse()
+	{
+		boolean noOtherFalseFound = true;
+
+		for(int i=0; i < conditionsStack.size()-1; i++)
+			noOtherFalseFound = noOtherFalseFound & conditionsStack.get( i );
+
+		return noOtherFalseFound;
+
 	}
 
 
@@ -326,5 +396,29 @@ public class AlgoInterpreter
 		in.processLine();
 
 		System.out.println(in.alData.get( 1 ));
+	}
+
+	public char getLastConditionValue()
+	{
+		if(conditionsStack.empty())
+			return 'n';
+
+		return conditionsStack.peek() ? 'g':'r';
+	}
+
+
+	public int getLineIndex()
+	{
+		return lineIndex;
+	}
+
+
+	public boolean isLoopAlreadyStacked(Loop loop)
+	{
+		for(Loop l : loopsStack)
+			if(l.equals( loop ))
+				return true;
+
+		return false;
 	}
 }

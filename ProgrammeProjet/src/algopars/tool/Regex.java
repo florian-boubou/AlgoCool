@@ -28,6 +28,8 @@ public class Regex
 	public static final String REGEX_CONDITION      = "^\\s*si .+ alors\\s*$";
 	public static final String REGEX_LOOP           = "^\\s*tant que .+ faire\\s*$";
 
+	public static final String REGEX_COMMENT        = "^\\s*.*//.*\\s*$";
+
 	/**
 	 * Méthode permettant de savoir si une chaîne correspond bien au standard de variable
 	 *
@@ -158,6 +160,17 @@ public class Regex
 	public static boolean isLoop( String s )
 	{
 		return s.matches( REGEX_LOOP );
+	}
+
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à une opération
+	 *
+	 * @param s La chaîne à analyser
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isComment( String s )
+	{
+		return s.matches( REGEX_COMMENT );
 	}
 	
 	/**

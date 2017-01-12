@@ -148,7 +148,7 @@ public class AlgoInterpreter
 
 			if ( conditionsStack.peek() )
 			{
-				this.lineIndex = loopsStack.peek().getStartIndex();
+				this.lineIndex = loopsStack.peek().getStartIndex() - 1;
 				line = algorithm.get( lineIndex );
 			}
 			else
@@ -421,4 +421,14 @@ public class AlgoInterpreter
 	}
 
 	public int getLineIndex() { return lineIndex; }
+
+	public Stack<Boolean> getConditionsStack(){ return this.conditionsStack; }
+
+	public Stack<Loop> getLoopsStack(){ return this.loopsStack; }
+
+	public void setConditionsStack(Stack<Boolean> conditionsStack){ this.conditionsStack = conditionsStack; }
+
+	public void setLoopsStack(Stack<Loop> loopsStack){ this.loopsStack = loopsStack; }
+
+	public void setLineIndex(int lineIndex){ this.lineIndex = lineIndex; }
 }

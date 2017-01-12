@@ -8,7 +8,7 @@ package algopars.util.var;
  * @version 1.0.0a
  * @date 01/08/2017
  */
-public abstract class Variable
+public abstract class Variable implements Cloneable
 {
 	public       String  name;
 	public       String  type;
@@ -72,6 +72,21 @@ public abstract class Variable
 	 * @param newValue nouvelle valeur a affecter
      */
 	public abstract void setValue(String newValue);
+
+	public Object clone() {
+		Object o = null;
+		try {
+			// On récupère l'instance à renvoyer par l'appel de la
+			// méthode super.clone()
+			o = super.clone();
+		} catch(CloneNotSupportedException cnse) {
+			// Ne devrait jamais arriver car nous implémentons
+			// l'interface Cloneable
+			cnse.printStackTrace(System.err);
+		}
+		// on renvoie le clone
+		return o;
+	}
 	
 	/**
 	 * Méthode permettant d'obetnir une chaîne représentant l'état complet de l'objet Variable courant

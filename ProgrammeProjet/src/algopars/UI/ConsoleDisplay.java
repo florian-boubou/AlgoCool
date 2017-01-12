@@ -3,9 +3,11 @@ package algopars.UI;
 
 import algopars.Controller;
 import algopars.util.color.Color;
+import algopars.util.var.Variable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Classe ConsoleDisplay qui se charge d'afficher tout le tintouin
@@ -17,7 +19,6 @@ import java.util.LinkedList;
 public class ConsoleDisplay
 {
 	private ArrayList<String> algorithm;
-	private ArrayList<String> consoleTrace;
 	private Controller        controller;
 
 	private static final Color  color      = new Color();
@@ -61,7 +62,6 @@ public class ConsoleDisplay
 	public ConsoleDisplay( Controller controller )
 	{
 		this.controller = controller;
-		this.consoleTrace = new ArrayList<>();
 		this.algorithm = controller.getAlgorithm();
 	}
 
@@ -72,7 +72,7 @@ public class ConsoleDisplay
 	 * @param current            La ligne courante
 	 * @param lastConditionValue
 	 */
-	public void display( int current, char lastConditionValue )
+	public void display(int current, char lastConditionValue , List<Variable> alData, ArrayList<String> consoleTrace)
 	{
 		setCurrentBackgroundColor( lastConditionValue );
 
@@ -101,22 +101,22 @@ public class ConsoleDisplay
 						  + String.format( "%-10s", "TYPE" ) + "|"
 						  + String.format( "%-20s", "VALEUR" ) + "|\n";
 			}
-			else if ( iVar < this.controller.getAlData().size() )
+			else if ( iVar < alData.size() )
 			{
 				dataStr = "|" +
 						  String.format( "%-10s",
-										 this.controller.getAlData().get( iVar ).getName() )
+										 alData.get( iVar ).getName() )
 						  + "|" +
 						  String.format( "%-10s",
-										 this.controller.getAlData().get( iVar ).getType() )
+										 alData.get( iVar ).getType() )
 						  + "|" +
-						  String.format( "%-20s", this.controller.getAlData().
+						  String.format( "%-20s", alData.
 								  get( iVar ).getStrValue() == null ?
-								  "" : this.controller.getAlData().get( iVar ).getStrValue() ) +
+								  "" : alData.get( iVar ).getStrValue() ) +
 						  "|\n";
 				iVar++;
 			}
-			else if ( iVar == this.controller.getAlData().size() )
+			else if ( iVar == alData.size() )
 			{
 				dataStr = new String( new char[44] ).replace( '\0', '"' ) + "\n";
 				iVar++;
@@ -154,20 +154,24 @@ public class ConsoleDisplay
 
 
 		str.append( new String( new char[87] ).replace( '\0', '"' ) + "\n\n" );
+		str.append(executionTrace(consoleTrace));
 
+		System.out.println( str );
+	}
+
+	private String executionTrace(ArrayList<String> consoleTrace){
+		StringBuilder str = new StringBuilder();
 		str.append( new String( new char[11] ).replace( '\0', '"' ) + "\n" +
-					"| CONSOLE |\n" + new String( new char[87] ).replace( '\0', '"' ) + "\n" );
-
-		this.consoleTrace = this.controller.getAlConsole();
+				"| CONSOLE |\n" + new String( new char[87] ).replace( '\0', '"' ) + "\n" );
 
 		//Boucle pour afficher le code et les données
-		for ( int i = 3; i >= 0; i-- )
+		for ( int i = 4; i > 0; i-- )
 		{
 			if ( consoleTrace.size() != 0 && consoleTrace.size() - i >= 0 )
 			{
 				str.append( background +
-							String.format( "|%-85s|\n", consoleTrace.get( consoleTrace.size() - i )
-										 ) );
+						String.format( "|%-85s|\n", consoleTrace.get( consoleTrace.size() - i )
+						) );
 			}
 			else
 			{
@@ -179,7 +183,7 @@ public class ConsoleDisplay
 
 		str.append( new String( new char[87] ).replace( '\0', '"' ) + "\n" );
 
-		System.out.println( str );
+		return str.toString();
 	}
 
 

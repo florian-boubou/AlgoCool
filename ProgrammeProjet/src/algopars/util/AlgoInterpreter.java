@@ -8,10 +8,7 @@ import algopars.util.var.Variable;
 import algopars.tool.Loop;
 import algopars.tool.Regex;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -22,7 +19,7 @@ import java.io.InputStreamReader;
  * @version 1.0.0a
  * @date 01/08/2017
  */
-public class AlgoInterpreter
+public class AlgoInterpreter implements Cloneable
 {
 	private Interpreter   interpreter;
 	private DataFactory   df;
@@ -383,26 +380,6 @@ public class AlgoInterpreter
 	 */
 	public ArrayList<String> getAlConsole() { return this.alConsole; }
 
-	/*public static void main(String[] args)
-	{
-		ArrayList<String> algo = new ArrayList<>(  );
-		algo.add("ALGORITHME Machin");
-		algo.add("variable :");
-		algo.add("x, y : entier");
-		algo.add( "DEBUT" );
-		algo.add("x ◄— 5");
-		algo.add("y ◄— x - 2");
-		algo.add("FIN");
-		AlgoInterpreter in = new AlgoInterpreter( algo );
-
-		in.lineIndex = 4;
-		in.processLine();
-		in.lineIndex = 5;
-		in.processLine();
-
-		System.out.println(in.alData.get( 1 ));
-	}*/
-
 	public char getLastConditionValue()
 	{
 		if(conditionsStack.empty())
@@ -422,13 +399,48 @@ public class AlgoInterpreter
 
 	public int getLineIndex() { return lineIndex; }
 
-	public Stack<Boolean> getConditionsStack(){ return this.conditionsStack; }
+	public Object clone() throws CloneNotSupportedException{
+		// On récupère l'instance à renvoyer par l'appel de la
+		// méthode super.clone()
+		AlgoInterpreter cloned = (AlgoInterpreter) super.clone();
 
-	public Stack<Loop> getLoopsStack(){ return this.loopsStack; }
+		ArrayList<Variable> clonedData = new ArrayList<>();
+		for(Variable v : alData){
+			clonedData.add((Variable)v.clone());
+		}
+		cloned.setAlData(clonedData);
 
-	public void setConditionsStack(Stack<Boolean> conditionsStack){ this.conditionsStack = conditionsStack; }
+		ArrayList<Variable> clonedTrace = new ArrayList<>();
+		for(Variable tracedV : tracedVar){
+			for(Variable v : cloned.alData){
+				if(tracedV.getName().equals(v.getName())) clonedTrace.add(v);
+			}
+		}
+		cloned.setTracedVar(clonedTrace);
 
-	public void setLoopsStack(Stack<Loop> loopsStack){ this.loopsStack = loopsStack; }
+		cloned.setAlConsole((ArrayList)alConsole.clone());
+		cloned.setConditionsStack((Stack)conditionsStack.clone());
+		cloned.setLoopsStack((Stack)loopsStack.clone());
+		return cloned;
+	}
 
-	public void setLineIndex(int lineIndex){ this.lineIndex = lineIndex; }
+	public void setAlData(ArrayList<Variable> alData) {
+		this.alData = alData;
+	}
+
+	public void setTracedVar(ArrayList<Variable> tracedVar) {
+		this.tracedVar = tracedVar;
+	}
+
+	public void setAlConsole(ArrayList<String> alConsole) {
+		this.alConsole = alConsole;
+	}
+
+	public void setConditionsStack(Stack<Boolean> conditionsStack) {
+		this.conditionsStack = conditionsStack;
+	}
+
+	public void setLoopsStack(Stack<Loop> loopsStack) {
+		this.loopsStack = loopsStack;
+	}
 }

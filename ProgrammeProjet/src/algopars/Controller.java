@@ -36,7 +36,7 @@ public class Controller
 		displayed = true;
 
 		this.algoInterpreter.chooseVar();
-		processLine(0);
+		processLine();
 		consoleDisplay.display(0, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
 
 		do{
@@ -49,7 +49,6 @@ public class Controller
 					next();
 					break;
 			}
-			System.err.println(getAlData() + " | " + memory.size());
 		}while(algoInterpreter.getLineIndex() < (algorithm.size() > 40 ? 40 : algorithm.size()));
 	}
 
@@ -58,24 +57,26 @@ public class Controller
 		do{
 			line = algoInterpreter.getLineIndex();
 
-			if(line > memory.peekLast().getCurrentLine() + 1 && displayed){
-				line = memory.peekLast().getCurrentLine() + 1;
-				algoInterpreter.setLineIndex(line);
-				algoInterpreter.setConditionsStack((Stack<Boolean>) memory.peekLast().getConditionsStack().clone());
-				algoInterpreter.setLoopsStack((Stack<Loop>) memory.peekLast().getLoopStack().clone());
+			if(line > memory.peekLast().getAlgoInterpreter().getLineIndex() && displayed){
+				try{
+					this.algoInterpreter = (AlgoInterpreter)(memory.peekLast().getAlgoInterpreter()).clone();
+				}
+				catch(Exception e){}
+				System.err.println("AVANT" + line);
+				line = memory.size() >= 1 ? algoInterpreter.getLineIndex() : 1;
+				System.err.println(line);
 			}
-			processLine(line);
-			System.out.println(displayed);
+			processLine();
 		}while(!displayed);
+
 		consoleDisplay.display(line, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
 	}
 
 	public void previous(){
-		if(!memory.isEmpty()){
+		if(memory.size() > 1)
 			memory.pollLast();
-			AlgoState as = memory.peekLast();
-			consoleDisplay.display(as.getCurrentLine(), as.getLastConditionValue(), as.getAlData(), as.getAlExec());
-		}
+		AlgoInterpreter ai = memory.peekLast().getAlgoInterpreter();
+		consoleDisplay.display(ai.getLineIndex() - 1, ai.getLastConditionValue(), ai.getAlData(), ai.getAlConsole());
 	}
 
 
@@ -93,17 +94,15 @@ public class Controller
 	/**
 	 * Méthode permettant d'appeler le processLine de AlgoInterpréteur
 	 */
-	public void processLine(int line)
+	public void processLine()
 	{
 		displayed = this.algoInterpreter.processLine();
 
 		if(displayed) {
-			ArrayList<Variable> clonedAL = new ArrayList<>();
-			for (Variable v : getAlData()) {
-				clonedAL.add((Variable) v.clone());
+			try{
+				memory.add(new AlgoState((AlgoInterpreter) algoInterpreter.clone()));
 			}
-			memory.add(new AlgoState(line, algoInterpreter.getLastConditionValue(), clonedAL, (ArrayList) getAlConsole().clone(),
-					(Stack<Boolean>) algoInterpreter.getConditionsStack().clone(), (Stack<Loop>) algoInterpreter.getLoopsStack().clone()));
+			catch(Exception e){}
 		}
 	}
 

@@ -30,6 +30,10 @@ public class Regex
 
 	public static final String REGEX_COMMENT        = "^\\s*.*//.*\\s*$";
 
+	public static final String REGEX_ARRAY          = "(^\\s*.*\\s*:\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)|(^\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)";
+	public static final String REGEX_ARRAY_VAR 		= "^.+\\[\\w+\\]$";
+
+
 	/**
 	 * Méthode permettant de savoir si une chaîne correspond bien au standard de variable
 	 *
@@ -171,6 +175,28 @@ public class Regex
 	public static boolean isComment( String s )
 	{
 		return s.matches( REGEX_COMMENT );
+	}
+
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à une opération
+	 *
+	 * @param s La chaîne à analyser
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isArray( String s )
+	{
+		return s.matches( REGEX_ARRAY );
+	}
+
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à une opération
+	 *
+	 * @param s La chaîne à analyser
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isArrayVar( String s )
+	{
+		return s.matches( REGEX_ARRAY_VAR );
 	}
 	
 	/**

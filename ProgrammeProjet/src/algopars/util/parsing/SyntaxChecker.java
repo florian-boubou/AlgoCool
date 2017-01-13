@@ -181,9 +181,19 @@ public class SyntaxChecker
 
 				//On cherche à obtenir le var de la variable déclarée
 				testType = testLine.split( ":" )[1].trim();
+				// si la variable est un tableau, on enleve la valeur entre crochets pour tester le type
+				if(Regex.isArray(testLine)) {
+					testType = testType.replace(testType.substring(testType.indexOf("[") + 1, testType.indexOf("]")), "");
+				}
+
 				//Si le var ne la variable déclarée ne correspond pas aux types définis pour l'interpréteur, on renvoie false
-				if( !reserved.getHashMapConfig().get( "type" ).contains( testType ) )
+				if( !reserved.getHashMapConfig().get( "type" ).contains( testType )) {
 					return false;
+				}
+
+				if(Regex.isArray(testLine)) {
+					testType = testLine.split( ":" )[1].trim();
+				}
 
 				//On cherche à obtenir le nom de la variable déclarée
 				testName = testLine.split( ":" )[0].trim();

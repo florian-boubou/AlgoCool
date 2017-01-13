@@ -3,11 +3,11 @@ package algopars.util;
 import bsh.EvalError;
 import bsh.Interpreter;
 import algopars.util.parsing.SyntaxChecker;
-import algopars.util.var.DataFactory;
-import algopars.util.var.Variable;
+import algopars.util.var.*;
 import algopars.tool.Loop;
 import algopars.tool.Regex;
 
+import java.io.IOException;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -81,6 +81,13 @@ public class AlgoInterpreter implements Cloneable
 		{
 			try
 			{
+				if( v instanceof ArrayVar)
+			{
+				ArrayVar aV = (ArrayVar) v;
+				aV.setSize((Integer)interpreter.eval("(new " + aV.getJavaType() + "[" + aV.getStrSize() +"]).length"));
+
+			}
+			else
 				interpreter.eval( v.getJavaType() + " " + v.getName() );
 			} catch ( EvalError e )
 			{
@@ -274,19 +281,49 @@ public class AlgoInterpreter implements Cloneable
 	{
 		String var = line.split( "◄—" )[0].trim();
 		String val = line.split( "◄—" )[1].trim();
+		int indexVar = -1;
 
-		for ( Variable v : alData )
-			if ( v.getName().equals( var ) )
+		if (Regex.isArrayVar(var))
+		{
+			try {
+				indexVar = ((Integer)interpreter.eval(var.substring(var.indexOf("[")+1, var.indexOf("]"))));
+			} catch (EvalError evalError) {
+				evalError.printStackTrace();
+			}
+			var = line.substring(0, line.indexOf("["));
+		}
+		if (Regex.isArrayVar(val))
+		{
+			int indexVal = 0;
+			try {
+				indexVal = (Integer)interpreter.eval(val.substring(val.indexOf("[")+1, val.indexOf("]")));
+			} catch (EvalError evalError) {
+				evalError.printStackTrace();
+			}
+			val = val.substring(0, val.indexOf("["));
+			for(Variable v : alData)
 			{
-				try
-				{
-					interpreter.eval( ( var + " = " + val ) );
-					v.setValue( String.valueOf( interpreter.get( v.getName() ) ) );
-				} catch ( EvalError e )
-				{
-					System.err.println( e.toString() );
+				if (v.getName().equals(val)) {
+					val = ((ArrayVar) v).getValue(indexVal);
 				}
 			}
+		}
+
+		for ( Variable v : alData ) {
+			if (v.getName().equals(var)) {
+				if (indexVar != -1) {
+					((ArrayVar) v).setCellValue(indexVar, val);
+				}
+				else {
+					try {
+						interpreter.eval((var + " = " + val));
+						v.setValue(String.valueOf(interpreter.get(v.getName())));
+					} catch (EvalError e) {
+						System.err.println(e.toString());
+					}
+				}
+			}
+		}
 	}
 
 
@@ -337,16 +374,26 @@ public class AlgoInterpreter implements Cloneable
 		for ( Variable var : alData )
 		{
 			for ( int i = 0; i < tabS.length; i++ )
-				if ( var.getName().equals( tabS[i] ) )
+			{
+				if (Regex.isArrayVar(tabS[i]) && tabS[i].substring(0, tabS[i].indexOf("[")).equals(var.getName()))
 				{
-					System.out.println( "entrez une valeur pour " + var.getName() );
-					try
-					{
-						String value = entree.readLine();
-						interpreter.eval( var.getName() + "=" + value );
-						var.setValue( value );
-					} catch ( Exception e ) {}
+					System.out.println("entrez une valeur pour " + var.getName());
+					String value = null;
+					try {
+						value = entree.readLine();
+						((ArrayVar) var).setCellValue(((Integer)interpreter.eval(tabS[i].substring(tabS[i].indexOf("[")+1, tabS[i].indexOf("]")))), value);
+					} catch (Exception e) {	}
+
 				}
+				else if(var.getName().equals(tabS[i])) {
+					try {
+						System.out.println("entrez une valeur pour " + var.getName());
+						String value = entree.readLine();
+						interpreter.eval(var.getName() + "=" + value);
+						var.setValue(value);
+					} catch (Exception e) {}
+				}
+			}
 		}
 	}
 

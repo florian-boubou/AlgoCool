@@ -1,7 +1,11 @@
 ALGORITHME Algo
 variable :
-    x : entier
+    x, y : entier
+    tab : Tableau[3] d'entier
 DEBUT
+    lire(tab[0])
+    tab[1] ◄— 6
+    y ◄— tab[0]
     lire(x)
     ecrire("joie")
     ecrire(x)

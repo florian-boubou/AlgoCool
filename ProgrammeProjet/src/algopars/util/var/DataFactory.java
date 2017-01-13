@@ -90,25 +90,31 @@ public class DataFactory
 		{
 			type = determineType(value);
 		}
-		switch(type)
+
+		if(Regex.isArray(type))
 		{
-			case "entier":
-				hMapData.put(varName, new IntegerVar(varName, value));
-				break;
-			case "double":
-				hMapData.put(varName, new DoubleVar(varName, value.replace(',','.')));
-				break;
-			case "caractere":
-				hMapData.put(varName, new CharVar(varName, value));
-				break;
-			case "chaine":
-				hMapData.put(varName, new StringVar(varName, value));
-				break;
-			case "booleen":
-				hMapData.put(varName, new BooleanVar(varName, value));
-				break;
-			default:
-				throw new Exception("Erreur: var invalide");
+			hMapData.put(varName, new ArrayVar(varName, type));
+		}
+		else {
+			switch (type) {
+				case "entier":
+					hMapData.put(varName, new IntegerVar(varName, value));
+					break;
+				case "double":
+					hMapData.put(varName, new DoubleVar(varName, value.replace(',', '.')));
+					break;
+				case "caractere":
+					hMapData.put(varName, new CharVar(varName, value));
+					break;
+				case "chaine":
+					hMapData.put(varName, new StringVar(varName, value));
+					break;
+				case "booleen":
+					hMapData.put(varName, new BooleanVar(varName, value));
+					break;
+				default:
+					throw new Exception("Erreur: var invalide");
+			}
 		}
 	}
 	

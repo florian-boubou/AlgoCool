@@ -34,6 +34,7 @@ public class AlgoInterpreter implements Cloneable
 
 	private Stack<Boolean> conditionsStack;
 	private Stack<Loop>    loopsStack;
+	private Stack<String> expressionsStack;
 
 
 	/**
@@ -59,6 +60,7 @@ public class AlgoInterpreter implements Cloneable
 
 			this.conditionsStack = new Stack<>();
 			this.loopsStack = new Stack<>();
+			this.expressionsStack = new Stack<>();
 		} catch ( Exception e )
 		{
 			System.err.println( e.getMessage() );
@@ -250,6 +252,16 @@ public class AlgoInterpreter implements Cloneable
 		return conditionsStack.empty()?true:!containsFalse();
 	}
 
+	private void process(String expression)
+	{
+		//EXEMPLE D'EXPRESSION A TRAITER
+		//enEntier(enChaine(3.5+12))
+		//	enChaine(3.5+12)
+		//		3.5+12
+		if(expression.contains( "(" ))
+			process(null);
+	}
+
 
 	private boolean containsFalse()
 	{
@@ -371,13 +383,13 @@ public class AlgoInterpreter implements Cloneable
 	{
 		String[]       tabS   = vars.split( "\\," );
 		BufferedReader entree = new BufferedReader( new InputStreamReader( System.in ) );
-		for ( Variable var : alData )
+		for ( int i = 0; i < tabS.length; i++ )
 		{
-			for ( int i = 0; i < tabS.length; i++ )
+			for ( Variable var : alData )
 			{
 				if (Regex.isArrayVar(tabS[i]) && tabS[i].substring(0, tabS[i].indexOf("[")).equals(var.getName()))
 				{
-					System.out.println("entrez une valeur pour " + var.getName());
+					System.out.println("entrez une valeur pour " + tabS[i]);
 					String value = null;
 					try {
 						value = entree.readLine();

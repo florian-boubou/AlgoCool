@@ -50,7 +50,20 @@ public class ArrayVar extends Variable
     public void setValue(String newValue) {
     }
 
-    public void setCellValue(int index, String value)
+
+    @Override
+    public String getStrValue()
+    {
+        StringBuilder s = new StringBuilder(  );
+        for(int i = 0; i < size && i < 4; i++)
+        {
+            s.append( "[" + (i < size && values[i] != null?values[i]:"") +"]" );
+        }
+        return s.toString();
+    }
+
+
+    public void setCellValue( int index, String value )
     {
         values[index] = value;
     }

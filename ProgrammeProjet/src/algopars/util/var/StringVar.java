@@ -28,6 +28,17 @@ public class StringVar extends Variable
 	}
 	
 	/**
+	 * Méthode permettant d'obtenir la chaîne représentant la valeur de la Variable
+	 *
+	 * @return La chaîne représentant la valeur de la Variable
+	 */
+	@Override
+	public String getStrValue()
+	{
+		return this.strValue == null ? this.strValue : "\"" + this.strValue + "\"";
+	}
+	
+	/**
 	 * Méthode permettant d'obtenir la valeur de la StringVar courante
 	 *
 	 * @return La valeur de la StringVar courante

@@ -10,28 +10,31 @@ package algopars.tool;
  */
 public class Regex
 {
-	public static final String REGEX_VARIABLE       = "^[a-z]\\w*(_\\w*)*$";
-	public static final String REGEX_CONSTANT       = "^[A-Z][0-9A-Z]*(_[0-9A-Z]*)*$";
-	public static final String REGEX_INTEGER        = "^[0-9]+$";
-	public static final String REGEX_DOUBLE         = "^[0-9]+,[0-9]+$";
-	public static final String REGEX_BOOLEAN        = "^(vrai|faux)$";
-	public static final String REGEX_STRING         = "dvjkchqsjk()^\"([^\"]|\\\\\")*\"$";
-	public static final String REGEX_CHAR           = "^'[^']'$";
-	public static final String REGEX_FUNCTION       = "^[a-z][a-zA-Z]*\\(.*\\)$";
+	public static final String REGEX_VARIABLE       = "^\\s*[a-z]\\w*(_\\w*)*\\s*$";
+	public static final String REGEX_CONSTANT       = "^\\s*[A-Z][0-9A-Z]*(_[0-9A-Z]*)*\\s*$";
+	public static final String REGEX_INTEGER        = "^\\s*[0-9]+\\s*$";
+	public static final String REGEX_DOUBLE         = "^\\s*[0-9]+(,|.)[0-9]+$\\s*";
+	public static final String REGEX_BOOLEAN        = "^\\s*(vrai|faux)\\s*$";
+	public static final String REGEX_STRING         = "^\\s*\"([^\"]|\\\\\")*\"\\s*$";
+	public static final String REGEX_CHAR           = "^\\s*'[^']'\\s*$";
+	public static final String REGEX_FUNCTION       = "^\\s*[a-z][a-zA-Z]*_?[a-zA-Z]*\\(.*\\)\\s*$";
 	
-	public static final String REGEX_OPERATION      = "^[0-9]+,?[0-9]* *([+×\\-\\\\]|(MOD|DIV)){1} *[0-9]+,?[0-9]* *" +
-	                                                  "( *([+×\\-\\\\]|(MOD|DIV)){1} *[0-9]+,?[0-9]*)*$";
+	public static final String REGEX_OPERATION      = "^\\s*(([0-9]+,?[0-9]*))\\s*" +
+	                                                  "([+×\\-/]|(MOD|DIV)){1}\\s*([0-9]+,?[0-9]*)\\s*" +
+	                                                  "(([+×\\-/]|(MOD|DIV)){1}\\s*([0-9]+,?[0-9]*))*\\s*$";
 	
-	public static final String REGEX_CONCATENATION  = "^\\s*(\"[^\"\\\\]*\"|\\w*)\\s*&\\s*(\"[^\"\\\\]*\"|\\w*)\\s*" +
-	                                                  "(\\s*&\\s*(\"[^\"\\\\]*\"|\\w*)\\s*)*$";
+	public static final String REGEX_CONCATENATION  = "^\\s*((\".*\")|[a-z]\\w*(_\\w*)*)\\s*&\\s*" +
+	                                                  "((\".*\")|[a-z]\\w*(_\\w*)*)\\s*" +
+	                                                  "(&\\s*((\".*\")|[a-z]\\w*(_\\w*)*))*\\s*$";
 	
 	public static final String REGEX_CONDITION      = "^\\s*si .+ alors\\s*$";
 	public static final String REGEX_LOOP           = "^\\s*tant que .+ faire\\s*$";
 
 	public static final String REGEX_COMMENT        = "^\\s*.*//.*\\s*$";
 
-	public static final String REGEX_ARRAY          = "(^\\s*.*\\s*:\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)|(^\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)";
-	public static final String REGEX_ARRAY_VAR 		= "^.+\\[\\w+\\]$";
+	public static final String REGEX_ARRAY          = "(^\\s*.*\\s*:\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)|" +
+													  "(^\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)";
+	public static final String REGEX_ARRAY_VAR     = "^.+\\[\\w+\\]$";
 
 
 	/**
@@ -176,6 +179,19 @@ public class Regex
 	{
 		return s.matches( REGEX_COMMENT );
 	}
+	
+	/**
+	 * Méthode permettant de savoir si une chaîne correspond bien à quelque chose de passable dans un ecrire
+	 *
+	 * @param s La chaîne à analyser
+	 * @return Un booléen indiquant la réponse
+	 */
+	public static boolean isExpression( String s )
+	{
+		return Regex.isInteger(s) || Regex.isDouble(s)      || Regex.isCharacter(s) || Regex.isString(s) 	||
+		       Regex.isBoolean(s) || Regex.isVariable(s)    || Regex.isConstant(s)	|| Regex.isOperation(s)	||
+			   Regex.isConcatenation(s);
+	}
 
 	/**
 	 * Méthode permettant de savoir si une chaîne correspond bien à une opération
@@ -197,17 +213,5 @@ public class Regex
 	public static boolean isArrayVar( String s )
 	{
 		return s.matches( REGEX_ARRAY_VAR );
-	}
-	
-	/**
-	 * Méthode permettant de savoir si une chaîne correspond bien à quelque chose de passable dans un ecrire
-	 *
-	 * @param s La chaîne à analyser
-	 * @return Un booléen indiquant la réponse
-	 */
-	public static boolean isWritable(String s)
-	{
-		return Regex.isInteger(s) || Regex.isDouble(s)      || Regex.isCharacter(s) || Regex.isString(s) ||
-		       Regex.isBoolean(s) || Regex.isVariable(s)    || Regex.isConstant(s);
 	}
 }

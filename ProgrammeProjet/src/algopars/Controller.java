@@ -11,7 +11,6 @@ import algopars.util.AlgoState;
 import algopars.util.var.Variable;
 
 public class Controller
-
 {
 	private AlgoInterpreter algoInterpreter;
 	private ConsoleDisplay  consoleDisplay;
@@ -51,7 +50,10 @@ public class Controller
 			}
 		}while(algoInterpreter.getLineIndex() < (algorithm.size() > 40 ? 40 : algorithm.size()));
 	}
-
+	
+	/**
+	 * Méthode permettant de passer à la ligne suivante
+	 */
 	public void next(){
 		int line;
 		do{
@@ -71,7 +73,10 @@ public class Controller
 
 		consoleDisplay.display(line, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
 	}
-
+	
+	/**
+	 * Méthode permettant de passer à la ligne précédente
+	 */
 	public void previous(){
 		if(memory.size() > 1)
 			memory.pollLast();

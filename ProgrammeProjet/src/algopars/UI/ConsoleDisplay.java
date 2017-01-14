@@ -158,8 +158,16 @@ public class ConsoleDisplay
 
 		System.out.println( str );
 	}
-
-	private String executionTrace(ArrayList<String> consoleTrace){
+	
+	/**
+	 * Méthode permettant d'afficher la trace d'exécution
+	 * @param consoleTrace
+	 *      L'ArrayList de String représant tout ce qui est à afficher
+	 * @return
+	 *      La chaine représentant l'affichage complet (avec mise en forme) de la trace d'exécution
+	 */
+	private String executionTrace(ArrayList<String> consoleTrace)
+	{
 		StringBuilder str = new StringBuilder();
 		str.append( new String( new char[11] ).replace( '\0', '"' ) + "\n" +
 				"| CONSOLE |\n" + new String( new char[87] ).replace( '\0', '"' ) + "\n" );
@@ -185,8 +193,12 @@ public class ConsoleDisplay
 
 		return str.toString();
 	}
-
-
+	
+	/**
+	 * Méthode permettant de changer la couleur de fond de la ligne courante
+	 * @param value
+	 *      Le caractère représentant la couleur à mettre
+	 */
 	private void setCurrentBackgroundColor( char value )
 	{
 		switch ( value )

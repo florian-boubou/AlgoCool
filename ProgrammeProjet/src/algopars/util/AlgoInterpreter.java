@@ -9,10 +9,8 @@ import algopars.util.var.*;
 import algopars.tool.Loop;
 import algopars.tool.Regex;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * Classe algopars.util.AlgoInterpreter (classe principale metier) qui gère l'interprétation des algorithmes
@@ -21,7 +19,7 @@ import java.io.InputStreamReader;
  * @version 1.0.0a
  * @date 01/08/2017
  */
-public class AlgoInterpreter implements Cloneable
+public class AlgoInterpreter implements Serializable
 {
 	private Interpreter   interpreter;
 	private DataFactory   df;
@@ -657,37 +655,23 @@ public class AlgoInterpreter implements Cloneable
 	 *
 	 * @return Le clone de l'AlgoInterprer courant
 	 *
-	 * @throws CloneNotSupportedException
-	 * 		Si il y a une erreur durant le clonage
+	 * @throws IOException, ClassNotFoundException
 	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException
-	{
-		// On récupère l'instance à renvoyer par l'appel de la
-		// méthode super.clone()
-		AlgoInterpreter cloned = (AlgoInterpreter) super.clone();
-		
-		ArrayList<Variable> clonedData = new ArrayList<>();
-		for(Variable v : alData)
-		{
-			clonedData.add((Variable) v.clone());
+	public AlgoInterpreter deepClone(){
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(baos);
+			oos.writeObject(this);
+
+			ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+			ObjectInputStream ois = new ObjectInputStream(bais);
+			return (AlgoInterpreter) ois.readObject();
+		} catch (IOException e) {
+			System.err.println(e.toString());
+			return null;
+		} catch (ClassNotFoundException e) {
+			return null;
 		}
-		cloned.setAlData(clonedData);
-		
-		ArrayList<Variable> clonedTrace = new ArrayList<>();
-		for(Variable tracedV : tracedVar)
-		{
-			for(Variable v : cloned.alData)
-			{
-				if(tracedV.getName().equals(v.getName())) clonedTrace.add(v);
-			}
-		}
-		cloned.setTracedVar(clonedTrace);
-		
-		cloned.setAlConsole((ArrayList) alConsole.clone());
-		cloned.setConditionsStack((Stack) conditionsStack.clone());
-		cloned.setLoopsStack((Stack) loopsStack.clone());
-		return cloned;
 	}
 	
 	/**
@@ -710,59 +694,14 @@ public class AlgoInterpreter implements Cloneable
 		
 		return null;
 	}
-	
+
 	/**
-	 * Setter de AlData
+	 * Setter de LineIndex
 	 *
-	 * @param alData
-	 * 		La nouvelle ArrayList de Variable
+	 * @param lineIndex
+	 * 		L'indice de la ligne à traiter
 	 */
-	public void setAlData(ArrayList<Variable> alData)
-	{
-		this.alData = alData;
-	}
-	
-	/**
-	 * Setter de TracedVar
-	 *
-	 * @param tracedVar
-	 * 		La nouvelle ArrayList de Variable à tracer
-	 */
-	public void setTracedVar(ArrayList<Variable> tracedVar)
-	{
-		this.tracedVar = tracedVar;
-	}
-	
-	/**
-	 * Setter de alConsole
-	 *
-	 * @param alConsole
-	 * 		La nouvelle ArrayList de String à afficher dans la trace d'exécution
-	 */
-	public void setAlConsole(ArrayList<String> alConsole)
-	{
-		this.alConsole = alConsole;
-	}
-	
-	/**
-	 * Setter de la pile de conditions
-	 *
-	 * @param conditionsStack
-	 * 		La nouvelle Stack de Boolean
-	 */
-	public void setConditionsStack(Stack<Boolean> conditionsStack)
-	{
-		this.conditionsStack = conditionsStack;
-	}
-	
-	/**
-	 * Setter de LoopsStack
-	 *
-	 * @param loopsStack
-	 * 		La nouvelle Stack de Loop
-	 */
-	public void setLoopsStack(Stack<Loop> loopsStack)
-	{
-		this.loopsStack = loopsStack;
+	public void setLineIndex(int lineIndex) {
+		this.lineIndex = lineIndex;
 	}
 }

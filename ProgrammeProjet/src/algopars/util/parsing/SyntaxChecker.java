@@ -2,6 +2,7 @@ package algopars.util.parsing;
 
 import algopars.tool.Regex;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -10,7 +11,7 @@ import java.util.LinkedHashMap;
  * @author Antoine Waret
  * @version 1.0b du 06/01/2017
  */
-public class SyntaxChecker
+public class SyntaxChecker implements Serializable
 {
 	private String[]                header;
 	private ArrayList<String>       data;

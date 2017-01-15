@@ -3,6 +3,7 @@ package algopars.util.var;
 
 import algopars.tool.Regex;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 
 /**
@@ -12,7 +13,7 @@ import java.util.LinkedHashMap;
  * @version 1.0.0a
  * @date 01/08/2017
  */
-public class DataFactory
+public class DataFactory implements Serializable
 {
 	private enum Type
 	{

@@ -58,16 +58,6 @@ public class Controller
 		int line;
 		do{
 			line = algoInterpreter.getLineIndex();
-
-			if(line > memory.peekLast().getAlgoInterpreter().getLineIndex() && displayed){
-				try{
-					this.algoInterpreter = (AlgoInterpreter)(memory.peekLast().getAlgoInterpreter()).clone();
-				}
-				catch(Exception e){}
-				System.err.println("AVANT" + line);
-				line = memory.size() >= 1 ? algoInterpreter.getLineIndex() : 1;
-				System.err.println(line);
-			}
 			processLine();
 		}while(!displayed);
 
@@ -80,8 +70,8 @@ public class Controller
 	public void previous(){
 		if(memory.size() > 1)
 			memory.pollLast();
-		AlgoInterpreter ai = memory.peekLast().getAlgoInterpreter();
-		consoleDisplay.display(ai.getLineIndex() - 1, ai.getLastConditionValue(), ai.getAlData(), ai.getAlConsole());
+		algoInterpreter = memory.peekLast().getAlgoInterpreter().deepClone();
+		consoleDisplay.display(algoInterpreter.getLineIndex(), algoInterpreter.getLastConditionValue(), algoInterpreter.getAlData(), algoInterpreter.getAlConsole());
 	}
 
 
@@ -101,13 +91,15 @@ public class Controller
 	 */
 	public void processLine()
 	{
-		displayed = this.algoInterpreter.processLine();
+		int currentIndex = algoInterpreter.getLineIndex();
+		displayed = algoInterpreter.processLine();
 
 		if(displayed) {
-			try{
-				memory.add(new AlgoState((AlgoInterpreter) algoInterpreter.clone()));
+			AlgoInterpreter cloned = algoInterpreter.deepClone();
+			cloned.setLineIndex(currentIndex);
+			if(memory.size() < 1 || cloned.getLineIndex() != memory.getLast().getAlgoInterpreter().getLineIndex()){
+				memory.add(new AlgoState(cloned));
 			}
-			catch(Exception e){}
 		}
 	}
 

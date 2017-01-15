@@ -4,6 +4,7 @@ package algopars.util.parsing;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -14,7 +15,7 @@ import java.util.HashSet;
  * @version 1.0.0a
  * @date 01/08/2017
  */
-public class HashMapConfig
+public class HashMapConfig implements Serializable
 {
 	private HashMap<String, HashSet<String>> reserved;
 	

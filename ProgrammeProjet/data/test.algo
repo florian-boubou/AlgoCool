@@ -1,16 +1,12 @@
 ALGORITHME Algo
 variable :
-    x, y : entier
-    st   : chaine
-    bOk  : booleen
+    kingdju : entier
+    mcsalo  : chaine
+    gaelle  : booleen
+    pophip  : reel
 DEBUT
-    x  <- hasard(10) x 10
-    y  <- hasard(10)
-    x  <- x + y
-    st <- enChaine(x)
-    bOk<- estEntier(x)
-    si bOk alors
-        st <- " est un nombre entier !"
-        ecrire(x & st)
-    fsi
+    y      <- 5 x 8
+    st     <- "Coucou !!"
+    bOk    <- faux
+    pophip <- 2,8
 FIN

@@ -1,17 +1,11 @@
 ALGORITHME Algo
 variable :
-    y    : entier
-    st   : chaine
-    bOk  : booleen
+    kingdju, pophip : entier
 DEBUT
-    y  <- 5 x 8
-    st <- enChaine(y)
-    bOk<- estReel(y)
-    si bOk alors
-        st <- " est un nombre réel !"
-        ecrire(y & st)
-    sinon
-        st <- " est un nombre entier !"
-        ecrire(y & st)
-    fsi
+    kingdju <- 1337
+    pophip  <- 42
+    tant que pophip <= kingdju faire
+        pophip <- pophip + 1
+        ecrire("pophip devient plus fort !!")
+    ftq
 FIN

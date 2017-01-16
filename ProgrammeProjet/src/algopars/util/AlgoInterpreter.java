@@ -405,7 +405,6 @@ public class AlgoInterpreter implements Serializable
 	public void write( String toWrite )
 	{
 		String processed = new String( toWrite );
-		System.out.println( processed );
 
 		if ( Regex.isString( processed ) )
 		{
@@ -452,7 +451,6 @@ public class AlgoInterpreter implements Serializable
 						&& variableExists( bracesContents[i].split( "\\[" )[0] ) != null)
 				{
 					String tabName = bracesContents[i].split( "\\[" )[0];
-					System.out.println(tabName);
 					int indice = Integer.parseInt(bracesContents[i].split("\\[")[1].replace('[', ' ').trim());
 					expression.replace(bracesContents[i], ((ArrayVar) this.variableExists(tabName)).getValue(indice));
 				}
@@ -488,9 +486,10 @@ public class AlgoInterpreter implements Serializable
 			{
 				expression = this.getVariableValue( expression );
 			}
-			else if ( ! Regex.isString( expression ) && !Regex.isCharacter( expression ) )
+			else if ( !Regex.isString( expression ) && !Regex.isCharacter( expression ) )
 			{
 				expression = Transformer.transformExpression( expression );
+				expression = expression.replace(',', '.');
 				expression = interpreter.eval( expression ).toString();
 			}
 		} catch ( EvalError e )

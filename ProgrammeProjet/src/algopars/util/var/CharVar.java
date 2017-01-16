@@ -35,10 +35,26 @@ public class CharVar extends Variable implements Comparable<CharVar>
 		return value;
 	}
 
+
+	/**
+	 * Getter de strValue
+	 * @return la valeur du paramètre de strValue
+	 */
+	@Override
+	public String getStrValue()
+	{
+		return value == '\0' ? null : "'"+value+"'";
+	}
+
+
+	/**
+	 * Getter de javaType
+	 * @return Le type java équivalent
+	 */
 	@Override
 	public String getJavaType()
 	{
-		return "character";
+		return "char";
 	}
 
 	/**

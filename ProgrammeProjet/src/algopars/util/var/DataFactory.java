@@ -18,7 +18,7 @@ public class DataFactory implements Serializable
 	private enum Type
 	{
 		INTEGER("entier", Regex.REGEX_INTEGER),
-		DOUBLE("double", Regex.REGEX_DOUBLE),
+		DOUBLE("reel", Regex.REGEX_DOUBLE),
 		CHAR("caractere", Regex.REGEX_CHAR),
 		STRING("chaine", Regex.REGEX_STRING),
 		BOOLEAN("booleen", Regex.REGEX_BOOLEAN);
@@ -101,8 +101,8 @@ public class DataFactory implements Serializable
 				case "entier":
 					hMapData.put(varName, new IntegerVar(varName, value));
 					break;
-				case "double":
-					hMapData.put(varName, new DoubleVar(varName, value.replace(',', '.')));
+				case "reel":
+					hMapData.put(varName, new DoubleVar(varName, value == null ? value : value.replace(',', '.')));
 					break;
 				case "caractere":
 					hMapData.put(varName, new CharVar(varName, value));

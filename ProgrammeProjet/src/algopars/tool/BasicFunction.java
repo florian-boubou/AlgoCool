@@ -29,6 +29,7 @@ public class BasicFunction
 	public static final String ESTREEL     = "ESTREEL";
 	public static final String ESTENTIER   = "ESTENTIER";
 	public static final String HASARD      = "HASARD";
+	public static final String RACINE	   = "RACINE";
 	public static final String COSINUS     = "COSINUS";
 	public static final String SINUS       = "SINUS";
 	public static final String ABSOLUE     = "ABSOLUE";
@@ -78,6 +79,8 @@ public class BasicFunction
 				return estEntier(function[1]);
 			case HASARD:
 				return hasard(function[1]);
+			case RACINE:
+				return racine( function[1] );
 			case COSINUS:
 				return cosinus(function[1]);
 			case SINUS:
@@ -375,6 +378,33 @@ public class BasicFunction
 	{
 		String[] tab = s.split("\"");
 		return s.replaceAll("\"", "");
+	}
+
+
+	/**
+	 * Méthode renvoyant la racine d'un nombre entier ou réel
+	 *
+	 * @param s La chaîne représentant le nombre
+	 * @return La racine du nombre passé en paramètre
+	 */
+	private static String racine( String s )
+	{
+		Double squareRoot = 0.0;
+
+		if( Regex.isInteger( s ) )
+		{
+			squareRoot = Math.sqrt( Integer.parseInt( s ) );
+		}
+		else if ( Regex.isDouble( s ) )
+		{
+			squareRoot = Math.sqrt( Double.parseDouble( s ) );
+		}
+		else
+		{
+			squareRoot = null;
+		}
+
+		return squareRoot.toString();
 	}
 	
 }

@@ -35,7 +35,7 @@ public class HashMapConfig implements Serializable
 			BufferedReader br = new BufferedReader(ipsr);
 			while((line = br.readLine()) != null)
 			{
-				line.replaceAll("\\t| ", "");
+				line.replaceAll("\\s| ", "");
 				if(line.matches("^\\/\\*.*"))
 				{
 					key = line.substring(2);

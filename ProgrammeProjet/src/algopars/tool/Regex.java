@@ -4,7 +4,7 @@ package algopars.tool;
 /**
  * Classe Regex, utilitaire qui permet de vérifier la bonne forme de tous les mots-clés de l'algorithme
  *
- * @author Antoine WARET
+ * @author Antoine WARET, Mathieu CHOUGUI
  * @version 1.0.0a
  * @date 01/08/2017
  */
@@ -32,8 +32,7 @@ public class Regex
 
 	public static final String REGEX_COMMENT        = "^\\s*.*//.*\\s*$";
 
-	public static final String REGEX_ARRAY          = "(^\\s*.*\\s*:\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)|" +
-													  "(^\\s*Tableau\\[.*\\]\\s*(de|d\\').*\\s*$)";
+	public static final String REGEX_ARRAY          = "^\\s*.*(T|t)ableau\\[.*\\]\\s*(de|d\\').*\\s*$";
 	public static final String REGEX_ARRAY_VAR     = "^.+\\[\\w+\\]$";
 
 

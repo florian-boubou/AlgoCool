@@ -35,8 +35,9 @@ public class Controller
 		displayed = true;
 
 		this.algoInterpreter.chooseVar();
+		int beginIndex = this.algoInterpreter.getLineIndex();
 		processLine();
-		consoleDisplay.display(0, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+		consoleDisplay.display(beginIndex, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
 
 		do{
 			Scanner sc = new Scanner(System.in);

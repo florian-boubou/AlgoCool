@@ -69,7 +69,7 @@ public class AlgoInterpreter implements Serializable
 		}
 		
 		this.initializeData();
-		
+		lineIndex = algorithm.size() - syntaxChecker.getBody().size();
 	}
 	
 	

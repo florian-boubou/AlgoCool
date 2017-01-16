@@ -28,6 +28,7 @@ public class Controller
 	public Controller( String filePath, int displaySize )
 	{
 		this.algorithm = new AlgoReader( filePath ).getAlgorithm();
+		displaySize = displaySize >= this.algorithm.size()? this.algorithm.size() - 1 : displaySize;
 
 		this.algoInterpreter = new AlgoInterpreter( this.algorithm );
 		this.consoleDisplay = new ConsoleDisplay( this , displaySize);

@@ -1,14 +1,16 @@
 ALGORITHME Algo
-constante:
-TAILLE ◄— 58
 variable :
     x, y : entier
+    st   : chaine
+    bOk  : booleen
 DEBUT
-    x ◄— 5
-    y ◄— x - 2
-    si x = 3 alors
-        ecrire("joie")
-    sinon
-        y ◄— 1
+    x  ◄— hasard(10) × 10
+    y  ◄— hasard(10)
+    x  ◄— x + y
+    st ◄— enChaine(x)
+    bOk◄— estEntier(x)
+    si bOk alors
+        st ◄— " est un nombre entier !"
+        ecrire(x & st)
     fsi
 FIN

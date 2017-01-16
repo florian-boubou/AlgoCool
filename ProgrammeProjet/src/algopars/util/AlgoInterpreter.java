@@ -471,9 +471,9 @@ public class AlgoInterpreter implements Serializable
 				{
 					expression = expression.replace( parts[i], BasicFunction.chooseBasicFunction( parts[i] ) );
 				}
-				if ( Regex.isVariable( parts[i] ) && this.variableExists( bracesContents[i] ) == null )
+				if ( Regex.isVariable( parts[i] ) && this.variableExists( parts[i] ) != null )
 				{
-					expression = expression.replace( parts[i], this.getVariableValue( parts[i] ) );
+					expression = expression.replace( parts[i], this.getVariableValue( parts[i].trim() ) );
 				}
 				if ( parts[i].matches( "\\w+\\^\\w+" ) )
 				{
@@ -484,7 +484,7 @@ public class AlgoInterpreter implements Serializable
 
 			}
 
-			if ( Regex.isVariable( expression ) && variableExists( expression ) == null )
+			if ( Regex.isVariable( expression ) && variableExists( expression ) != null )
 			{
 				expression = this.getVariableValue( expression );
 			}

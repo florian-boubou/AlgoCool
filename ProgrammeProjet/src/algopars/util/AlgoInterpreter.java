@@ -96,7 +96,10 @@ public class AlgoInterpreter implements Serializable
 				}
 				else
 				{
-					interpreter.eval(v.getJavaType() + " " + v.getName());
+					if(v.constant)
+						interpreter.eval(v.getName() + "=" + v.getStrValue());
+					else
+						interpreter.eval(v.getJavaType() + " " + v.getName());
 				}
 			}
 			catch(EvalError e)

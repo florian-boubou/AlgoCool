@@ -28,6 +28,7 @@ public class AlgoInterpreter implements Serializable
 
 	private ArrayList<String> algorithm;
 	private int               lineIndex;
+	private int               currentIndex;
 
 	private ArrayList<Variable> alData;
 	private ArrayList<Variable> tracedVar;
@@ -35,7 +36,6 @@ public class AlgoInterpreter implements Serializable
 
 	private Stack<Boolean> conditionsStack;
 	private Stack<Loop>    loopsStack;
-	private Stack<String>  expressionsStack;
 
 
 	/**
@@ -53,6 +53,7 @@ public class AlgoInterpreter implements Serializable
 			this.syntaxChecker = new SyntaxChecker( algorithm );
 
 			this.lineIndex = 0;
+			this.currentIndex = 0;
 			this.algorithm = algorithm;
 
 			this.alData = new ArrayList<>();
@@ -61,7 +62,6 @@ public class AlgoInterpreter implements Serializable
 
 			this.conditionsStack = new Stack<>();
 			this.loopsStack = new Stack<>();
-			this.expressionsStack = new Stack<>();
 		} catch ( Exception e )
 		{
 			System.err.println( e.getMessage() );
@@ -147,6 +147,7 @@ public class AlgoInterpreter implements Serializable
 	 */
 	public boolean processLine()
 	{
+		currentIndex = lineIndex;
 		String line = algorithm.get( lineIndex ).trim();
 
 		if ( algopars.tool.Regex.isComment( line ) )
@@ -701,6 +702,7 @@ public class AlgoInterpreter implements Serializable
 		return null;
 	}
 
+	public int getCurrentIndex(){return currentIndex;}
 
 	/**
 	 * Setter de LineIndex

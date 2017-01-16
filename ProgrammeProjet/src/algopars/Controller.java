@@ -42,12 +42,16 @@ public class Controller
 
 		do{
 			Scanner sc = new Scanner(System.in);
-			switch(sc.nextLine()){
+			String s = sc.nextLine();
+			switch(s){
 				case "b":
 					previous();
 					break;
 				default :
-					next();
+					if(s.matches("^l[0-9]*$"))
+						goTo(Integer.parseInt(s.split("l")[1]));
+					else
+						next();
 					break;
 			}
 		}while(algoInterpreter.getLineIndex() < algorithm.size());
@@ -57,13 +61,11 @@ public class Controller
 	 * Méthode permettant de passer à la ligne suivante
 	 */
 	public void next(){
-		int line;
 		do{
-			line = algoInterpreter.getLineIndex();
 			processLine();
 		}while(!displayed);
 
-		consoleDisplay.display(line, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+		consoleDisplay.display(algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
 	}
 	
 	/**
@@ -73,9 +75,27 @@ public class Controller
 		if(memory.size() > 1)
 			memory.pollLast();
 		algoInterpreter = memory.peekLast().getAlgoInterpreter().deepClone();
-		consoleDisplay.display(algoInterpreter.getLineIndex(), algoInterpreter.getLastConditionValue(), algoInterpreter.getAlData(), algoInterpreter.getAlConsole());
+		consoleDisplay.display(algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
 	}
 
+	public void goTo(int index){
+		if(index < algoInterpreter.getCurrentIndex()){
+			index = index < memory.peekFirst().getAlgoInterpreter().getCurrentIndex() ? memory.peekFirst().getAlgoInterpreter().getCurrentIndex() : index;
+			do{
+				previous();
+			}while(index < algoInterpreter.getCurrentIndex());
+		}
+		else if(index > algoInterpreter.getCurrentIndex()){
+			index = index >= algorithm.size() ? algorithm.size() - 1 : index;
+			do{
+				next();
+			}while(index > algoInterpreter.getCurrentIndex());
+		}
+		else{
+			algoInterpreter = memory.peekLast().getAlgoInterpreter().deepClone();
+			consoleDisplay.display(algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+		}
+	}
 
 	/**
 	 * Méthode permettant d'obtenir l'ArrayList<String> représentant l'algorithme à interpréter
@@ -93,12 +113,10 @@ public class Controller
 	 */
 	public void processLine()
 	{
-		int currentIndex = algoInterpreter.getLineIndex();
 		displayed = algoInterpreter.processLine();
 
 		if(displayed) {
 			AlgoInterpreter cloned = algoInterpreter.deepClone();
-			cloned.setLineIndex(currentIndex);
 			if(memory.size() < 1 || cloned.getLineIndex() != memory.getLast().getAlgoInterpreter().getLineIndex()){
 				memory.add(new AlgoState(cloned));
 			}

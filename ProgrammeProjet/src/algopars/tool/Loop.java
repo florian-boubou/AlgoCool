@@ -1,6 +1,8 @@
 package algopars.tool;
 
 
+import java.io.Serializable;
+
 /**
  * Classe utilitaire Loop qui permet d'interpréter les boucles
  *
@@ -8,7 +10,7 @@ package algopars.tool;
  * @version 1.0.0a
  * @date 01/09/2017
  */
-public class Loop
+public class Loop implements Serializable
 {
 	private int     startIndex;
 	private String  condition;

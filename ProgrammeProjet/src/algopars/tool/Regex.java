@@ -20,8 +20,8 @@ public class Regex
 	public static final String REGEX_FUNCTION       = "^\\s*[a-z][a-zA-Z]*_?[a-zA-Z]*\\(.*\\)\\s*$";
 	
 	public static final String REGEX_OPERATION      = "^\\s*(([0-9]+,?[0-9]*))\\s*" +
-	                                                  "([+×\\-/]|(MOD|DIV)){1}\\s*([0-9]+,?[0-9]*)\\s*" +
-	                                                  "(([+×\\-/]|(MOD|DIV)){1}\\s*([0-9]+,?[0-9]*))*\\s*$";
+	                                                  "([+x\\-/]|(MOD|DIV)){1}\\s*([0-9]+,?[0-9]*)\\s*" +
+	                                                  "(([+x\\-/]|(MOD|DIV)){1}\\s*([0-9]+,?[0-9]*))*\\s*$";
 	
 	public static final String REGEX_CONCATENATION  = "^\\s*((\".*\")|[a-z]\\w*(_\\w*)*)\\s*&\\s*" +
 	                                                  "((\".*\")|[a-z]\\w*(_\\w*)*)\\s*" +

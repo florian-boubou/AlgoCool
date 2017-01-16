@@ -1,16 +1,17 @@
 ALGORITHME Algo
 variable :
-    x, y : entier
+    y    : entier
     st   : chaine
     bOk  : booleen
 DEBUT
-    x  ◄— hasard(10) × 10
-    y  ◄— hasard(10)
-    x  ◄— x + y
-    st ◄— enChaine(x)
-    bOk◄— estEntier(x)
+    y  <- 5 x 8
+    st <- enChaine(y)
+    bOk<- estReel(y)
     si bOk alors
-        st ◄— " est un nombre entier !"
-        ecrire(x & st)
+        st <- " est un nombre réel !"
+        ecrire(y & st)
+    sinon
+        st <- " est un nombre entier !"
+        ecrire(y & st)
     fsi
 FIN

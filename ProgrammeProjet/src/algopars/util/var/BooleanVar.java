@@ -53,9 +53,17 @@ public class BooleanVar extends Variable
 	public void setValue( String value1 )
 	{
 		if( !constant && value1 != null) {
+			if(value1.equals("true"))
+				value1 = "vrai";
+			if(value1.equals("false"))
+				value1 = "faux";
+			
 			strValue = value1;
-			if (value1.equals("vrai")) value = true;
-			else value = false;
+			
+			if (value1.equals("vrai"))
+				value = true;
+			if(value1.equals("faux"))
+				value = false;
 		}
 	}
 }

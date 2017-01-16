@@ -4,7 +4,6 @@ package algopars;
 import java.util.*;
 
 import algopars.UI.ConsoleDisplay;
-import algopars.tool.Loop;
 import algopars.util.AlgoReader;
 import algopars.util.AlgoInterpreter;
 import algopars.util.AlgoState;
@@ -115,9 +114,11 @@ public class Controller
 	{
 		displayed = algoInterpreter.processLine();
 
-		if(displayed) {
+		if(displayed)
+		{
 			AlgoInterpreter cloned = algoInterpreter.deepClone();
-			if(memory.size() < 1 || cloned.getLineIndex() != memory.getLast().getAlgoInterpreter().getLineIndex()){
+			if(memory.size() < 1 || cloned.getLineIndex() != memory.getLast().getAlgoInterpreter().getLineIndex())
+			{
 				memory.add(new AlgoState(cloned));
 			}
 		}

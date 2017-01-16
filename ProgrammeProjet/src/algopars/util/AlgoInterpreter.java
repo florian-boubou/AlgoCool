@@ -254,7 +254,7 @@ public class AlgoInterpreter implements Serializable
 						break;
 				}
 			}
-			else if ( line.indexOf( "◄—" ) != - 1 )
+			else if ( line.indexOf( "<-" ) != - 1 )
 			{
 				this.assignement( line );
 			}
@@ -311,8 +311,8 @@ public class AlgoInterpreter implements Serializable
 	 */
 	public void assignement( String line )
 	{
-		String var      = line.split( "◄—" )[0].trim();
-		String val      = line.split( "◄—" )[1].trim();
+		String var      = line.split( "<-" )[0].trim();
+		String val      = line.split( "<-" )[1].trim();
 		int    indexVar = - 1;
 
 		if ( Regex.isArrayVar( var ) )
@@ -427,8 +427,7 @@ public class AlgoInterpreter implements Serializable
 
 		this.alConsole.add( BasicFunction.supressQuotes( processed ) );
 	}
-
-
+	
 	/**
 	 * Méthode permettant d'évaluer toute expression composée
 	 *
@@ -465,7 +464,7 @@ public class AlgoInterpreter implements Serializable
 				}
 			}
 
-			String[] parts = expression.split( "\\+|-|×|/|&" );
+			String[] parts = expression.split( "\\+|-|x|/|&" );
 			for ( int i = 0; i < parts.length; i++ )
 			{
 				if ( Regex.isFunction( parts[i] ) )

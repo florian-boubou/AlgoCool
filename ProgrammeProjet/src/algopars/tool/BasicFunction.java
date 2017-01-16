@@ -5,203 +5,329 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by Corentin Athinault on 11/01/2017.
+ * Classe BasicFunction qui gère toutes les primitives
+ *
+ * @author Groupe 9 - (Antoine WARET, Clémence EDOUARD, BOULANT Florian, CHOUGUI Mathieu)
+ * @version 1.0.0a
+ * @date 01/11/2017
  */
 public class BasicFunction
 {
-
-	public static final String ENCHAINE			= "ENCHAINE";
-	public static final String ENENTIER			= "ENENTIER";
-	public static final String ENREEL			= "ENREEL";
-	public static final String CARD				= "CARD";
-	public static final String ORD				= "ORD";
-	public static final String PLANCHER			= "PLANCHER";
-	public static final String PLAFOND			= "PLAFOND";
-	public static final String ARRONDI			= "ARRONDI";
-	public static final String AUJOURD_HUI 		= "AUJOURD_HUI";
-	public static final String JOUR 			= "JOUR";
-	public static final String MOIS				= "MOIS";
-	public static final String ANNEE	 		= "ANNEE";
-	public static final String ESTREEL	 		= "ESTREEL";
-	public static final String ESTENTIER		= "ESTENTIER";
-	public static final String HASARD 			= "HASARD";
-
+	
+	public static final String ENCHAINE    = "ENCHAINE";
+	public static final String ENENTIER    = "ENENTIER";
+	public static final String ENREEL      = "ENREEL";
+	public static final String CARD        = "CARD";
+	public static final String ORD         = "ORD";
+	public static final String PLANCHER    = "PLANCHER";
+	public static final String PLAFOND     = "PLAFOND";
+	public static final String ARRONDI     = "ARRONDI";
+	public static final String AUJOURD_HUI = "AUJOURD_HUI";
+	public static final String JOUR        = "JOUR";
+	public static final String MOIS        = "MOIS";
+	public static final String ANNEE       = "ANNEE";
+	public static final String ESTREEL     = "ESTREEL";
+	public static final String ESTENTIER   = "ESTENTIER";
+	public static final String HASARD      = "HASARD";
+	
+	
+	/**
+	 * Méthode permettant de rediriger vers les fonctions correspondantes
+	 *
+	 * @param functions
+	 * 		La chaîne correspondant à la fonction en pseudo-code
+	 *
+	 * @return La chaîne du résultat
+	 */
 	public static String chooseBasicFunction(String functions)
 	{
-		functions = functions.replaceAll( "\\,|\\'","_" ).toUpperCase();
-		String[] function = functions.split( "\\(|\\)" );
-		if(function[0].equals(ENCHAINE))
+		functions = functions.replaceAll("\\'", "_");
+		String[] function = functions.split("\\(|\\)");
+		function[0] = function[0].toUpperCase();
+		switch(function[0].trim())
 		{
-			return enChaine(function[1]);
+			case ENCHAINE:
+				return enChaine(function[1]);
+			case ENENTIER:
+				return enEntier(function[1]);
+			case ENREEL:
+				return enReel(function[1]);
+			case CARD:
+				return card(function[1]);
+			case ORD:
+				return ord(function[1]);
+			case PLANCHER:
+				return plancher(function[1]);
+			case PLAFOND:
+				return plafond(function[1]);
+			case ARRONDI:
+				return arrondi(function[1]);
+			case AUJOURD_HUI:
+				return aujourd_hui();
+			case JOUR:
+				return jour(function[1]);
+			case MOIS:
+				return mois(function[1]);
+			case ANNEE:
+				return annee(function[1]);
+			case ESTREEL:
+				return estReel(function[1]);
+			case ESTENTIER:
+				return estEntier(function[1]);
+			case HASARD:
+				return hasard(function[1]);
+			default:
+				return "";
+			
 		}
-		if(function[0].equals(ENENTIER))
-		{
-			return enEntier(function[1]);
-		}
-		if(function[0].equals(ENREEL))
-		{
-			return enReel(function[1]);
-		}
-		if(function[0].equals(CARD))
-		{
-			return card(function[1]);
-		}
-		if(function[0].equals(ORD))
-		{
-			return ord(function[1]);
-		}
-		if(function[0].equals(PLANCHER))
-		{
-			return plancher(function[1]);
-		}
-		if(function[0].equals(PLAFOND))
-		{
-			return plafond(function[1]);
-		}
-		if(function[0].equals(ARRONDI))
-		{
-			return arrondi(function[1]);
-		}
-		if(function[0].equals(AUJOURD_HUI))
-		{
-			return aujourd_hui();
-		}
-		if(function[0].equals(JOUR))
-		{
-			return jour(function[1]);
-		}
-		if(function[0].equals(MOIS))
-		{
-			return mois(function[1]);
-		}
-		if(function[0].equals(ANNEE))
-		{
-			return annee(function[1]);
-		}
-		if(function[0].equals(ESTREEL))
-		{
-			return estReel(function[1]);
-		}
-		if(function[0].equals(ESTENTIER))
-		{
-			return estEntier(function[1]);
-		}
-		if(function[0].equals(HASARD))
-		{
-			return hasard(function[1]);
-		}
-		return "";
+		
 	}
-
-	private static String arrondi( String s )
+	
+	
+	/**
+	 * Méthode renvoyant l'arrondi d'un réel
+	 *
+	 * @param s
+	 * 		La chaîne représentant le réel
+	 *
+	 * @return L'arrondi du réel passé en paramètre
+	 */
+	private static String arrondi(String s)
 	{
-		return ""+Math.round(Double.parseDouble( s ));
+		return "" + Math.round(Double.parseDouble(s)) + ".0";
 	}
-
-	private static String plafond( String s )
+	
+	
+	/**
+	 * Méthode renvoyant le prochain entier plus grand que le réel en paramètre
+	 *
+	 * @param s
+	 * 		Le réel à plafonner
+	 *
+	 * @return Le plafond du réel
+	 */
+	private static String plafond(String s)
 	{
-		return ""+Math.ceil( Double.parseDouble( s ) );
+		return "" + Math.ceil(Double.parseDouble(s));
 	}
-
-	private static String plancher( String s )
+	
+	
+	/**
+	 * Méthode renvoyant le prochain entier plus petit que le réel passé en paramètre
+	 *
+	 * @param s
+	 * 		Le réel à plancher
+	 *
+	 * @return Le plancher du réel
+	 */
+	private static String plancher(String s)
 	{
-		return ""+Math.floor( Double.parseDouble( s ) );
+		return "" + Math.floor(Double.parseDouble(s));
 	}
-
-	private static String ord( String s )
+	
+	
+	/**
+	 * Méthode renvoyant la valeur ASCII du caractère passé en paramètre
+	 *
+	 * @param s
+	 * 		Le caractère dont on doit renvoyer la valeur ASCII
+	 *
+	 * @return La valeur ASCII du caractère passé en paramètre
+	 */
+	private static String ord(String s)
 	{
-		return ""+(int)s.charAt( 0 );
+		return "" + (int) s.charAt(0);
 	}
-
-	private static String enReel( String s )
+	
+	
+	/**
+	 * Méthode permettant de transformer une chaine de caractère en réel
+	 *
+	 * @param s
+	 * 		La chaîne de caractère à transformer en réel
+	 *
+	 * @return Le réel correspondant à la chaîne
+	 */
+	private static String enReel(String s)
 	{
-		s = supressQuotes( s );
-		System.out.print( s +"c'est la abruti");
-		return Double.toString( Double.parseDouble( s ) );
+		s = supressQuotes(s);
+		return Double.toString(Double.parseDouble(s));
 	}
-
-	private static String enEntier( String s )
+	
+	
+	/**
+	 * Méthode permettant de transformer une chaine de caractère en entier
+	 *
+	 * @param s
+	 * 		La chaîne de caractère à transformer en entier
+	 *
+	 * @return Le réel correspondant à la chaîne
+	 */
+	private static String enEntier(String s)
 	{
-		s = supressQuotes( s );
-		System.out.println(s);
-		String[] tab = s.split( "\\." );
-		System.out.println(tab[0]);
-		return Integer.toString( Integer.parseInt(tab[0]));
+		s = supressQuotes(s);
+		String[] tab = s.split("\\.");
+		return Integer.toString(Integer.parseInt(tab[0]));
 	}
-
-	private static String card( String s )
+	
+	/**
+	 * Méthode permettant de donner le caractère correspondant à la valeur ASCII passée en paramètre
+	 *
+	 * @param s
+	 * 		La valeur ASCII dont on cherche le caractère équivalent
+	 *
+	 * @return Le caractère correspondant à la valeur ASCII en paramètre
+	 */
+	private static String card(String s)
 	{
-		return ""+(char)Integer.parseInt( s );
+		return "" + (char) Integer.parseInt(s);
 	}
-
-
-	private static String enChaine( String s )
+	
+	
+	/**
+	 * Méthode permettant de transformer le paramètre en chaîne
+	 *
+	 * @param s
+	 * 		Le paramètre à transformer en chaîne
+	 *
+	 * @return La chaîne correspondant au paramètre
+	 */
+	private static String enChaine(String s)
 	{
-		return s;
+		return "\"" + s + "\"";
 	}
-
-	private static String aujourd_hui(  )
+	
+	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive aujourd'hui()
+	 *
+	 * @return Le résultat de la primitive aujourd'hui()
+	 */
+	private static String aujourd_hui()
 	{
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern( "dd/MM/yyyy HH:mm:ss" );
-		LocalDateTime     now = LocalDateTime.now();
-		String date = dtf.format(now);
-		String[] tabDate = date.split( " " );
-		return tabDate[0];
+		DateTimeFormatter dtf      = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		LocalDateTime     now      = LocalDateTime.now();
+		String            date     = dtf.format(now);
+		String[]          tabDate  = date.split(" ");
+		String            toReturn = "\"" + tabDate[0] + "\"";
+		return toReturn;
 	}
-
-	private static String jour( String function )
+	
+	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive jour(chaine)
+	 *
+	 * @param function
+	 * 		La date à décomposer
+	 *
+	 * @return Le résultat de la primitive jour(chaine)
+	 */
+	private static String jour(String function)
 	{
-		function = supressQuotes( function );
-		String[] tab = function.split( "/" );
+		function = supressQuotes(function);
+		String[] tab = function.split("\\\\");
 		return tab[0];
 	}
-
-	private static String mois( String function )
+	
+	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive mois(chaine)
+	 *
+	 * @param function
+	 * 		La date à décomposer
+	 *
+	 * @return Le résultat de la primitive mois(chaine)
+	 */
+	private static String mois(String function)
 	{
-		function = supressQuotes( function );
-		String[] tab = function.split( "/" );
+		function = supressQuotes(function);
+		String[] tab = function.split("\\\\");
 		return tab[1];
 	}
-
-	private static String annee( String function )
+	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive annee(chaine)
+	 *
+	 * @param function
+	 * 		La date à décomposer
+	 *
+	 * @return Le résultat de la primitive annee(chaine)
+	 */
+	private static String annee(String function)
 	{
-		function = supressQuotes( function );
-		String[] tab = function.split( "/" );
+		function = supressQuotes(function);
+		String[] tab = function.split("\\\\");
 		return tab[2];
 	}
-
-	private static String estReel( String function )
+	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive estReel(chaine)
+	 *
+	 * @param function
+	 * 		La chaine à analyser
+	 *
+	 * @return Le résultat de la primitive estReel(chaine)
+	 */
+	private static String estReel(String function)
 	{
-		function = supressQuotes( function );
-		if(Regex.isDouble( function ))
+		function = supressQuotes(function).replaceAll("\\.", ",");
+		if(Regex.isDouble(function))
+		{
 			return "vrai";
+		}
 		else
-			return "false";
-
+		{
+			return "faux";
+		}
 	}
-
-	private static String estEntier( String function )
+	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive estEntier(chaine)
+	 *
+	 * @param function
+	 * 		La chaine à analyser
+	 *
+	 * @return Le résultat de la primitive estEntier(chaine)
+	 */
+	private static String estEntier(String function)
 	{
-		function = supressQuotes( function );
-		if(Regex.isInteger( function ))
+		function = supressQuotes(function).replaceAll("\\.", ",");
+		if(Regex.isInteger(function))
+		{
 			return "vrai";
+		}
 		else
-			return "false";
+		{
+			return "faux";
+		}
 	}
-
-	private static String hasard( String function )
+	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive hasard(entier)
+	 *
+	 * @param function
+	 * 		La chaine représentant l'entier définissant les bornes de la primitive
+	 *
+	 * @return Le résultat de la primitive hasard(entier)
+	 */
+	private static String hasard(String function)
 	{
-		int  range = Integer.parseInt(function);
-		System.out.println(range);
-		return Integer.toString((int)(Math.random()*range));
+		int range = Integer.parseInt(function);
+		return Integer.toString((int) (Math.random() * range));
 	}
-
-	private static String supressQuotes(String s)
+	
+	/**
+	 * Méthode permettant de retirer les '"" en trop
+	 *
+	 * @param s
+	 * 		La chaîne à trnasformer
+	 *
+	 * @return Une chaîne sans '"' en trop
+	 */
+	public static String supressQuotes(String s)
 	{
-		String[] tab = s.split( "\"" );
-		System.out.println(tab[0]);
-		return s.replaceAll( "\"","" );
+		String[] tab = s.split("\"");
+		return s.replaceAll("\"", "");
 	}
-
-
+	
 }

@@ -12,27 +12,30 @@ import java.util.ArrayList;
  */
 public abstract class Transformer
 {
-	public String transformAffectation( String pseudoCode )
+	public static String transformAffectation( String pseudoCode )
 	{
 		return pseudoCode.replace("◄—", "=");
 	}
 	
-	public String transformExpression( String pseudoCode )
+	public static String transformExpression( String pseudoCode )
 	{
 		String javaCode = new String(pseudoCode);
 		
-		if( !javaCode.matches(Regex.REGEX_OPERATION) )
-			return pseudoCode;
-		else
+		if( Regex.isOperation( javaCode ) )
 		{
 			if( javaCode.contains( "×" ) ) javaCode = javaCode.replace( "×", "*" );
 			if( javaCode.contains("MOD") ) javaCode = javaCode.replace("MOD", "%");
 			if( javaCode.contains("DIV") ) javaCode = javaCode.replace("DIV", "/");
 			
-			if( Regex.isConcatenation( javaCode ) ) javaCode = javaCode.replace('&', '+');
-			
 			return javaCode;
 		}
+		if( Regex.isConcatenation( javaCode ) )
+			javaCode = javaCode.replace("&", "+");
+		
+		if( javaCode.contains("vrai") ) javaCode = javaCode.replace("vrai", "true" );
+		if( javaCode.contains("faux") ) javaCode = javaCode.replace("faux", "false");
+
+		return javaCode;
 	}
 
 	/**

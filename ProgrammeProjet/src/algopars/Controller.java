@@ -1,19 +1,16 @@
 package algopars;
 
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import algopars.UI.ConsoleDisplay;
+import algopars.tool.Loop;
 import algopars.util.AlgoReader;
 import algopars.util.AlgoInterpreter;
 import algopars.util.AlgoState;
 import algopars.util.var.Variable;
 
 public class Controller
-
 {
 	private AlgoInterpreter algoInterpreter;
 	private ConsoleDisplay  consoleDisplay;
@@ -35,39 +32,47 @@ public class Controller
 		this.algoInterpreter = new AlgoInterpreter( this.algorithm );
 		this.consoleDisplay = new ConsoleDisplay( this );
 		memory = new LinkedList<>();
-		int line;
-		int memIndex = 1;
 		displayed = true;
 
 		this.algoInterpreter.chooseVar();
-		processLine(0);
-		line = algoInterpreter.getLineIndex();
-		consoleDisplay.display(0, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
-
+		int beginIndex = this.algoInterpreter.getLineIndex();
+		processLine();
+		consoleDisplay.display(beginIndex, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
 
 		do{
-			Scanner scanner = new Scanner(System.in);
-
-			if(scanner.nextLine().toString().equals("b")){
-				memIndex = (memIndex <= 1 ? 1 : memIndex -1);
-				consoleDisplay.display(memory.get(memIndex-1).getCurrentLine(), memory.get(memIndex-1).getLastConditionValue(), memory.get(memIndex-1).getAlData(), memory.get(memIndex-1).getAlExec());
+			Scanner sc = new Scanner(System.in);
+			switch(sc.nextLine()){
+				case "b":
+					previous();
+					break;
+				default :
+					next();
+					break;
 			}
-			else{
-				if(memIndex < memory.size()){
-					consoleDisplay.display(memory.get(memIndex).getCurrentLine(), memory.get(memIndex).getLastConditionValue(), memory.get(memIndex).getAlData(), memory.get(memIndex).getAlExec());
-					line = memory.get(memIndex).getCurrentLine();
-				}
-				else{
-					do{
-						processLine(line);
-					}while(!displayed);
-					consoleDisplay.display(line, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
-				}
-				memIndex++;
-			}
+		}while(algoInterpreter.getLineIndex() < (algorithm.size() > 40 ? 40 : algorithm.size()));
+	}
+	
+	/**
+	 * Méthode permettant de passer à la ligne suivante
+	 */
+	public void next(){
+		int line;
+		do{
 			line = algoInterpreter.getLineIndex();
+			processLine();
+		}while(!displayed);
 
-		} while(line < (algorithm.size() > 40 ? 40 : algorithm.size()));
+		consoleDisplay.display(line, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+	}
+	
+	/**
+	 * Méthode permettant de passer à la ligne précédente
+	 */
+	public void previous(){
+		if(memory.size() > 1)
+			memory.pollLast();
+		algoInterpreter = memory.peekLast().getAlgoInterpreter().deepClone();
+		consoleDisplay.display(algoInterpreter.getLineIndex(), algoInterpreter.getLastConditionValue(), algoInterpreter.getAlData(), algoInterpreter.getAlConsole());
 	}
 
 
@@ -85,19 +90,18 @@ public class Controller
 	/**
 	 * Méthode permettant d'appeler le processLine de AlgoInterpréteur
 	 */
-	public void processLine(int line)
+	public void processLine()
 	{
-		boolean b = this.algoInterpreter.processLine();
+		int currentIndex = algoInterpreter.getLineIndex();
+		displayed = algoInterpreter.processLine();
 
-		if(b) {
-			ArrayList<Variable> clonedAL = new ArrayList<>();
-			for (Variable v : getAlData()) {
-				clonedAL.add((Variable) v.clone());
+		if(displayed) {
+			AlgoInterpreter cloned = algoInterpreter.deepClone();
+			cloned.setLineIndex(currentIndex);
+			if(memory.size() < 1 || cloned.getLineIndex() != memory.getLast().getAlgoInterpreter().getLineIndex()){
+				memory.add(new AlgoState(cloned));
 			}
-			memory.add(new AlgoState(line, algoInterpreter.getLastConditionValue(), clonedAL, (ArrayList) getAlConsole().clone()));
 		}
-
-		this.displayed = b;
 	}
 
 

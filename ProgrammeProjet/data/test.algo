@@ -1,15 +1,16 @@
 ALGORITHME Algo
 variable :
-    x : entier
+    x, y : entier
+    st   : chaine
+    bOk  : booleen
 DEBUT
-    lire(x)
-    ecrire("joie")
-    ecrire(x)
-    ecrire("allegresse")
-    si x = 12 alors
-        ecrire("x est égal à 12")
-        ecrire("Le 5ème va vous étonner")
-    sinon
-        ecrire("x n'est pas égal à 12")
+    x  ◄— hasard(10) × 10
+    y  ◄— hasard(10)
+    x  ◄— x + y
+    st ◄— enChaine(x)
+    bOk◄— estEntier(x)
+    si bOk alors
+        st ◄— " est un nombre entier !"
+        ecrire(x & st)
     fsi
 FIN

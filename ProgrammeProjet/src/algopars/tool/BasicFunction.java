@@ -29,7 +29,9 @@ public class BasicFunction
 	public static final String ESTREEL     = "ESTREEL";
 	public static final String ESTENTIER   = "ESTENTIER";
 	public static final String HASARD      = "HASARD";
-	
+	public static final String COSINUS     = "COSINUS";
+	public static final String SINUS       = "SINUS";
+	public static final String ABSOLUE     = "ABSOLUE";
 	
 	/**
 	 * Méthode permettant de rediriger vers les fonctions correspondantes
@@ -76,14 +78,22 @@ public class BasicFunction
 				return estEntier(function[1]);
 			case HASARD:
 				return hasard(function[1]);
+			case COSINUS:
+				return cosinus(function[1]);
+			case SINUS:
+				return sinus(function[1]);
+			case ABSOLUE:
+				return absolue(function[1]);
 			default:
 				return "";
 			
 		}
 		
 	}
-	
-	
+
+
+
+
 	/**
 	 * Méthode renvoyant l'arrondi d'un réel
 	 *
@@ -315,7 +325,44 @@ public class BasicFunction
 		int range = Integer.parseInt(function);
 		return Integer.toString((int) (Math.random() * range));
 	}
-	
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive cosinus(réel)
+	 *
+	 * @param function
+	 * 		La chaine représentant le réel dont on cherche le cosinus
+	 *
+	 * @return Le résultat de la primitive cosinus(réel)
+	 */
+	private static String cosinus( String function )
+	{
+		return Double.toString(Math.cos( Double.parseDouble( function ) ));
+	}
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive sinus(réel)
+	 *
+	 * @param function
+	 * 		La chaine représentant le réel dont on cherche le sinus
+	 *
+	 * @return Le résultat de la primitive sinus(réel)
+	 */
+	private static String sinus( String function )
+	{
+		return Double.toString(Math.sin( Double.parseDouble( function ) ));
+	}
+	/**
+	 * Méthode permettant de retourner le résultat de la primitive absolue(réel) ou absolue(entier)
+	 *
+	 * @param function
+	 * 		La chaine représentant le réel ou l'entier dont on cherche la valeur absolue
+	 *
+	 * @return Le résultat de la primitive absolue(entier) ou absolue(réel)
+	 */
+	private static String absolue( String function )
+	{
+		function = supressQuotes(function);
+		if(function.contains("\\." )) return Double.toString(Math.abs( Double.parseDouble( function ) ));
+		else return Integer.toString(Math.abs( Integer.parseInt( function ) ));
+	}
 	/**
 	 * Méthode permettant de retirer les '"" en trop
 	 *

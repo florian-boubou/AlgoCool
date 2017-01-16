@@ -25,6 +25,7 @@ public class ConsoleDisplay
 	private final        String background = color.WHITE + color.BACKGROUND_BLACK;
 
 	private String backgroundCurrent = color.BLACK + color.BACKGROUND_WHITE;
+	private int size;
 
 	private static LinkedList<Keyword> keywords = new LinkedList<Keyword>()
 	{{
@@ -59,10 +60,11 @@ public class ConsoleDisplay
 	 *
 	 * @param controller Le lien entre l'affichage et le métier
 	 */
-	public ConsoleDisplay( Controller controller )
+	public ConsoleDisplay( Controller controller, int size )
 	{
 		this.controller = controller;
 		this.algorithm = controller.getAlgorithm();
+		this.size = size;
 	}
 
 
@@ -91,9 +93,8 @@ public class ConsoleDisplay
 
 		int iVar = 0;
 
-
 		//Boucle pour afficher le code et les données
-		for ( int i = 0; i < ( algorithm.size() > 40 ? 40 : algorithm.size() ); i++ )
+		for ( int i = (current <= size ? 0 : current - size); i <= ( current > size ? size + (current - size) : size ); i++ )
 		{
 			if ( i == 0 )
 			{

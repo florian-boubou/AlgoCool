@@ -25,12 +25,12 @@ public class Controller
 	 *
 	 * @param filePath Le chemin vers le fichier contenant l'algorithme à interpréter
 	 */
-	public Controller( String filePath )
+	public Controller( String filePath, int displaySize )
 	{
 		this.algorithm = new AlgoReader( filePath ).getAlgorithm();
 
 		this.algoInterpreter = new AlgoInterpreter( this.algorithm );
-		this.consoleDisplay = new ConsoleDisplay( this );
+		this.consoleDisplay = new ConsoleDisplay( this , displaySize);
 		memory = new LinkedList<>();
 		displayed = true;
 
@@ -49,7 +49,7 @@ public class Controller
 					next();
 					break;
 			}
-		}while(algoInterpreter.getLineIndex() < (algorithm.size() > 40 ? 40 : algorithm.size()));
+		}while(algoInterpreter.getLineIndex() < algorithm.size());
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public class Controller
 	 */
 	public static void main( String[] args )
 	{
-		Controller c = new Controller( args[0] );
+		Controller c = new Controller( args[0] , Integer.parseInt(args[1]));
 	}
 
 

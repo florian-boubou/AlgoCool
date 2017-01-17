@@ -1,11 +1,18 @@
 ALGORITHME Algo
 variable :
-    kingdju, pophip : entier
+    kingdju : entier
+    pophip  : entier
 DEBUT
-    kingdju <- 1337
-    pophip  <- 42
-    tant que pophip <= kingdju faire
-        pophip <- pophip + 1
-        ecrire("pophip devient plus fort !!")
-    ftq
+   pophip  <- 42
+   kingdju <- 1337
+
+   tant que pophip < kingdju faire
+       pophip <- pophip + 1
+
+       si pophip MOD 2 = 0 alors
+           ecrire("pophip devient plus fort !!!")
+       sinon
+           ecrire("pophip se repose..")
+       fsi
+   ftq
 FIN

@@ -14,9 +14,9 @@ public class Controller
 	private AlgoInterpreter algoInterpreter;
 	private ConsoleDisplay  consoleDisplay;
 
-	private ArrayList<String> algorithm;
+	private ArrayList<String>     algorithm;
 	private LinkedList<AlgoState> memory;
-	private boolean displayed;
+	private boolean               displayed;
 
 
 	/**
@@ -27,74 +27,93 @@ public class Controller
 	public Controller( String filePath, int displaySize )
 	{
 		this.algorithm = new AlgoReader( filePath ).getAlgorithm();
-		displaySize = displaySize >= this.algorithm.size()? this.algorithm.size() - 1 : displaySize;
+		displaySize = displaySize >= this.algorithm.size() ? this.algorithm.size() - 1 : displaySize;
 
 		this.algoInterpreter = new AlgoInterpreter( this.algorithm );
-		this.consoleDisplay = new ConsoleDisplay( this , displaySize);
+		this.consoleDisplay = new ConsoleDisplay( this, displaySize );
 		memory = new LinkedList<>();
 		displayed = true;
 
 		this.algoInterpreter.chooseVar();
 		int beginIndex = this.algoInterpreter.getLineIndex();
 		processLine();
-		consoleDisplay.display(beginIndex, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+		consoleDisplay.display( beginIndex, algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole() );
 
-		do{
-			Scanner sc = new Scanner(System.in);
-			String s = sc.nextLine();
-			switch(s){
+		do
+		{
+			Scanner sc = new Scanner( System.in );
+			String  s  = sc.nextLine();
+			switch ( s )
+			{
 				case "b":
 					previous();
 					break;
-				default :
-					if(s.matches("^l[0-9]*$"))
-						goTo(Integer.parseInt(s.split("l")[1]));
+				default:
+					if ( s.matches( "^l[0-9]*$" ) )
+						goTo( Integer.parseInt( s.split( "l" )[1] ) );
 					else
 						next();
 					break;
 			}
-		}while(algoInterpreter.getLineIndex() < algorithm.size());
+		} while ( algoInterpreter.getLineIndex() < algorithm.size() );
 	}
-	
+
+
 	/**
 	 * Méthode permettant de passer à la ligne suivante
 	 */
-	public void next(){
-		do{
+	public void next()
+	{
+		do
+		{
 			processLine();
-		}while(!displayed);
+		} while ( ! displayed );
 
-		consoleDisplay.display(algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+		consoleDisplay.display( algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(),
+								getAlConsole() );
 	}
-	
+
+
 	/**
 	 * Méthode permettant de passer à la ligne précédente
 	 */
-	public void previous(){
-		if(memory.size() > 1)
+	public void previous()
+	{
+		if ( memory.size() > 1 )
 			memory.pollLast();
 		algoInterpreter = memory.peekLast().getAlgoInterpreter().deepClone();
-		consoleDisplay.display(algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+		consoleDisplay.display( algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(),
+								getAlConsole() );
 	}
 
-	public void goTo(int index){
-		if(index < algoInterpreter.getCurrentIndex()){
-			index = index < memory.peekFirst().getAlgoInterpreter().getCurrentIndex() ? memory.peekFirst().getAlgoInterpreter().getCurrentIndex() : index;
-			do{
+
+	public void goTo( int index )
+	{
+		if ( index < algoInterpreter.getCurrentIndex() )
+		{
+			index = index <
+					memory.peekFirst().getAlgoInterpreter().getCurrentIndex() ? memory.peekFirst().getAlgoInterpreter().getCurrentIndex() : index;
+			do
+			{
 				previous();
-			}while(index < algoInterpreter.getCurrentIndex());
+			} while ( index < algoInterpreter.getCurrentIndex() );
 		}
-		else if(index > algoInterpreter.getCurrentIndex()){
+		else if ( index > algoInterpreter.getCurrentIndex() )
+		{
 			index = index >= algorithm.size() ? algorithm.size() - 1 : index;
-			do{
+			do
+			{
 				next();
-			}while(index > algoInterpreter.getCurrentIndex());
+			} while ( index > algoInterpreter.getCurrentIndex() );
 		}
-		else{
+		else
+		{
 			algoInterpreter = memory.peekLast().getAlgoInterpreter().deepClone();
-			consoleDisplay.display(algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(), getAlData(), getAlConsole());
+			consoleDisplay.display( algoInterpreter.getCurrentIndex(), algoInterpreter.getLastConditionValue(),
+									getAlData(), getAlConsole() );
 		}
 	}
+
 
 	/**
 	 * Méthode permettant d'obtenir l'ArrayList<String> représentant l'algorithme à interpréter
@@ -114,12 +133,12 @@ public class Controller
 	{
 		displayed = algoInterpreter.processLine();
 
-		if(displayed)
+		if ( displayed )
 		{
 			AlgoInterpreter cloned = algoInterpreter.deepClone();
-			if(memory.size() < 1 || cloned.getLineIndex() != memory.getLast().getAlgoInterpreter().getLineIndex())
+			if ( memory.size() < 1 || cloned.getLineIndex() != memory.getLast().getAlgoInterpreter().getLineIndex() )
 			{
-				memory.add(new AlgoState(cloned));
+				memory.add( new AlgoState( cloned ) );
 			}
 		}
 	}
@@ -143,7 +162,7 @@ public class Controller
 	 */
 	public static void main( String[] args )
 	{
-		Controller c = new Controller( args[0] , Integer.parseInt(args[1]));
+		Controller c = new Controller( args[0], Integer.parseInt( args[1] ) );
 	}
 
 

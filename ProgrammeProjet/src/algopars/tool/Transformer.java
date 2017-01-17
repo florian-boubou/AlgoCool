@@ -21,14 +21,13 @@ public abstract class Transformer
 	{
 		String javaCode = new String(pseudoCode);
 		
-		if( Regex.isOperation( javaCode ) )
+		if(!Regex.isString( javaCode ))
 		{
-			if( javaCode.contains( "x" ) ) javaCode = javaCode.replace( "x", "*" );
-			if( javaCode.contains("MOD") ) javaCode = javaCode.replace("MOD", "%");
-			if( javaCode.contains("DIV") ) javaCode = javaCode.replace("DIV", "/");
-			
-			return javaCode;
+			if ( javaCode.contains( "x"   ) ) javaCode = javaCode.replace( "x"  , "*" );
+			if ( javaCode.contains( "MOD" ) ) javaCode = javaCode.replace( "MOD", "%" );
+			if ( javaCode.contains( "DIV" ) ) javaCode = javaCode.replace( "DIV", "/" );
 		}
+
 		if( Regex.isConcatenation( javaCode ) )
 			javaCode = javaCode.replace("&", "+");
 		
@@ -84,8 +83,11 @@ public abstract class Transformer
 		//Transformation du = (pseudo-code) en == (pseudo-code)
 		for( int i = 0; i < tabS.length; i++ )
 		{
-			if( tabS[i].trim().matches( "^\\w*\\s*=\\s*\\w*$" ) )
+			if(tabS[i].trim().matches("(\\w|%|\\+|-|/|DIV|MOD|\\s)*=(\\w|%|\\+|-|/|DIV|MOD|\\s)*"))
+			{
 				tabS[i] = tabS[i].replaceAll( "=", "==" );
+			}
+
 			javaCode += tabS[i] + (i < tabS.length - 1 ? logicOps.get( i ) : "");
 		}
 

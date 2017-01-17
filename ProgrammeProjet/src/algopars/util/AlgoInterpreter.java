@@ -62,7 +62,8 @@ public class AlgoInterpreter implements Serializable
 
 			this.conditionsStack = new Stack<>();
 			this.loopsStack = new Stack<>();
-		} catch ( Exception e )
+		}
+		catch ( Exception e )
 		{
 			System.err.println( e.getMessage() );
 		}
@@ -383,17 +384,8 @@ public class AlgoInterpreter implements Serializable
 	 */
 	public Boolean evaluateCondition( String condition )
 	{
-		condition = algopars.tool.Transformer.transformCondition( condition );
-
-		try
-		{
-			return (Boolean)interpreter.eval( condition );
-		} catch ( EvalError evalError )
-		{
-			evalError.printStackTrace();
-		}
-
-		return false;
+		condition = Transformer.transformCondition( condition );
+		return Boolean.parseBoolean(this.process(condition));
 	}
 
 
@@ -490,6 +482,7 @@ public class AlgoInterpreter implements Serializable
 			{
 				expression = Transformer.transformExpression( expression );
 				expression = expression.replace(',', '.');
+				System.out.println(expression);
 				expression = interpreter.eval( expression ).toString();
 			}
 		} catch ( EvalError e )

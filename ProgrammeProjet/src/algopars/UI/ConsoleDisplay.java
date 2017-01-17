@@ -131,8 +131,7 @@ public class ConsoleDisplay
 						  String.format( "%-80s", ( current == i ? color.BACKGROUND_WHITE +
 																   color.BLACK : "" ) +
 												  String.format( "%2d", i ) + " " +
-												  String.format( algorithm.get( i ).contains("<-") ? "%-80s" : "%-81s",
-												                 algorithm.get( i ).replace("<-", "◄—")
+												  String.format( "%-80s", algorithm.get( i ).replace("<-", "◄—")
 														                 .replaceAll("\\s+x\\s+", "×"))) +
 						  background +
 						  " | " + dataStr;

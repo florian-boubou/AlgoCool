@@ -134,12 +134,12 @@ public class SyntaxChecker implements Serializable
 		if ( constant != - 1 )
 		{
 			for ( int i = constant + 1; i < ( variable == - 1 ? data.size() : variable ); i++ )
-				//On vérifie si la ligne contient le symbole d'affectation ◄— et qu'il n'y en a qu'un seul
-				if ( ( testLine = data.get( i ) ).contains( "◄—" ) && testLine.split(
-						"◄—" ).length == 2 )
+				//On vérifie si la ligne contient le symbole d'affectation <- et qu'il n'y en a qu'un seul
+				if ( ( testLine = data.get( i ) ).contains( "<-" ) && testLine.split(
+						"<-" ).length == 2 )
 				{
 					//On supprime les espaces en queue et en tête
-					testName = testLine.split( "◄—" )[0].trim();
+					testName = testLine.split( "<-" )[0].trim();
 
 					//Le nom donné à la constante doit être sous la forme :
 					//  commence par une majuscule suivi par un nombre indéterminé de chiffres, de majuscules
@@ -155,7 +155,7 @@ public class SyntaxChecker implements Serializable
 						//  Texte compris entre guillemets
 						//  Suite de chiffres suivis ou non d'une virgule et d'une suite de chiffres
 						//  Caractère compris entre simples guillemets
-						if ( ! testLine.split( "◄—" )[1].trim().matches(
+						if ( ! testLine.split( "<-" )[1].trim().matches(
 								"^\"([^\"]|\\\\\")*\"$|[0-9]*(,[0-9]*)?$|^'[^']|\''$" ) )
 							return false;
 						//On vérifie que la constante n'a pas déjà été déclarée
@@ -164,7 +164,7 @@ public class SyntaxChecker implements Serializable
 								return false;
 
 						//On place dans la HasMap de constantes la constante vérifiée en clé et sa valeur attribuée en valeur
-						hData.put( testName, testLine.split( "◄—" )[1].trim() );
+						hData.put( testName, testLine.split( "<-" )[1].trim() );
 					}
 				}
 			nbConstant = hData.size();
@@ -265,10 +265,10 @@ public class SyntaxChecker implements Serializable
 			return false;
 		}
 		for ( String s : body )
-			if ( s.contains( "◄—" ) )
+			if ( s.contains( "<-" ) )
 			{
 				for ( String keyV : hData.keySet() )
-					if ( s.split( "◄—" )[0].trim().equals( keyV ) )
+					if ( s.split( "<-" )[0].trim().equals( keyV ) )
 					{
 						found = true;
 						break;

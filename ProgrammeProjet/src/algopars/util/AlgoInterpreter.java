@@ -254,7 +254,7 @@ public class AlgoInterpreter implements Serializable
 						break;
 				}
 			}
-			else if ( line.indexOf( "◄—" ) != - 1 )
+			else if ( line.indexOf( "<-" ) != - 1 )
 			{
 				this.assignement( line );
 			}
@@ -311,8 +311,8 @@ public class AlgoInterpreter implements Serializable
 	 */
 	public void assignement( String line )
 	{
-		String var      = line.split( "◄—" )[0].trim();
-		String val      = line.split( "◄—" )[1].trim();
+		String var      = line.split( "<-" )[0].trim();
+		String val      = line.split( "<-" )[1].trim();
 		int    indexVar = - 1;
 
 		if ( Regex.isArrayVar( var ) )
@@ -405,7 +405,6 @@ public class AlgoInterpreter implements Serializable
 	public void write( String toWrite )
 	{
 		String processed = new String( toWrite );
-		System.out.println( processed );
 
 		if ( Regex.isString( processed ) )
 		{
@@ -427,8 +426,7 @@ public class AlgoInterpreter implements Serializable
 
 		this.alConsole.add( BasicFunction.supressQuotes( processed ) );
 	}
-
-
+	
 	/**
 	 * Méthode permettant d'évaluer toute expression composée
 	 *
@@ -453,7 +451,6 @@ public class AlgoInterpreter implements Serializable
 						&& variableExists( bracesContents[i].split( "\\[" )[0] ) != null)
 				{
 					String tabName = bracesContents[i].split( "\\[" )[0];
-					System.out.println(tabName);
 					int indice = Integer.parseInt(bracesContents[i].split("\\[")[1].replace('[', ' ').trim());
 					expression.replace(bracesContents[i], ((ArrayVar) this.variableExists(tabName)).getValue(indice));
 				}
@@ -465,7 +462,7 @@ public class AlgoInterpreter implements Serializable
 				}
 			}
 
-			String[] parts = expression.split( "\\+|-|×|/|&" );
+			String[] parts = expression.split( "\\+|-|x|/|&" );
 			for ( int i = 0; i < parts.length; i++ )
 			{
 				if ( Regex.isFunction( parts[i] ) )
@@ -489,9 +486,10 @@ public class AlgoInterpreter implements Serializable
 			{
 				expression = this.getVariableValue( expression );
 			}
-			else if ( ! Regex.isString( expression ) && !Regex.isCharacter( expression ) )
+			else if ( !Regex.isString( expression ) && !Regex.isCharacter( expression ) )
 			{
 				expression = Transformer.transformExpression( expression );
+				expression = expression.replace(',', '.');
 				expression = interpreter.eval( expression ).toString();
 			}
 		} catch ( EvalError e )

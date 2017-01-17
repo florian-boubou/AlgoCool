@@ -1,16 +1,11 @@
 ALGORITHME Algo
 variable :
-    x, y : entier
-    st   : chaine
-    bOk  : booleen
+    kingdju, pophip : entier
 DEBUT
-    x  ◄— hasard(10) × 10
-    y  ◄— hasard(10)
-    x  ◄— x + y
-    st ◄— enChaine(x)
-    bOk◄— estEntier(x)
-    si bOk alors
-        st ◄— " est un nombre entier !"
-        ecrire(x & st)
-    fsi
+    kingdju <- 1337
+    pophip  <- 42
+    tant que pophip <= kingdju faire
+        pophip <- pophip + 1
+        ecrire("pophip devient plus fort !!")
+    ftq
 FIN

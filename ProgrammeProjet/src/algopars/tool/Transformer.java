@@ -14,7 +14,7 @@ public abstract class Transformer
 {
 	public static String transformAffectation( String pseudoCode )
 	{
-		return pseudoCode.replace("◄—", "=");
+		return pseudoCode.replace("<-", "=");
 	}
 	
 	public static String transformExpression( String pseudoCode )
@@ -23,7 +23,7 @@ public abstract class Transformer
 		
 		if( Regex.isOperation( javaCode ) )
 		{
-			if( javaCode.contains( "×" ) ) javaCode = javaCode.replace( "×", "*" );
+			if( javaCode.contains( "x" ) ) javaCode = javaCode.replace( "x", "*" );
 			if( javaCode.contains("MOD") ) javaCode = javaCode.replace("MOD", "%");
 			if( javaCode.contains("DIV") ) javaCode = javaCode.replace("DIV", "/");
 			
